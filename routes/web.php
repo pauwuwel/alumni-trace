@@ -23,15 +23,11 @@ Route::post('/login', [AkunController::class, 'login']);
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/', function() {
-        return view('welcome');
-    });
-
-    Route::prefix('dashboard')->middleware(['access:admin'])->group(function () {
+    Route::prefix('dashboard')->middleware(['access:admin,superAdmin,alumni'])->group(function () {
         Route::get('/', function() {
             return view('welcome');
         });
     });
 
-    Route::get('/logout', [AuthController::class, 'logout']);
+    Route::get('/logout', [AkunController::class, 'logout']);
 });

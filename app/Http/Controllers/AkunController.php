@@ -41,6 +41,13 @@ class AkunController extends Controller
         return redirect()->back();
     }
 
+    function logout()
+    {
+        Auth::logout();
+        Session::regenerateToken();
+        return redirect('/');
+    }
+
     /**
      * Show the form for creating a new resource.
      */
