@@ -15,7 +15,8 @@ return new class extends Migration
             $table->integer('id_akun', true)->nullable(false); // menentukan tipe data id_akun
             $table->string('username', 60)->nullable(false); // menentukan tipe data username
             $table->text('password')->nullable(false); // menentukan tipe data password
-            $table->string('email', 225)->nullable(false); // menentukan tipe data email
+            // $table->string('email', 225)->nullable(false); // menentukan tipe data email
+            $table->enum('role', ['superAdmin', 'admin', 'alumni'])->nullable(false); // menentukan tipe data email
         });
     }
 

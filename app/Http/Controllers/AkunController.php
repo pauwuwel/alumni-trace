@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Akun;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class AkunController extends Controller
 {
@@ -12,7 +14,31 @@ class AkunController extends Controller
      */
     public function index()
     {
-        //
+        return view('login.index');
+    }
+
+    /**
+     * Fungsi untuk autentikasi akun.
+     */
+    public function login(Request $request)
+    {
+        $validatedData = $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        $credentials = [
+            'username' => $validatedData['username'],
+            'password' => $validatedData['password'],
+        ];
+
+        if (Auth::attempt($credentials)) {
+            // $user = Auth::user();
+            return redirect('/dashboard')->with('_token', Session::token());
+
+        }
+
+        return redirect()->back();
     }
 
     /**

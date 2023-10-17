@@ -9,7 +9,7 @@ class Admin extends Model
 {
     use HasFactory;
     protected $table = 'admin'; //  nama tabel
-    protected $primarykey = 'id_admin'; // primary key tabel
+    protected $primaryKey = 'id_admin'; // primary key tabel
     protected $fillable = ['id_akun', 'nama', 'foto']; // rows pada tabel
     public $timestamps = false; // mematikan fitur timestamps
 }

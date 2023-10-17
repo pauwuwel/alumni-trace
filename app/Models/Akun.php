@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Akun extends Model
+class Akun extends Authenticatable
 {
     use HasFactory;
     protected $table = 'akun'; // nama tabel
-    protected $primarykey = 'id_akun'; // primary key tabel
-    protected $fillable = ['username', 'email', 'password']; // row pada tabel
+    protected $primaryKey = 'id_akun'; // primary key tabel
+    protected $fillable = ['username', 'password', 'role']; // row pada tabel
     public $timestamps = false; // mematikan fitur timestamps
 }
