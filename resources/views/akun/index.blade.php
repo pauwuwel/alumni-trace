@@ -13,33 +13,39 @@
     </head>
     <body>
         <div class="d-flex justify-content-end">
-            <a href="kelola-akun/tambah">
+            <a href="/kelola-akun/tambah">
                 <button class="btn btn-success mb-2">Tambah Akun</button>
             </a>
         </div>
-        <table class="table table-hover table-bordered">
-            <thead>
-                <tr>
-                    <th>Usermame</th>
-                    <th>Password</th>
-                    <th>Role</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ( $datas as $data )
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead>
                     <tr>
-                        <td>{{ $data->username }}</td>
-                        <td>{{ $data->password }}</td>
-                        <td>{{ $data->role }}</td>
-                        <td style="width: 12%">
-                            <button class="btn btn-danger text-white">Hapus</button>
-                            <button class="btn btn-info text-white">Edit</button>
-                        </td>
+                        <th>Usermame</th>
+                        <th>Password</th>
+                        <th>Role</th>
+                        <th>Aksi</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ( $datas as $data )
+                        <tr>
+                            <td>{{ $data->username }}</td>
+                            <td>{{ $data->password }}</td>
+                            <td>{{ $data->role }}</td>
+                            <td style="width: 12%">
+                                <a style="text-decoration: none;" href="#">
+                                    <button class="btn btn-danger text-white">Hapus</button>
+                                </a>
+                                <a style="text-decoration: none;" href="#">
+                                    <button class="btn btn-info text-white">Edit</button>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </body>
     </html>
 @endsection

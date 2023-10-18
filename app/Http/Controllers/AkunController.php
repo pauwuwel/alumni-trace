@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Akun;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class AkunController extends Controller
@@ -24,15 +25,33 @@ class AkunController extends Controller
      */
     public function create()
     {
-        //
+        return view('akun.tambah');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Akun $akun, Request $request)
     {
-        //
+        $data = $request->validate(
+            [
+                'username' => ['required'],
+                'password' => ['required'],
+                'role'    => ['required'],
+            ]
+        );
+
+        //Proses Insert
+        if ($data) {
+            $data['password'] =  Hash::make($data['password']);
+
+            // Simpan jika data terisi semua
+            $akun->create($data);
+            return redirect('kelola-akun')->with('success', 'Data user baru berhasil ditambah');
+        } else {
+            // Kembali ke form tambah data
+            return back()->with('error', 'Data user gagal ditambahkan');
+        }
     }
 
     /**

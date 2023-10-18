@@ -31,6 +31,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('kelola-akun')->middleware(['access:superAdmin'])->group(function () {
         Route::get('/', [AkunController::class, 'index']);
+        Route::get('/tambah', [AkunController::class, 'create']);
+        Route::post('/tambah', [AkunController::class, 'store']);
     });
 
     Route::get('/logout', [AuthController::class, 'loggingout']);
