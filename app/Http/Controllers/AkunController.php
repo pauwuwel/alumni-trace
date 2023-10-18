@@ -81,8 +81,27 @@ class AkunController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Akun $akun)
+    public function destroy(Akun $akun, Request $request)
     {
-        //
+        $id_akun = $request->input('id_akun');
+
+        // Hapus 
+        $aksi = $akun->where('id_akun', $id_akun )->delete();
+
+        if ($aksi) {
+            // Pesan Berhasil
+            $pesan = [
+                'success' => true,
+                'pesan'   => 'Data jenis surat berhasil dihapus'
+            ];
+        } else {
+            // Pesan Gagal
+            $pesan = [
+                'success' => false,
+                'pesan'   => 'Data gagal dihapus'
+            ];
+        }
+
+        return response()->json($pesan);
     }
 }

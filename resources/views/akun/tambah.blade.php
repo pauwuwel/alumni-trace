@@ -15,7 +15,8 @@
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="text" class="form-control" name="password" id="password" placeholder="Masukan password">
+                    <input type="text" class="form-control" name="password" id="password"
+                        placeholder="Masukan password">
                 </div>
                 <div class="form-group">
                     <label for="role">Role</label>
@@ -26,15 +27,14 @@
                     </select>
                     @csrf
                 </div>
-                <div class="d-flex mt-2" style="gap: 6px">
-                    <a style="text-decoration: none">
-                        <button type="submit" class="btn btn-success">Tambah Akun</button>
-                    </a>
-                    <a style="text-decoration: none" href="/kelola-akun"
+                <div class="d-flex mt-2" style="gap: 6px;text-decoration: none">
+                    <button type="submit" class="btn btn-success">Tambah Akun</button>
+                    <a href="/kelola-akun">
                         <btn class="btn btn-secondary">Kembali</btn>
                     </a>
                 </div>
             </form>
         </div>
     </div>
+
 @endsection

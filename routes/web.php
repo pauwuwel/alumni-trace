@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [AkunController::class, 'index']);
         Route::get('/tambah', [AkunController::class, 'create']);
         Route::post('/tambah', [AkunController::class, 'store']);
+        Route::delete('/hapus', [AkunController::class, 'destroy']);
     });
 
     Route::get('/logout', [AuthController::class, 'loggingout']);
