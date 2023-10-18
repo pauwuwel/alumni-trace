@@ -18,17 +18,18 @@ class UserSeeder extends Seeder
                 'username' => 'superadmin',
                 'role' => 'superAdmin',
                 'password' => Hash::make('superadmin')
-            ],
-            [
-                'username' => 'admin',
-                'role' => 'admin',
-                'password' => Hash::make('admin')
-            ],
-            [
-                'username' => 'alumni',
-                'role' => 'alumni',
-                'password' => Hash::make('alumni')
             ]
+            // ,
+            // [
+            //     'username' => 'admin',
+            //     'role' => 'admin',
+            //     'password' => Hash::make('admin')
+            // ],
+            // [
+            //     'username' => 'alumni',
+            //     'role' => 'alumni',
+            //     'password' => Hash::make('alumni')
+            // ]
         ];
 
         // Melakukan looping data dengan foreach

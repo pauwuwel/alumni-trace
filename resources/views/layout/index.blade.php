@@ -16,10 +16,10 @@
 </head>
 
 <body style="max-width: 100vw;overflow-x: hidden;">
-    <nav class="navbar navbar-expand-sm navbar-dark" style="background: #00AEA6">
+    <nav class="navbar navbar-expand-sm navbar-dark py-3" style="background: #00AEA6">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <img src="{{ url('img') . '/logo.png' }}" alt="alumni-trace" width="32" height="32" class="me-2">
+                <img src="{{ url('img/logo.png') }}" alt="alumni-trace" width="32" height="32" class="me-2">
             </a>
             <button class="navbar-toggler" type="button">
                 <span class="navbar-toggler-icon"></span>
@@ -28,24 +28,24 @@
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-sm-0">
                     <li class="nav-item">
-                        <a class="nav-link @yield('dashboard')" href="#">Dashboard</a>
+                        <a class="nav-link @yield('dashboard')" href="/dashboard">Dashboard</a>
                     </li>
                     @if (Auth::user()->role == 'superAdmin')
                         <li class="nav-item">
-                            <a class="nav-link @yield('account')" href="#">Kelola Akun</a>
+                            <a class="nav-link @yield('account')" href="/kelola-akun">Kelola Akun</a>
                         </li>
                     @endif
                     @if (Auth::user()->role == 'alumni')
                         <li class="nav-item">
-                            <a class="nav-link @yield('gallery')" href="#">Galeri</a>
+                            <a class="nav-link @yield('gallery')" href="/galeri">Galeri</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @yield('forum')" href="#">Forum</a>
+                            <a class="nav-link @yield('forum')" href="/forum">Forum</a>
                         </li>
                     @endif
                     @if (Auth::user()->role == 'admin')
                         <li class="nav-item">
-                            <a class="nav-link @yield('forum')" href="#">Forum</a>
+                            <a class="nav-link @yield('forum')" href="/forum">Forum</a>
                         </li>
                     @endif
                 </ul>
@@ -54,10 +54,11 @@
                         <img src="{{ url('img') . '/pp.png' }}" alt="" width="32" height="32" class="rounded-circle me-2">
                     </a>
                     <ul class="dropdown-menu text-small shadow  dropdown-menu-end">
-                        <li><a class="dropdown-item" href="/profile">{{ Auth::user()->username }}</a></li>
+                        <li><a class="dropdown-item" style="pointer-events: none" href="#">{{ Auth::user()->username }}</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
+                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
                         <li><a class="dropdown-item" href="/logout">Sign out</a></li>
                     </ul>
                 </div>

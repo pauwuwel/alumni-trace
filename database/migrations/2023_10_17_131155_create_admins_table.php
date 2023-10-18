@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('admin', function (Blueprint $table) {
             $table->integer('id_admin', true)->nullable(false); // tipe data id_admin
-            $table->integer('id_akun')->nullable(false)->index('id_akun'); // tipe data id_akun (fk)
+            $table->integer('id_akun'   )->nullable(false)->index('id_akun'); // tipe data id_akun (fk)
             $table->string('nama', 60)->nullable(false); // tipe data nama
             $table->text('foto')->nullable(true); // tipe data foto
 

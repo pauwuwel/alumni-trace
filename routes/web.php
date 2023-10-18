@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AkunController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,8 +20,8 @@ Route::get('/', function () {
     return redirect('login');
 });
 
-Route::get('/login', [AkunController::class, 'index'])->name('login');
-Route::post('/login', [AkunController::class, 'login']);
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'loggingin']);
 
 Route::middleware(['auth'])->group(function () {
 
@@ -28,5 +29,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [DashboardController::class, 'index']);
     });
 
-    Route::get('/logout', [AkunController::class, 'logout']);
+    Route::prefix('kelola-akun')->middleware(['access:superAdmin'])->group(function () {
+        Route::get('/', [AkunController::class, 'index']);
+    });
+
+    Route::get('/logout', [AuthController::class, 'loggingout']);
 });

@@ -29,7 +29,7 @@
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="text" class="form-control" name="password" id="password" placeholder="Masukan password">
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Masukan password">
                         </div>
                         <button type="submit" class="btn text-light text-uppercase fw-bold btn-md mt-1" style="letter-spacing: 2px;background: #00AEA6;">Masuk</button>
                         @csrf

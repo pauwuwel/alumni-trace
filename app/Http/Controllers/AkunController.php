@@ -4,48 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Akun;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 
 class AkunController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Akun $akun)
     {
-        return view('login.index');
-    }
-
-    /**
-     * Fungsi untuk autentikasi akun.
-     */
-    public function login(Request $request)
-    {
-        $validatedData = $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ]);
-
-        $credentials = [
-            'username' => $validatedData['username'],
-            'password' => $validatedData['password'],
+        $data = [
+            'datas' => $akun->all()
         ];
-
-        if (Auth::attempt($credentials)) {
-            // $user = Auth::user();
-            return redirect('/dashboard')->with('_token', Session::token());
-
-        }
-
-        return redirect()->back();
-    }
-
-    function logout()
-    {
-        Auth::logout();
-        Session::regenerateToken();
-        return redirect('/');
+        return view('akun.index', $data);
     }
 
     /**
