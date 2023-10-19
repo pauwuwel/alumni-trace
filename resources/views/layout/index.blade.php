@@ -58,7 +58,7 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/profile/{{ Auth::user()->id_akun }}">Profile</a></li>
                         <li><a class="dropdown-item" href="/logout">Sign out</a></li>
                     </ul>
                 </div>

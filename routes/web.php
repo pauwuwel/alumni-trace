@@ -3,6 +3,7 @@
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SuperAdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,7 +40,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('profile')->middleware(['access:superAdmin'])->group(function () {
-        Route::get('/{id}', [AkunController::class, 'index']);
+        Route::get('/{id}', [SuperAdminController::class, 'index']);
     });
 
     Route::get('/logout', [AuthController::class, 'loggingout']);

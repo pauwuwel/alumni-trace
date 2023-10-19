@@ -10,9 +10,16 @@ class SuperAdminController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(SuperAdmin $superAdmin, Request $request, string $id)
     {
-        //
+        $data = [
+            'data' => SuperAdmin::join('akun', 'super_admin.id_akun', '=', 'akun.id_akun')
+            ->select('super_admin.*', 'akun.id_akun')
+            ->where('super_admin.id_akun', '=', $id)
+            ->get()
+        ];
+
+        return view('profile.index', $data);
     }
 
     /**
