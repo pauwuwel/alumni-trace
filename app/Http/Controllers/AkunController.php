@@ -65,9 +65,13 @@ class AkunController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Akun $akun)
+    public function edit(Akun $akun, string $id)
     {
-        //
+        $data = [
+            'data' =>  Akun::where('id_akun', $id)->first()
+        ];
+
+        return view('akun.edit', $data);
     }
 
     /**
@@ -75,7 +79,23 @@ class AkunController extends Controller
      */
     public function update(Request $request, Akun $akun)
     {
-        //
+        $data = $request->validate([
+            'username' => ['required'],
+            'role' => ['required'],
+        ]);
+
+        $id_akun = $request->input('id_akun');
+
+        if ($id_akun !== null) {
+            // Process Update
+            $dataUpdate = $akun->where('id_akun', $id_akun)->update($data);
+
+            if ($dataUpdate) {
+                return redirect('kelola-akun')->with('success', 'Data jenis surat berhasil di update');
+            } else {
+                return back()->with('error', 'Data jenis surat gagal di update');
+            }
+        }
     }
 
     /**

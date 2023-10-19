@@ -33,7 +33,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [AkunController::class, 'index']);
         Route::get('/tambah', [AkunController::class, 'create']);
         Route::post('/tambah', [AkunController::class, 'store']);
+        Route::get('/edit/{id}', [AkunController::class, 'edit']);
+        Route::post('/edit/{id}', [AkunController::class, 'update']);
         Route::delete('/hapus', [AkunController::class, 'destroy']);
+    });
+
+    Route::prefix('profile')->middleware(['access:superAdmin'])->group(function () {
+        Route::get('/{id}', [AkunController::class, 'index']);
     });
 
     Route::get('/logout', [AuthController::class, 'loggingout']);

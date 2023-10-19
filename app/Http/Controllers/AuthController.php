@@ -26,12 +26,11 @@ class AuthController extends Controller
         ];
 
         if (Auth::attempt($credentials)) {
-            // $user = Auth::user();
-            return redirect('/dashboard')->with('_token', Session::token());
+            return redirect('/dashboard')->with('_token', Session::token())->with('success','Selamat datang ' . Auth::user()->username);
 
         }
 
-        return redirect()->back();
+        return redirect()->back()->with('error', 'Terdapat kesalahan pada username atau password');
     }
 
     function loggingout()

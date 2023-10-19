@@ -8,12 +8,11 @@ return new class extends Migration {
     /**
      * Run the migrations.
      */
-    protected $trgName = 'trgCreateAkun';
 
     public function up()
     {
         DB::unprepared(
-            'CREATE TRIGGER ' . $this->trgName . ' AFTER INSERT ON akun
+            'CREATE TRIGGER trgCreateAkun AFTER INSERT ON akun
             FOR EACH ROW
             BEGIN
                 DECLARE akun_id INT;
@@ -46,6 +45,6 @@ return new class extends Migration {
     public function down(): void
     {
         // DROP Trigger on Rollback
-        DB::unprepared('DROP TRIGGER IF EXISTS ' . $this->trgName); //
+        DB::unprepared('DROP TRIGGER IF EXISTS trgCreateAkun'); //
     }
 };

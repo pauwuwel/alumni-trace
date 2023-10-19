@@ -14,15 +14,16 @@
     </style>
 </head>
 <body>
-    <div class="container-fluid vh-100">
+    <div class="vh-100 overflow-hidden">
         <div class="row h-100">
-            <div class="col-lg-8 d-none d-lg-block border border-dark">
-                <img src="" alt="foto smk 1" srcset="">
+            <div class="col-lg-8 d-none d-lg-block">
+                <img src="{{ url('img') . '/smkn1.png' }}" class="w-100 h-100" alt="foto smk 1" srcset="">
             </div>
             <div class="col-lg-4 col-sm-12 d-flex align-items-center justify-content-center">
                 <form method="POST" action="">
                     <div class="d-flex flex-column" style="width: 26vw;gap: 12px;">
-                        <img src="" alt="logo alumni-trace" class="border border-dark">
+                        <img src="{{ url('img/logo_colored.png') }}" alt="logo alumni-trace" style="margin: 0px auto 12px auto; width:50%;">
+                        @include('layout.flash-massage')
                         <div class="form-group">
                             <label for="username">Username</label>
                             <input type="text" class="form-control" name="username" id="username" placeholder="Masukan username">

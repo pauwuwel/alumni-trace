@@ -18,8 +18,8 @@
 <body style="max-width: 100vw;overflow-x: hidden;">
     <nav class="navbar navbar-expand-sm navbar-dark py-3" style="background: #00AEA6">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="{{ url('img/logo.png') }}" alt="alumni-trace" width="32" height="32" class="me-2">
+            <a class="navbar-brand" href="/dashboard">
+                <img src="{{ url('img/logo_white.png') }}" alt="alumni-trace" height="32" class="me-2">
             </a>
             <button class="navbar-toggler" type="button">
                 <span class="navbar-toggler-icon"></span>
@@ -67,6 +67,7 @@
     </nav>
     <div class="container-fluid mt-3 px-5">
         <h4 style="text-transform: capitalize;color:#00A9AD;font-weight: bold">@yield('page')</h4>
+        @include('layout.flash-massage')
         @yield('content')
     </div>
 </body>
