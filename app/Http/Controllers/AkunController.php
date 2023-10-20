@@ -105,7 +105,7 @@ class AkunController extends Controller
     {
         $id_akun = $request->input('id_akun');
 
-        // Hapus 
+        // Hapus
         $aksi = $akun->where('id_akun', $id_akun )->delete();
 
         if ($aksi) {

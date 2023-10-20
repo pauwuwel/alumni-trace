@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('profile')->group(function () {
             Route::get('/{id}', [ProfileController::class, 'index']);
             Route::get('/edit/{id}', [ProfileController::class, 'edit']);
+            Route::post('/edit/simpan', [ProfileController::class, 'update']);
         });
 
     });

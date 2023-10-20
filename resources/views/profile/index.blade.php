@@ -4,7 +4,9 @@
 @section('content')
     <div class="row">
         <div style="gap: 10px" class="col-3 d-flex flex-column justify-content-center align-items-center">
-            <img src="{{ url('img') . '/pp.png' }}" width="400" height="400" alt="pp">
+            @foreach ($superAdmin as $item)
+                <img id="profile-image" src="{{ $item->foto !== null ? url('img') . '/' . $item->foto : url('img/pp.png') }}" width="400" height="400" alt="pp">
+            @endforeach
             <div class="d-flex w-100 justify-content-center">
                 <a href="/profile/edit/{{ Auth::user()->id_akun }}">
                     <button class="btn btn-info text-white">Edit Profile</button>

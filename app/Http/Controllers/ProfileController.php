@@ -53,4 +53,32 @@ class ProfileController extends Controller
 
         return view('profile.edit', $data);
     }
+
+    public function update(Request $request, SuperAdmin $superAdmin)
+    {
+        $id_super_admin = $request->input('id_super_admin');
+
+        $data = $request->validate([
+            'id_super_admin' => 'required',
+            'nama' => 'sometimes',
+            'foto' => 'sometimes|file',
+        ]);
+
+        if ($id_super_admin !== null) {
+            if ($request->hasFile('foto')) {
+                $foto_file = $request->file('foto');
+                $foto_nama = md5($foto_file->getClientOriginalName() . time()) . '.' . $foto_file->getClientOriginalExtension();
+                $foto_file->move(public_path('img'), $foto_nama);
+                $data['foto'] = $foto_nama;
+            }
+
+            $dataUpdate = $superAdmin->where('id_super_admin', $id_super_admin)->update($data);
+
+            if ($dataUpdate) {
+                return redirect('/profile/' . $id_super_admin)->with('success', 'Data profile berhasil diupdate');
+            }
+
+            return back()->with('error', 'Data jenis surat gagal diupdate');
+        }
+    }
 }

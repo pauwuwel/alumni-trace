@@ -56,7 +56,7 @@
                 confirmButtonColor: '#ff0000',
                 cancelButtonColor: '#969696',
                 confirmButtonText: 'Hapus',
-                cancelButtonText: 'Batal' 
+                cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
                     //Ajax Delete
