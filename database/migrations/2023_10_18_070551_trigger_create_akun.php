@@ -12,13 +12,14 @@ return new class extends Migration {
     public function up()
     {
         DB::unprepared(
+            
             'CREATE TRIGGER trgCreateAkun AFTER INSERT ON akun
             FOR EACH ROW
             BEGIN
                 DECLARE akun_id INT;
                 DECLARE uname VARCHAR(60);
                 DECLARE role_akun TEXT;
-                
+
                 SET akun_id = NEW.id_akun;
                 SET uname = NEW.username;
                 SET role_akun = NEW.role;
@@ -34,7 +35,7 @@ return new class extends Migration {
                 IF role_akun = "superAdmin" THEN
                     INSERT INTO super_admin (id_akun, nama) VALUES (akun_id, uname);
                 END IF;
-                
+
             END'
         );
     }

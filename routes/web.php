@@ -4,6 +4,7 @@ use App\Http\Controllers\AkunController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,21 +27,30 @@ Route::post('/login', [AuthController::class, 'loggingin']);
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::prefix('dashboard')->middleware(['access:admin,superAdmin,alumni'])->group(function () {
-        Route::get('/', [DashboardController::class, 'index']);
+    Route::middleware(['access:admin,superAdmin,alumni'])->group(function () {
+
+        Route::prefix('dashboard')->group(function () {
+            Route::get('/', [DashboardController::class, 'index']);
+        });
+
+        Route::prefix('profile')->group(function () {
+            Route::get('/{id}', [ProfileController::class, 'index']);
+            Route::get('/edit/{id}', [ProfileController::class, 'edit']);
+        });
+
     });
 
-    Route::prefix('kelola-akun')->middleware(['access:superAdmin'])->group(function () {
-        Route::get('/', [AkunController::class, 'index']);
-        Route::get('/tambah', [AkunController::class, 'create']);
-        Route::post('/tambah', [AkunController::class, 'store']);
-        Route::get('/edit/{id}', [AkunController::class, 'edit']);
-        Route::post('/edit/{id}', [AkunController::class, 'update']);
-        Route::delete('/hapus', [AkunController::class, 'destroy']);
-    });
+    Route::middleware(['access:superAdmin'])->group(function () {
 
-    Route::prefix('profile')->middleware(['access:superAdmin'])->group(function () {
-        Route::get('/{id}', [SuperAdminController::class, 'index']);
+        Route::prefix('kelola-akun')->group(function () {
+            Route::get('/', [AkunController::class, 'index']);
+            Route::get('/tambah', [AkunController::class, 'create']);
+            Route::post('/tambah', [AkunController::class, 'store']);
+            Route::get('/edit/{id}', [AkunController::class, 'edit']);
+            Route::post('/edit/{id}', [AkunController::class, 'update']);
+            Route::delete('/hapus', [AkunController::class, 'destroy']);
+        });
+
     });
 
     Route::get('/logout', [AuthController::class, 'loggingout']);

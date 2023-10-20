@@ -12,6 +12,12 @@
         body {
             font-family: 'Montserrat';
         }
+        @media (max-width: 768px) {
+            .custom-dropdown {
+                position: static;
+                float: right;
+            }
+        }
     </style>
 </head>
 
@@ -21,11 +27,11 @@
             <a class="navbar-brand" href="/dashboard">
                 <img src="{{ url('img/logo_white.png') }}" alt="alumni-trace" height="32" class="me-2">
             </a>
-            <button class="navbar-toggler" type="button">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navcontent">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse">
+            <div class="collapse navbar-collapse" id="navcontent">
                 <ul class="navbar-nav me-auto mb-2 mb-sm-0">
                     <li class="nav-item">
                         <a class="nav-link @yield('dashboard')" href="/dashboard">Dashboard</a>
@@ -49,12 +55,15 @@
                         </li>
                     @endif
                 </ul>
-                <div class="dropdown">
-                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" >
-                        <img src="{{ url('img') . '/pp.png' }}" alt="" width="32" height="32" class="rounded-circle me-2">
+                <div class="dropdown custom-dropdown">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                        data-bs-toggle="dropdown">
+                        <img src="{{ url('img') . '/pp.png' }}" alt="" width="32" height="32"
+                            class="rounded-circle me-2">
                     </a>
-                    <ul class="dropdown-menu text-small shadow  dropdown-menu-end">
-                        <li><a class="dropdown-item" style="pointer-events: none" href="#">{{ Auth::user()->username }}</a></li>
+                    <ul class="dropdown-menu text-small shadow dropdown-menu-end">
+                        <li><a class="dropdown-item" style="pointer-events: none"
+                                href="#">{{ Auth::user()->username }}</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>

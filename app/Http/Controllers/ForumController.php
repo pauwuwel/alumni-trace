@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SuperAdmin;
+use App\Models\Forum;
 use Illuminate\Http\Request;
 
-class SuperAdminController extends Controller
+class ForumController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(SuperAdmin $superAdmin, Request $request, string $id)
+    public function index()
     {
         //
     }
@@ -34,7 +34,7 @@ class SuperAdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(SuperAdmin $superAdmin)
+    public function show(Forum $forum)
     {
         //
     }
@@ -42,7 +42,7 @@ class SuperAdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(SuperAdmin $superAdmin)
+    public function edit(Forum $forum)
     {
         //
     }
@@ -50,7 +50,7 @@ class SuperAdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, SuperAdmin $superAdmin)
+    public function update(Request $request, Forum $forum)
     {
         //
     }
@@ -58,7 +58,7 @@ class SuperAdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SuperAdmin $superAdmin)
+    public function destroy(Forum $forum)
     {
         //
     }
