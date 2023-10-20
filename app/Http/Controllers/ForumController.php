@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Akun;
 use App\Models\Forum;
 use Illuminate\Http\Request;
 
@@ -10,9 +11,12 @@ class ForumController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Forum $forum)
     {
-        //
+        $data = [
+            'datas' => $forum->all(),
+        ];
+        return view('forum.index', $data);
     }
 
     /**
@@ -42,9 +46,14 @@ class ForumController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Forum $forum)
+    public function edit(Forum $forum, string $id)
     {
-        //
+
+        $data = [
+            'data' => Forum::where('id_forum', $id)->first()
+        ];
+
+        return view('forum.edit', $data);
     }
 
     /**

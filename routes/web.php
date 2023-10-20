@@ -3,6 +3,8 @@
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ForumController;
+use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +51,23 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/edit/{id}', [AkunController::class, 'edit']);
             Route::post('/edit/{id}', [AkunController::class, 'update']);
             Route::delete('/hapus', [AkunController::class, 'destroy']);
+        });
+
+    });
+
+    Route::middleware(['access:admin,alumni'])->group(function () {
+
+        Route::prefix('forum')->group(function () {
+            Route::get('/', [ForumController::class, 'index']);
+            Route::get('/{id}', [ForumController::class, 'detail']);
+        });
+
+    });
+
+    Route::middleware(['access:alumni'])->group(function () {
+
+        Route::prefix('galeri')->group(function () {
+            Route::get('/', [GalleryController::class, 'index']);
         });
 
     });
