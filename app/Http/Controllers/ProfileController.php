@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Akun;
 use App\Models\SuperAdmin;
 use App\Models\Admin;
 use App\Models\Alumni;
@@ -32,7 +33,7 @@ class ProfileController extends Controller
         return view('profile.index', $data);
     }
 
-    public function edit(SuperAdmin $superAdmin, Admin $admin, Alumni $alumni, Request $request, string $id)
+    public function edit(Akun $akun, SuperAdmin $superAdmin, Admin $admin, Alumni $alumni, Request $request, string $id)
     {
         $data = [
             'superAdmin' => SuperAdmin::join('akun', 'super_admin.id_akun', '=', 'akun.id_akun')
@@ -48,7 +49,8 @@ class ProfileController extends Controller
             'alumni' => Alumni::join('akun', 'alumni.id_akun', '=', 'akun.id_akun')
                                         ->select('alumni.*', 'akun.id_akun')
                                         ->where('alumni.id_akun', '=', $id)
-                                        ->get()
+                                        ->get(),
+            'alumni_has' => $akun->with('alumni')->get(),
         ];
 
         return view('profile.edit', $data);

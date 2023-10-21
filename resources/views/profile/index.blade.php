@@ -3,9 +3,9 @@
 @section('page', 'Profile')
 @section('content')
     <div class="row">
-        <div style="gap: 10px" class="col-3 d-flex flex-column justify-content-center align-items-center">
+        <div style="gap: 10px" class="col-md-3 d-flex flex-column justify-content-center align-items-center">
             @foreach ($superAdmin as $item)
-                <img id="profile-image" src="{{ $item->foto !== null ? url('img') . '/' . $item->foto : url('img/pp.png') }}" width="400" height="400" alt="pp">
+                <img id="profile-image" src="{{ $item->foto !== null ? url('img') . '/' . $item->foto : url('img/pp.png') }}" class="w-100" alt="pp">
             @endforeach
             <div class="d-flex w-100 justify-content-center">
                 <a href="/profile/edit/{{ Auth::user()->id_akun }}">
@@ -13,7 +13,7 @@
                 </a>
             </div>
         </div>
-        <div class="col-9">
+        <div class="col-md-9">
             @if (Auth::user()->role == 'superAdmin')
                 @foreach ($superAdmin as $item)
                     <div class="form-group">

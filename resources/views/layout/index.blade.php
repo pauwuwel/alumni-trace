@@ -30,7 +30,6 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navcontent">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse" id="navcontent">
                 <ul class="navbar-nav me-auto mb-2 mb-sm-0">
                     <li class="nav-item">
@@ -58,7 +57,7 @@
                 <div class="dropdown custom-dropdown">
                     <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                         data-bs-toggle="dropdown">
-                        <img src="{{ url('img') . '/pp.png' }}" alt="" width="32" height="32"
+                        <img src="{{ $pfp ? url('img') . '/' . $pfp : url('img') . '/pp.png' }}" alt="" width="32" height="32"
                             class="rounded-circle me-2">
                     </a>
                     <ul class="dropdown-menu text-small shadow dropdown-menu-end">

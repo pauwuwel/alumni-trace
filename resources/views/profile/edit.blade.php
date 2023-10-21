@@ -16,7 +16,7 @@
         <div style="gap: 10px" class="col-md-3 d-flex flex-column justify-content-center align-items-center">
             <div class="profile-picture">
                 @foreach ($superAdmin as $item)
-                    <img id="profile-image" src="{{ $item->foto !== null ? url('img') . '/' . $item->foto : url('img/pp.png') }}" width="400" height="400" alt="pp">
+                    <img id="profile-image" src="{{ $item->foto !== null ? url('img') . '/' . $item->foto : url('img/pp.png') }}" class="w-100" alt="pp">
                 @endforeach
                 <input type="file" name="foto" id="file-input" accept="image/*" style="display: none">
                 <label for="file-input" class="change-profile-label">Klik untuk mengubah foto profil</label>

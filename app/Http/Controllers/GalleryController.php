@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alumni;
 use Illuminate\Http\Request;
 
 class GalleryController extends Controller
 {
-    public function index()
+    public function index(Alumni $alumni)
     {
-        return view('galeri.index');
+        $data = [
+            'datas' => $alumni->orderBy('nama', 'asc')->get()
+        ];
+        return view('galeri.index', $data);
     }
 }
