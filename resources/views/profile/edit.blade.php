@@ -18,12 +18,14 @@
         .hide-arrows {
             -moz-appearance: textfield;
         }
-    </style>
-    <form method="POST" action="" class="row">
+    </style>                
+    <form method="POST" action="" class="form row" enctype="multipart/form-data">
         @foreach ($datas as $data)
             <div style="gap: 10px" class="col-md-3 d-flex flex-column align-items-center">
                 <img id="profile-image" src="{{ $data->foto !== null ? url('img/' . $data->foto) : url('img/pp.png') }}" class="w-100" alt="pp">
                 <input type="file" name="foto" id="file-input" accept="image/*" style="display: none">
+                <input type="hidden" name="id_alumni" value="{{ $data->id_alumni }}">
+                <input type="hidden" name="role" value="{{ $data->role }}">
                 <label for="file-input" class="change-profile-label">Klik untuk mengubah foto profil</label>
                 @csrf
                 <div class="d-flex w-100 justify-content-center" style="gap: 10px;">
@@ -45,7 +47,7 @@
                     </div>
                     <div class="form-group">
                         <label for="jenKel">Jenis Kelamin</label>
-                        <select class="form-select" id="jenKel">
+                        <select class="form-select" name="jenis_kelamin" id="jenKel">
                             <option selected hidden>Pilih Jenis Kelamin</option>
                             <option value="laki-laki" {{ $data->jenis_kelamin == 'laki-laki' ? 'selected' : '' }}>Laki-Laki</option>
                             <option value="perempuan" {{ $data->jenis_kelamin == 'perempuan' ? 'selected' : '' }}>Perempuan</option>

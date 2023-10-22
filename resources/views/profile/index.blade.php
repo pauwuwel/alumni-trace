@@ -17,30 +17,37 @@
             </div>
             <div class="col-md-9">
                 <div class="d-flex flex-column" style="gap: 11px">
-                    <div class="form-group">
-                        <label for="nama">Nama</label>
-                        <input type="text" class="form-control" disabled name="nama" id="nama" placeholder="Masukan nama" value="{{ $data->nama !== null ? $data->nama : '-' }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="tanggalLahir">Tanggal Lahir</label>
-                        <input type="text" class="form-control" disabled name="tanggal_lahir" id="tanggalLahir" placeholder="Masukan tanggal lahir" value="{{ $data->tanggal_lahir !== null ? $data->tanggal_lahir : '-' }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="jenKel">Jenis Kelamin</label>
-                        <input type="text" class="form-control text-capitalize" disabled name="jenis_kelamin" id="jenKel" value="{{ $data->jenis_kelamin !== null ? $data->jenis_kelamin : '-' }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="notelp">Nomor Telepon</label>
-                        <input type="text" class="form-control" disabled name="nomor_telepon" id="notelp" placeholder="Masukan nomor telepon" value="{{ $data->nomor_telepon !== null ? $data->nomor_telepon : '-' }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="alamat">Alamat</label>
-                        <input type="text" class="form-control" disabled name="alamat" id="alamat" placeholder="Masukan alamat" value="-">
-                    </div>
-                    <div class="form-group">
-                        <label for="karir">Riwayat Karir</label>
-                        <input type="text" class="form-control" disabled name="karir" id="karir" placeholder="Masukan karir" value="-">
-                    </div>
+                    @if ($data->role == 'admin' || $data->role == 'admin')
+                        <div class="form-group">
+                            <label for="nama">Nama</label>
+                            <input type="text" class="form-control" disabled name="nama" id="nama" placeholder="Masukan nama" value="{{ $data->nama !== null ? $data->nama : '-' }}">
+                        </div>
+                    @elseif ($data->role == 'alumni')
+                        <div class="form-group">
+                            <label for="nama">Nama</label>
+                            <input type="text" class="form-control" disabled name="nama" id="nama" placeholder="Masukan nama" value="{{ $data->nama !== null ? $data->nama : '-' }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="tanggalLahir">Tanggal Lahir</label>
+                            <input type="text" class="form-control" disabled name="tanggal_lahir" id="tanggalLahir" placeholder="Masukan tanggal lahir" value="{{ $data->tanggal_lahir !== null ? $data->tanggal_lahir : '-' }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="jenKel">Jenis Kelamin</label>
+                            <input type="text" class="form-control text-capitalize" disabled name="jenis_kelamin" id="jenKel" value="{{ $data->jenis_kelamin !== null ? $data->jenis_kelamin : '-' }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="notelp">Nomor Telepon</label>
+                            <input type="text" class="form-control" disabled name="nomor_telepon" id="notelp" placeholder="Masukan nomor telepon" value="{{ $data->nomor_telepon !== null ? $data->nomor_telepon : '-' }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="alamat">Alamat</label>
+                            <input type="text" class="form-control" disabled name="alamat" id="alamat" placeholder="Masukan alamat" value="-">
+                        </div>
+                        <div class="form-group">
+                            <label for="karir">Riwayat Karir</label>
+                            <input type="text" class="form-control" disabled name="karir" id="karir" placeholder="Masukan karir" value="-">
+                        </div>
+                    @endif
                 </div>
             </div>
         @endforeach

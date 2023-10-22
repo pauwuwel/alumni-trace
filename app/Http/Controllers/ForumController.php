@@ -14,11 +14,17 @@ class ForumController extends Controller
      */
     public function index(Forum $forum)
     {
-        $data = [
-            'datas' => $forum->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
-                             ->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
-                             ->select('forum.*', 'alumni.nama')->orderBy('id_forum', 'desc')->get()
-        ];
+        $alumnis = $forum
+                        ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
+                        ->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
+                        ->select('forum.*', 'alumni.nama');
+        $admins = $forum
+                        ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
+                        ->join('admin', 'akun.id_akun', '=', 'admin.id_akun')
+                        ->select('forum.*', 'admin.nama');
+
+                   
+        $data = ['datas' => $alumnis->union($admins)->orderBy('id_forum', 'desc')->get()];
 
         return view('forum.index', $data);
     }
@@ -43,6 +49,7 @@ class ForumController extends Controller
                 'attachment' => ['sometimes'],
                 'tanggal_post',
                 'id_pembuat',
+                'status',
             ]
         );
 
@@ -50,6 +57,11 @@ class ForumController extends Controller
         if ($data) {
             $data['tanggal_post'] = Carbon::now()->format( 20 .'y-m-d');
             $data['id_pembuat'] = auth()->user()->id_akun;
+            
+            if (auth()->user()->id_akun)
+            {
+                $data['status'] = 'accepted';
+            }
             
             // Simpan jika data terisi semua
             $forum->create($data);

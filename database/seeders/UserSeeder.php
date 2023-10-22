@@ -50,9 +50,9 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('dwiki')
             ],
             [
-                'username' => 'farelganteng',
+                'username' => 'parel',
                 'role' => 'alumni',
-                'password' => Hash::make('farel')
+                'password' => Hash::make('parel'),
             ],
             [
                 'username' => 'gahtan',
