@@ -43,7 +43,7 @@ class AkunController extends Controller
 
         //Proses Insert
         if ($data) {
-            $data['password'] =  Hash::make($data['password']);
+            $data['password'] = Hash::make($data['password']);
 
             // Simpan jika data terisi semua
             $akun->create($data);

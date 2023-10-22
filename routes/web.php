@@ -9,6 +9,8 @@ use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+use Illuminate\Support\Carbon;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -60,7 +62,12 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('forum')->group(function () {
             Route::get('/', [ForumController::class, 'index']);
-            Route::get('/{id}', [ForumController::class, 'detail']);
+            Route::get('/tambah', [ForumController::class, 'create']);
+            Route::post('/tambah', [ForumController::class, 'store']);
+            Route::get('/{id}', [ForumController::class, 'show']);
+            Route::get('/edit/{id}', [ForumController::class, 'edit']);
+            Route::post('/edit/{id}', [ForumController::class, 'update']);
+            Route::delete('/hapus', [ForumController::class, 'destroy']);
         });
 
     });

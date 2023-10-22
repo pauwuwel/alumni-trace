@@ -76,7 +76,7 @@
     <div class="container-fluid mt-3 px-5">
         <div class="d-flex align-items-end" style="gap:10px">
             <h4 style="text-transform: capitalize;color:#00A9AD;font-weight: bold">@yield('page')</h4>
-            <h6><a style="color:#00A9AD;text-decoration: underline" href="#">@yield('subpage')</a></h6>
+            <h6><a style="color:#00A9AD;text-decoration: underline" href="@yield('sublink')">@yield('subpage')</a></h6>
         </div>
         @include('layout.flash-massage')
         @yield('content')

@@ -11,49 +11,108 @@ use App\Models\Alumni;
 
 class ProfileController extends Controller
 {
-    public function index(SuperAdmin $superAdmin, Admin $admin, Alumni $alumni, Request $request, string $id)
+    public function index(Akun $akun, Request $request, string $id)
     {
-        $data = [
-            'superAdmin' => SuperAdmin::join('akun', 'super_admin.id_akun', '=', 'akun.id_akun')
-                                        ->select('super_admin.*', 'akun.id_akun')
-                                        ->where('super_admin.id_akun', '=', $id)
-                                        ->get(),
+        $akun = Akun::find($id); 
+        
+        if ($akun) 
+        {
+            if ($akun->alumni) 
+            {
+                
+                $data = [ 
+                    'datas' => $akun->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
+                    ->select('alumni.*')->where('alumni.id_akun', $id)->get()
+                ];
 
-            'admin' => Admin::join('akun', 'admin.id_akun', '=', 'akun.id_akun')
-                                        ->select('admin.*', 'akun.id_akun')
-                                        ->where('admin.id_akun', '=', $id)
-                                        ->get(),
+                return view('profile.index', $data);
 
-            'alumni' => Alumni::join('akun', 'alumni.id_akun', '=', 'akun.id_akun')
-                                        ->select('alumni.*', 'akun.id_akun')
-                                        ->where('alumni.id_akun', '=', $id)
-                                        ->get()
-        ];
+            } 
+            
+            elseif ($akun->admin) 
+            {
+                
+                $data = [ 
+                    'data' => $akun->join('admin', 'akun.id_akun', '=', 'admin.id_akun')
+                    ->select('admin.*')->where('admin.id_akun', $id)->get()
+                ];
 
-        return view('profile.index', $data);
+                return view('profile.index', $data);
+            } 
+            
+            elseif ($akun->superadmin) 
+            {
+                
+                $data = [ 
+                    'data' => $akun->join('admin', 'akun.id_akun', '=', 'admin.id_akun')
+                    ->select('admin.*')->where('admin.id_akun', $id)->get()
+                ];
+
+                return view('profile.index', $data);
+            } 
+            
+            else 
+            {
+                return back()->with('error', 'terjadi kesalahan');
+            }
+        }
+
+        else 
+        {
+            return back()->with('error', 'terjadi kesalahan');
+        }
     }
 
-    public function edit(Akun $akun, SuperAdmin $superAdmin, Admin $admin, Alumni $alumni, Request $request, string $id)
+    public function edit(Akun $akun, Request $request, string $id)
     {
-        $data = [
-            'superAdmin' => SuperAdmin::join('akun', 'super_admin.id_akun', '=', 'akun.id_akun')
-                                        ->select('super_admin.*', 'akun.id_akun')
-                                        ->where('super_admin.id_akun', '=', $id)
-                                        ->get(),
+        $akun = Akun::find($id); 
+        
+        if ($akun) 
+        {
+            if ($akun->alumni) 
+            {
+                
+                $data = [ 
+                    'datas' => $akun->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
+                    ->select('alumni.*')->where('alumni.id_akun', $id)->get()
+                ];
 
-            'admin' => Admin::join('akun', 'admin.id_akun', '=', 'akun.id_akun')
-                                        ->select('admin.*', 'akun.id_akun')
-                                        ->where('admin.id_akun', '=', $id)
-                                        ->get(),
+                return view('profile.edit', $data);
 
-            'alumni' => Alumni::join('akun', 'alumni.id_akun', '=', 'akun.id_akun')
-                                        ->select('alumni.*', 'akun.id_akun')
-                                        ->where('alumni.id_akun', '=', $id)
-                                        ->get(),
-            'alumni_has' => $akun->with('alumni')->get(),
-        ];
+            } 
+            
+            elseif ($akun->admin) 
+            {
+                
+                $data = [ 
+                    'data' => $akun->join('admin', 'akun.id_akun', '=', 'admin.id_akun')
+                    ->select('admin.*')->where('admin.id_akun', $id)->get()
+                ];
 
-        return view('profile.edit', $data);
+                return view('profile.edit', $data);
+            } 
+            
+            elseif ($akun->superadmin) 
+            {
+                
+                $data = [ 
+                    'data' => $akun->join('admin', 'akun.id_akun', '=', 'admin.id_akun')
+                    ->select('admin.*')->where('admin.id_akun', $id)->get()
+                ];
+
+                return view('profile.edit', $data);
+            } 
+            
+            else 
+            {
+                return back()->with('error', 'terjadi kesalahan');
+            }
+        }
+
+        else 
+        {
+            return back()->with('error', 'terjadi kesalahan');
+        }
     }
 
     public function update(Request $request, SuperAdmin $superAdmin)
