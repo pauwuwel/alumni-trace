@@ -24,7 +24,7 @@ class ForumController extends Controller
                         ->select('forum.*', 'admin.nama');
 
                    
-        $data = ['datas' => $alumnis->union($admins)->orderBy('id_forum', 'desc')->get()];
+        $data = ['datas' => $alumnis->union($admins)->where('status', 'accepted')->orderBy('id_forum', 'desc')->get()];
 
         return view('forum.index', $data);
     }
