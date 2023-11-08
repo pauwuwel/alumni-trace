@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Akun;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
 
 class AkunController extends Controller
 {
@@ -16,7 +18,7 @@ class AkunController extends Controller
     {
         $data = [
             'datas' => $akun->all()
-        ];
+        ]; // mengembalikan data akun dan akan dikirim ke halaman kelola akun
         return view('akun.index', $data);
     }
 
@@ -46,8 +48,16 @@ class AkunController extends Controller
             $data['password'] = Hash::make($data['password']);
 
             // Simpan jika data terisi semua
-            $akun->create($data);
-            return redirect('kelola-akun')->with('success', 'Data user baru berhasil ditambah');
+            DB::beginTransaction();
+            try {
+                $akunId = $akun->create($data)->id_akun;
+                DB::statement("CALL createProfile(?, ?, ?)", [$akunId, $data['username'], $data['role']]);
+                // DB::commit();
+                return redirect('kelola-akun')->with('success', 'Data user berhasil ditambahkan');
+            } catch (Exception $e) {
+                // DB::rollback();  
+                return back()->with('error', 'Data user gagal ditambahkan');
+            }
         } else {
             // Kembali ke form tambah data
             return back()->with('error', 'Data user gagal ditambahkan');
@@ -91,9 +101,9 @@ class AkunController extends Controller
             $dataUpdate = $akun->where('id_akun', $id_akun)->update($data);
 
             if ($dataUpdate) {
-                return redirect('kelola-akun')->with('success', 'Data jenis surat berhasil di update');
+                return redirect('kelola-akun')->with('success', 'Data akun berhasil di update');
             } else {
-                return back()->with('error', 'Data jenis surat gagal di update');
+                return back()->with('error', 'Data akun gagal di update');
             }
         }
     }

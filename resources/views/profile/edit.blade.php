@@ -24,7 +24,6 @@
             <div style="gap: 10px" class="col-md-3 d-flex flex-column align-items-center">
                 <img id="profile-image" src="{{ $data->foto !== null ? url('img/' . $data->foto) : url('img/pp.png') }}" class="w-100" alt="pp">
                 <input type="file" name="foto" id="file-input" accept="image/*" style="display: none">
-                <input type="hidden" name="id_alumni" value="{{ $data->id_alumni }}">
                 <input type="hidden" name="role" value="{{ $data->role }}">
                 <label for="file-input" class="change-profile-label">Klik untuk mengubah foto profil</label>
                 @csrf
@@ -37,35 +36,49 @@
             </div>
             <div class="col-md-9">
                 <div class="d-flex flex-column" style="gap: 11px">
-                    <div class="form-group">
-                        <label for="nama">Nama</label>
-                        <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukan nama" value="{{ $data->nama }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="tanggalLahir">Tanggal Lahir</label>
-                        <input type="date" class="form-control" name="tanggal_lahir" id="tanggalLahir" placeholder="Masukan tanggal lahir" value="{{ $data->tanggal_lahir }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="jenKel">Jenis Kelamin</label>
-                        <select class="form-select" name="jenis_kelamin" id="jenKel">
-                            <option selected hidden>Pilih Jenis Kelamin</option>
-                            <option value="laki-laki" {{ $data->jenis_kelamin == 'laki-laki' ? 'selected' : '' }}>Laki-Laki</option>
-                            <option value="perempuan" {{ $data->jenis_kelamin == 'perempuan' ? 'selected' : '' }}>Perempuan</option>
-                        </select>
-                        <!-- <input type="text" class="form-control" name="jenis_kelamin" id="jenKel" value="{{ $data->jenis_kelamin }}"> -->
-                    </div>
-                    <div class="form-group">
-                        <label for="notelp">Nomor Telepon</label>
-                        <input type="number" class="form-control hide-arrows" name="nomor_telepon" id="notelp" placeholder="Masukan nomor telepon" value="{{ $data->nomor_telepon }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="alamat">Alamat</label>
-                        <input type="text" class="form-control" name="alamat" id="alamat" placeholder="Masukan alamat" disabled value="-">
-                    </div>
-                    <div class="form-group">
-                        <label for="karir">Riwayat Karir</label>
-                        <input type="text" class="form-control" name="karir" id="karir" placeholder="Masukan karir" disabled value="-">
-                    </div>
+                    @if ($data->role == 'superAdmin')
+                        <div class="form-group">
+                            <label for="nama">Nama</label>
+                            <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukan nama" value="{{ $data->nama }}">
+                            <input type="hidden" name="id_super_admin" value="{{ $data->id_super_admin }}">
+                        </div>
+                    @elseif ($data->role == 'admin')
+                        <div class="form-group">
+                            <label for="nama">Nama</label>
+                            <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukan nama" value="{{ $data->nama }}">
+                            <input type="hidden" name="id_admin" value="{{ $data->id_admin }}">
+                        </div>
+                    @elseif ($data->role == 'alumni')
+                        <div class="form-group">
+                            <label for="nama">Nama</label>
+                            <input type="text" required class="form-control" name="nama" id="nama" placeholder="Masukan nama" value="{{ $data->nama }}">
+                            <input type="hidden" name="id_alumni" value="{{ $data->id_alumni }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="tanggalLahir">Tanggal Lahir</label>
+                            <input type="date" required class="form-control" name="tanggal_lahir" id="tanggalLahir" placeholder="Masukan tanggal lahir" value="{{ $data->tanggal_lahir }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="jenKel">Jenis Kelamin</label>
+                            <select required class="form-select" name="jenis_kelamin" id="jenKel">
+                                <option selected value="" hidden>Pilih Jenis Kelamin</option>
+                                <option value="laki-laki" {{ $data->jenis_kelamin == 'laki-laki' ? 'selected' : '' }}>Laki-Laki</option>
+                                <option value="perempuan" {{ $data->jenis_kelamin == 'perempuan' ? 'selected' : '' }}>Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="notelp">Nomor Telepon</label>
+                            <input type="number" required class="form-control hide-arrows" name="nomor_telepon" id="notelp" placeholder="Masukan nomor telepon" value="{{ $data->nomor_telepon }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="alamat">Alamat</label>
+                            <input type="text" class="form-control" name="alamat" id="alamat" placeholder="Masukan alamat" disabled value="-">
+                        </div>
+                        <div class="form-group">
+                            <label for="karir">Riwayat Karir</label>
+                            <input type="text" class="form-control" name="karir" id="karir" placeholder="Masukan karir" disabled value="-">
+                        </div>
+                    @endif
                 </div>
             </div>
         @endforeach

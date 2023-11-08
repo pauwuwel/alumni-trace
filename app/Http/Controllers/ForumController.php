@@ -44,9 +44,9 @@ class ForumController extends Controller
     {
         $data = $request->validate(
             [
-                'judul' => ['required'],
-                'content' => ['required'],
-                'attachment' => ['sometimes'],
+                'judul' => 'required',
+                'content' => 'required',
+                'attachment' => 'sometimes|file',
                 'tanggal_post',
                 'id_pembuat',
                 'status',
@@ -55,7 +55,6 @@ class ForumController extends Controller
 
         //Proses Insert
         if ($data) {
-            $data['tanggal_post'] = Carbon::now()->format( 20 .'y-m-d');
             $data['id_pembuat'] = auth()->user()->id_akun;
             
             if (auth()->user()->id_akun)

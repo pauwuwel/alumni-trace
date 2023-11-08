@@ -11,7 +11,7 @@ class GalleryController extends Controller
     {
         $data = [
             'datas' => $alumni->orderBy('nama', 'asc')->get()
-        ];
+        ]; // mengembalikan data dalam sebuah array
         return view('galeri.index', $data);
     }
 }
