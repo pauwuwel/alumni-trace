@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('forum', function (Blueprint $table) {
-            $table->integer('id_forum', true)->nullable(false);
-            $table->integer('id_pembuat')->nullable(false)->index('id_pembuat');
-            $table->string('judul', 60)->nullable(false);
-            $table->text('content')->nullable(false);
-            $table->text('attachment')->nullable(true);
-            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending')->nullable(false);
-            $table->date('tanggal_post')->nullable(false);
+            $table->integer('id_forum', true)->nullable(false); // tipe data id_forum
+            $table->integer('id_pembuat')->nullable(false)->index('id_pembuat'); // tipe data id_pembuat
+            $table->string('judul', 60)->nullable(false); // tipe data judul
+            $table->text('content')->nullable(false); // tipe data content
+            $table->text('attachment')->nullable(true); // tipe data attachment
+            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending')->nullable(false); // tipe data status
+            $table->date('tanggal_post')->nullable(false); // tipe data tanggal_post
 
-            $table->foreign('id_pembuat')->on('akun')->references('id_akun')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('id_pembuat')->on('akun')->references('id_akun')->onUpdate('cascade')->onDelete('cascade'); // menyambungkan forgein key ke tabel akun
         });
     }
 

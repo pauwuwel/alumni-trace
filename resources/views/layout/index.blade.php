@@ -53,6 +53,11 @@
                             <a class="nav-link @yield('forum')" href="/forum">Forum</a>
                         </li>
                     @endif
+                    @if (Auth::user()->role == 'alumni')
+                    <li class="nav-item">
+                        <a class="nav-link @yield('logs')" href="/logs">Logs</a>
+                    </li>
+                    @endif
                 </ul>
                 <div class="dropdown custom-dropdown">
                     <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"

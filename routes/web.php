@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\KomentarController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -68,8 +69,17 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}', [ForumController::class, 'show']);
             Route::get('/edit/{id}', [ForumController::class, 'edit']);
             Route::post('/edit/{id}', [ForumController::class, 'update']);
-            Route::delete('/hapus', [ForumController::class, 'destroy']);
+            Route::delete('/hapus', [ForumController::class, 'destroy']);      
+            
+            Route::get('/komentar/{id}', [KomentarController::class,'create']);
+            Route::post('/komentar/tambah/{id}', [KomentarController::class,'store']);
+            Route::get('/komentar/edit/{id}', [KomentarController::class,'edit']);
+            Route::post('/komentar/update/{id}', [KomentarController::class,'update']);
+            Route::delete('/komentar/hapus', [KomentarController::class,'destroy']);
+
+
         });
+        Route::get('logs', [KomentarController::class,'logs']);
 
     });
 

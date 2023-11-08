@@ -30,6 +30,11 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('abdimalik')
             ],
             [
+                'username' => 'banna',
+                'role' => 'alumni',
+                'password' => Hash::make('banna')
+            ],
+            [
                 'username' => 'dinda',
                 'role' => 'alumni',
                 'password' => Hash::make('dinda')

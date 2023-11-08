@@ -4,8 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Akun;
 use App\Models\Forum;
+use App\Models\komentar;
+use App\Models\logs;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ForumController extends Controller
 {
@@ -14,17 +19,40 @@ class ForumController extends Controller
      */
     public function index(Forum $forum)
     {
-        $alumnis = $forum
-                        ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
-                        ->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
-                        ->select('forum.*', 'alumni.nama');
-        $admins = $forum
-                        ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
-                        ->join('admin', 'akun.id_akun', '=', 'admin.id_akun')
-                        ->select('forum.*', 'admin.nama');
+        $forums = $forum->all();
 
-                   
-        $data = ['datas' => $alumnis->union($admins)->orderBy('id_forum', 'desc')->get()];
+        $komen = DB::table('view_komentar')->get();
+
+        $alumnis = $forum
+            ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
+            ->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
+            ->select('forum.*', 'alumni.nama');
+        $admins = $forum
+            ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
+            ->join('admin', 'akun.id_akun', '=', 'admin.id_akun')
+            ->select('forum.*', 'admin.nama');
+
+        $data = [
+            'datas' => $alumnis
+                ->union($admins)
+                ->orderBy('id_forum', 'desc')
+                ->get(),
+        ];
+
+        $totalForum = DB::select('SELECT getTotalForum() AS totalForum')[0]->totalForum;
+        $totalKomentar = DB::select('SELECT getTotalKomentar() AS totalKomentar')[0]->totalKomentar;
+        // Mengirim data agar ditampilkan kedalam view dengan isi array data pendaftaran
+        // $data = [
+        //         'forum' => $forum->all(),
+        //         'jumlahForum' => $totalForum
+        // ];
+
+        $data = [
+            'forum' => $forums,
+            'jumlahForum' => $totalForum,
+            'jumlahKomentar' => $totalKomentar,
+            'komentar' => $komen,
+        ];
 
         return view('forum.index', $data);
     }
@@ -36,53 +64,76 @@ class ForumController extends Controller
     {
         return view('forum.tambah');
     }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Forum $forum, Request $request)
     {
-        $data = $request->validate(
-            [
-                'judul' => ['required'],
-                'content' => ['required'],
-                'attachment' => ['sometimes'],
-                'tanggal_post',
-                'id_pembuat',
-                'status',
-            ]
-        );
+        $data = $request->validate([
+            'judul' => ['required'],
+            'content' => ['required'],
+            'attachment' => ['sometimes'],
+            'tanggal_post',
+            'id_pembuat',
+            'status',
+        ]);
 
         //Proses Insert
         if ($data) {
-            $data['tanggal_post'] = Carbon::now()->format( 20 .'y-m-d');
+            $data['tanggal_post'] = Carbon::now()->format(20 . 'y-m-d');
             $data['id_pembuat'] = auth()->user()->id_akun;
-            
-            if (auth()->user()->id_akun)
-            {
+
+            if (auth()->user()->id_akun) {
                 $data['status'] = 'accepted';
             }
-            
-            // Simpan jika data terisi semua
-            $forum->create($data);
-            return redirect('forum')->with('success', 'Data user baru berhasil ditambah');
-        } else {
-            // Kembali ke form tambah data
-            return back()->with('error', 'Data user gagal ditambahkan');
+
+            if ($request->hasFile('attachment') && $request->file('attachment')->isValid()) {
+                $foto_file = $request->file('attachment');
+                $foto_nama = md5($foto_file->getClientOriginalName() . time()) . '.' . $foto_file->getClientOriginalExtension();
+                $foto_file->move(public_path('img'), $foto_nama);
+                $data['attachment'] = $foto_nama;
+            }
+
+            // Simpan jika data telah terisi semua
+            // DB::beginTransaction();
+            try {
+                // $kelasId = $forum->create($data)->id_kelas;
+                DB::statement('CALL Createforum(?, ?, ?, ?, ?, ?)', [$data['id_pembuat'], $data['judul'], $data['content'], $data['attachment'], $data['status'], $data['tanggal_post']]);
+                // DB::commit();
+                return redirect('forum')->with('success', 'data kamu berhasil ditambahkan');
+            } catch (Exception $e) {
+                // $e->getMessage();
+                dd($e->getMessage());
+                // DB::rollback();
+                return back()->with('error', 'Data siswa gagal ditambahkan');
+            }
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Forum $forum, string $id)
+
+    public function show(Forum $forum, string $id, komentar $komentar)
     {
+        $alumnis = $forum
+            ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
+            ->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
+            ->select('forum.*', 'alumni.nama');
+        $admins = $forum
+            ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
+            ->join('admin', 'akun.id_akun', '=', 'admin.id_akun')
+            ->select('forum.*', 'admin.nama');
+
         $data = [
-            'datas' => $forum->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
-                             ->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
-                             ->select('forum.*', 'alumni.nama')->where('forum.id_forum', $id)->get()
+            'datas' => $alumnis
+                ->union($admins)
+                ->where('id_forum', $id)
+                ->get(),
+            'komentar' => $komentar->join('akun', 'komentar.id_pembuat', '=', 'akun.id_akun')->get(),
         ];
 
+        // dd($data);
         return view('forum.detail', $data);
     }
 
@@ -92,7 +143,7 @@ class ForumController extends Controller
     public function edit(Forum $forum, string $id)
     {
         $data = [
-            'data' => Forum::where('id_forum', $id)->first()
+            'data' => Forum::where('id_forum', $id)->first(),
         ];
 
         return view('forum.edit', $data);
@@ -103,6 +154,8 @@ class ForumController extends Controller
      */
     public function update(Request $request, Forum $forum)
     {
+        // melakukan validasi untuk mengirim data ke dalam model menggunakan array
+        //array multidimensi, array assosiative, memiliki 3 element
         $data = $request->validate([
             'judul' => ['sometimes'],
             'content' => ['sometimes'],
@@ -131,22 +184,24 @@ class ForumController extends Controller
         $id_forum = $request->input('id_forum');
 
         // Hapus
-        $aksi = $forum->where('id_forum', $id_forum )->delete();
+        $aksi = $forum->where('id_forum', $id_forum)->delete();
 
         if ($aksi) {
             // Pesan Berhasil
             $pesan = [
                 'success' => true,
-                'pesan'   => 'Data jenis surat berhasil dihapus'
+                'pesan' => 'Data jenis surat berhasil dihapus',
             ];
         } else {
             // Pesan Gagal
             $pesan = [
                 'success' => false,
-                'pesan'   => 'Data gagal dihapus'
+                'pesan' => 'Data gagal dihapus',
             ];
         }
 
         return response()->json($pesan);
     }
+
+    
 }
