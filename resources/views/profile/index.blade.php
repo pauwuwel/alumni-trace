@@ -2,7 +2,7 @@
 @section('title', 'Profile')
 @section('page', 'Profile')
 @section('content')
-    <div class="row">
+    <div class="row"> 
         @foreach ($datas as $data)
             <div style="gap: 10px" class="col-md-3 d-flex flex-column align-items-center">
                 <img id="profile-image" src="{{ $data->foto !== null ? url('img/' . $data->foto) : url('img/pp.png') }}" class="w-100" alt="pp">
@@ -12,12 +12,12 @@
                             <button class="btn btn-info text-white">Edit Profile</button>
                         </a>
                     @endif
-                    <button onClick="kembali()" class="btn btn-secondary">Kembali</button>
+                    <button type="button" onClick="kembali()" class="btn btn-secondary">Kembali</button>
                 </div>
             </div>
             <div class="col-md-9">
                 <div class="d-flex flex-column" style="gap: 11px">
-                    @if ($data->role == 'admin' || $data->role == 'admin')
+                    @if ($data->role == 'superAdmin' || $data->role == 'admin')
                         <div class="form-group">
                             <label for="nama">Nama</label>
                             <input type="text" class="form-control" disabled name="nama" id="nama" placeholder="Masukan nama" value="{{ $data->nama !== null ? $data->nama : '-' }}">

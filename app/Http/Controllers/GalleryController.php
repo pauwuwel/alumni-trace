@@ -12,8 +12,8 @@ class GalleryController extends Controller
         // untuk mengambil data alumni dan mengurut kan data berdasarkan id alumni dari yang 
         // terkecil ke yang terbesar
         $data = [
-            'datas' => $alumni->orderBy('id_alumni', 'asc')->get()
-        ]; //mengembalikan data dalam sebuah array
+            'datas' => $alumni->orderBy('nama', 'asc')->get()
+        ]; // mengembalikan data dalam sebuah array
         return view('galeri.index', $data);
     }
 }

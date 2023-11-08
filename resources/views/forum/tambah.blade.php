@@ -19,7 +19,7 @@
                 <div class="d-flex mt-2" style="gap: 6px;text-decoration: none">
                     <button type="submit" class="btn btn-success">Tambah Forum</button>
                     <a href="/forum">
-                        <btn class="btn btn-secondary">Kembali</btn>
+                        <button type="button" class="btn btn-secondary">Kembali</button>
                     </a>
                 </div>
             </form>

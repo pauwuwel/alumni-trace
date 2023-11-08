@@ -69,18 +69,19 @@ class ForumController extends Controller
      */
     public function store(Forum $forum, Request $request)
     {
-        $data = $request->validate([
-            'judul' => ['required'],
-            'content' => ['required'],
-            'attachment' => ['sometimes'],
-            'tanggal_post',
-            'id_pembuat',
-            'status',
-        ]);
+        $data = $request->validate(
+            [
+                'judul' => 'required',
+                'content' => 'required',
+                'attachment' => 'sometimes|file',
+                'tanggal_post',
+                'id_pembuat',
+                'status',
+            ]
+        );
 
         //Proses Insert
         if ($data) {
-            $data['tanggal_post'] = Carbon::now()->format(20 . 'y-m-d');
             $data['id_pembuat'] = auth()->user()->id_akun;
 
             if (auth()->user()->id_akun) {

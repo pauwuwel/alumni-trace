@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Logs;
+use App\Models\Kuliah;
 use Illuminate\Http\Request;
 
-class LogsController extends Controller
+class KuliahController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class LogsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Logs $logs)
+    public function show(Kuliah $kuliah)
     {
         //
     }
@@ -42,7 +42,7 @@ class LogsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Logs $logs)
+    public function edit(Kuliah $kuliah)
     {
         //
     }
@@ -50,7 +50,7 @@ class LogsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Logs $logs)
+    public function update(Request $request, Kuliah $kuliah)
     {
         //
     }
@@ -58,7 +58,7 @@ class LogsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Logs $logs)
+    public function destroy(Kuliah $kuliah)
     {
         //
     }
