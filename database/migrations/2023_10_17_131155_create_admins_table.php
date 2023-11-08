@@ -9,6 +9,8 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
+    //Membuat tabel admin dengan migration
     public function up(): void
     {
         Schema::create('admin', function (Blueprint $table) {
@@ -17,7 +19,8 @@ return new class extends Migration
             $table->string('nama', 60)->nullable(false); // tipe data nama
             $table->text('foto')->nullable(true); // tipe data foto
 
-            $table->foreign('id_akun')->on('akun')->references('id_akun')->onDelete('cascade')->onUpdate('cascade'); // menyambungkan forgein key ke tabel akun
+            $table->foreign('id_akun')->on('akun')->references('id_akun')->onDelete('cascade')
+            ->onUpdate('cascade'); // menyambungkan forgein key ke tabel akun
         });
     }
 

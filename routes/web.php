@@ -70,6 +70,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/edit/{id}', [ForumController::class, 'update']);
             Route::delete('/hapus', [ForumController::class, 'destroy']);
         });
+            Route::get('/logs', [ForumController::class,'logs']);
 
     });
 

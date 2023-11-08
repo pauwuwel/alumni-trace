@@ -9,6 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    //Membuat tabel forum dengan migration
     public function up(): void
     {
         Schema::create('forum', function (Blueprint $table) {
@@ -17,10 +18,12 @@ return new class extends Migration
             $table->string('judul', 60)->nullable(false);
             $table->text('content')->nullable(false);
             $table->text('attachment')->nullable(true);
-            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending')->nullable(false);
+            $table->enum('status', ['pending', 'accepted', 'rejected'])
+                    ->default('pending')->nullable(false);
             $table->date('tanggal_post')->nullable(false);
 
-            $table->foreign('id_pembuat')->on('akun')->references('id_akun')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('id_pembuat')->on('akun')->references('id_akun')
+                    ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

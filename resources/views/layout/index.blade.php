@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title')</title>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <style>
         body {
@@ -53,6 +54,11 @@
                             <a class="nav-link @yield('forum')" href="/forum">Forum</a>
                         </li>
                     @endif
+                    @if (Auth::user()->role == 'admin')
+                        <li class="nav-item">
+                            <a class="nav-link @yield('logs')" href="/logs">Log Activity</a>
+                        </li>
+                    @endif
                 </ul>
                 <div class="dropdown custom-dropdown">
                     <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
@@ -81,6 +87,9 @@
         @include('layout.flash-massage')
         @yield('content')
     </div>
+
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
 </html>

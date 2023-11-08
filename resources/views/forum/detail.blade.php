@@ -4,7 +4,7 @@
 @section('page', 'Forum')
 @section('content')
     <div class="container-fluid">
-        @foreach ($datas as $data)
+        @foreach ($data as $data)
             <div class="d-flex align-items-end" style="gap: 12px">
                 <h2 class="fw-bolder">{{ $data->judul }}</h2>
                 <h5>{{ $data->nama }} || {{ $data->tanggal_post }}</h5>
@@ -12,6 +12,12 @@
             <div class="content">
                 <p>{{ $data->content }}</p>
             </div>
+
+            <div>
+                <img src="{{url('img/'.'/'. $data->attachment)}}"
+                    style="max-width: 250px; height: auto;"/>
+            </div>
+
             <div class="d-flex justify-content-end" style="gap:10px">
                 <button class="btn btn-danger text-white btnHapus" idForum="{{ $data->id_forum }}">Hapus</button>
                 <a href="/forum/edit/{{$data->id_forum}}" style="text-decoration:none">
