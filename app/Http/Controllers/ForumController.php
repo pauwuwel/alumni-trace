@@ -56,12 +56,20 @@ class ForumController extends Controller
         //Proses Insert
         if ($data) {
             $data['id_pembuat'] = auth()->user()->id_akun;
+            $data['tanggal_post'] = Carbon::now();
             
-            if (auth()->user()->id_akun)
+            if (auth()->user()->role == 'admin')
             {
                 $data['status'] = 'accepted';
             }
             
+            if ($request->hasFile('attachment') && $request->file('attachment')->isValid())
+            {
+                $foto_file = $request->file('attachment');
+                $foto_nama = md5($foto_file->getClientOriginalName() . time()) . '.' . $foto_file->getClientOriginalExtension();
+                $foto_file->move(public_path('img'), $foto_nama);
+                $data['attachment'] = $foto_nama;
+            }
             // Simpan jika data terisi semua
             $forum->create($data);
             return redirect('forum')->with('success', 'Data user baru berhasil ditambah');
@@ -76,13 +84,43 @@ class ForumController extends Controller
      */
     public function show(Forum $forum, string $id)
     {
-        $data = [
-            'datas' => $forum->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
-                             ->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
-                             ->select('forum.*', 'alumni.nama')->where('forum.id_forum', $id)->get()
-        ];
+        $alumnis = $forum
+                        ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
+                        ->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
+                        ->select('forum.*', 'alumni.nama')->where('id_forum', $id);
+        $admins = $forum
+                        ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
+                        ->join('admin', 'akun.id_akun', '=', 'admin.id_akun')
+                        ->select('forum.*', 'admin.nama')->where('id_forum', $id);
+
+                   
+        $data = ['datas' => $alumnis->union($admins)->get()];
 
         return view('forum.detail', $data);
+    }
+
+    public function status(Forum $forum, string $id, Request $request)
+    {
+        $id_forum = $request->input('id_forum');
+        $status = $request->input('status');
+
+        $dataUpdate = $forum->where('id_forum', $id_forum)->update(['status' => $status]);
+
+        if ($dataUpdate) {
+            // Pesan Berhasil
+            $pesan = [
+                'success' => true,
+                'pesan'   => 'Forum berhasil di Konfirmasi'
+            ];
+        } else {
+            // Pesan Gagal
+            $pesan = [
+                'success' => false,
+                'pesan'   => 'Forum gagal di Konfirmasi'
+            ];
+        }
+
+        return response()->json($pesan);
     }
 
     /**

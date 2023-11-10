@@ -25,6 +25,30 @@
                     </tbody>
                 </table>
             </div>
+        @elseif (auth()->user()->role == 'admin')
+            <div class="col-md-8 shadow rounded-3" style="height: 40vh; overflow-y: auto;">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td style="text-align: center;" colspan="2">Konfirmasi Forum Alumni</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if ($accForum !== null)
+                            @foreach ($accForum as $forum)
+                                <tr>
+                                    <td style="width: 90%">{{ $forum->nama }}, <b>{{ $forum->judul }}</b></td>
+                                    <td>
+                                        <a style="text-decoration: none" href="/forum/{{ $forum->id_forum }}"><button class="btn btn-warning">Detail</button></a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                        @endif
+                    </tbody>
+                </table>
+            </div>
         @endif
     </div>
 @endsection

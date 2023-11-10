@@ -8,7 +8,7 @@
             Tambah Forum
         </div>
         <div class="card-body">
-            <form action="" method="post">
+            <form action="" method="post" enctype="multipart/form-data">
                 <div class="form-group d-flex flex-column" style="gap: 10px">
                     <input type="text" class="form-control" name="judul" placeholder="Judul Forum">
                     <textarea class="form-control" name="content" rows="6" placeholder="Isi Forum"></textarea>
