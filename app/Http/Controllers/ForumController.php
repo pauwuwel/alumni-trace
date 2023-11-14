@@ -6,27 +6,19 @@ use App\Models\Akun;
 use App\Models\Forum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 class ForumController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Forum $forum)
+    public function index()
     {
-        $alumnis = $forum
-                        ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
-                        ->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
-                        ->select('forum.*', 'alumni.nama');
-        $admins = $forum
-                        ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
-                        ->join('admin', 'akun.id_akun', '=', 'admin.id_akun')
-                        ->select('forum.*', 'admin.nama');
+        $forum_data = DB::table('view_forum_data')->get();
 
-                   
-        $data = ['datas' => $alumnis->union($admins)->where('status', 'accepted')->orderBy('id_forum', 'desc')->get()];
-
-        return view('forum.index', $data);
+        return view('forum.index', compact('forum_data'));
     }
 
     /**

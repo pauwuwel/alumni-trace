@@ -6,11 +6,11 @@
 @section('sublink', '/forum/tambah')
 @section('content')
     <div class="container-fluid d-flex flex-column mb-5" style="gap:20px">
-        @foreach ($datas as $item)
+        @foreach ($forum_data as $item)
             <div class="rounded-3 border-secondary p-3" style="background-color :#F1F1F1">  
                 <div class="d-flex align-items-end" style="gap: 10px">
                     <h4 style="font-weight: bold">{{ $item->judul }}</h4>
-                    <h6>{{ $item->nama }} || {{ $item->tanggal_post }}</h6>
+                    <h6>{{ $item->nama_pembuat }} || {{ $item->tanggal_post }}</h6>
                 </div>
                 <div class="col-12 text-truncate">{{ $item->content }}</div>
                 <h6 class="text-end mt-2">
