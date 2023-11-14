@@ -30,9 +30,16 @@ return new class extends Migration
 
         DB::unprepared(
             'CREATE OR REPLACE VIEW view_forum_data AS 
-            SELECT forum.*, alumni.nama FROM forum
+
+            SELECT forum.*, alumni.nama as nama_pembuat FROM forum
             INNER JOIN akun ON forum.id_pembuat = akun.id_akun
-            INNER JOIN alumni ON akun.id_akun = alumni.id_akun'
+            INNER JOIN alumni ON akun.id_akun = alumni.id_akun
+            
+            UNION
+
+            SELECT forum.*, admin.nama as nama_pembuat FROM forum
+            INNER JOIN akun ON forum.id_pembuat = akun.id_akun
+            INNER JOIN admin ON akun.id_akun = admin.id_akun'
         );
     }
 
