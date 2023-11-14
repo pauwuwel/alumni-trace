@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('id_pembuat')->index('id_pembuat')->nullable(false);
             $table->text('komentar')->nullable(false);
             $table->text('attachment')->nullable(true);
-            $table->date('tanggal_post')->nullable(false);
+            $table->dateTime('tanggal_post')->nullable(false);
 
             $table->foreign('id_forum')->on('forum')->references('id_forum')
                   ->onUpdate('cascade')->onDelete('cascade');

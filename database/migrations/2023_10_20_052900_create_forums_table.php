@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('content')->nullable(false);
             $table->text('attachment')->nullable(true);
             $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending')->nullable(false);
-            $table->date('tanggal_post')->nullable(false);
+            $table->dateTime('tanggal_post')->nullable(false);
 
             $table->foreign('id_pembuat')->on('akun')->references('id_akun')->onUpdate('cascade')->onDelete('cascade');
         });

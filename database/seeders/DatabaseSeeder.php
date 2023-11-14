@@ -45,17 +45,35 @@ class DatabaseSeeder extends Seeder
             'nama'=> 'banskuy',
         ]);
         \App\Models\Forum::create([
-            'id_pembuat'=> 2,
-            'judul'=> 'example forum admin',
-            'content'=> 'lorem ipsum',
+            'id_pembuat'=> 3,
+            'judul'=> 'Ayo Ramaikan Clubing!!',
+            'content'=> 'Abang Tukang Bakso, cepat dong, kemari Sudah tak tahan lagi Satu mangkok saja, 5000 perak Yang banyak baksonya Tidak pakai saus, tidak pakai sambal Tapi minta pakai kol',
             'status'=> 'accepted',
             'tanggal_post'=> Carbon::now(),
         ]);
         \App\Models\Forum::create([
             'id_pembuat'=> 3,
-            'judul'=> 'example forum alumni',
-            'content'=> 'lorem ipsum',
-            'status'=> 'pending',
+            'judul'=> 'Tutorial Laravel 10 By Banskuyy',
+            'content'=> 'Cicak-cicak di dinding Diam-diam merayap Datang seekor nyamuk Hap! Lalu ditangkap Cicak-cicak di dinding Diam-diam merayap Datang seekor nyamuk Hap! Lalu ditangkap Cicak-cicak di dinding Diam-diam merayap Datang seekor nyamuk Hap! Lalu ditangkap Cicak-cicak di dinding Diam-diam merayap Datang seekor nyamuk Hap! Lalu ditangkap',
+            'status'=> 'accepted',
+            'tanggal_post'=> Carbon::now()->subMonth(),
+        ]);
+        \App\Models\Komentar::create([
+            'id_pembuat'=> 3,
+            'id_forum'=> 1,
+            'komentar'=> 'aku komentar',
+            'tanggal_post'=> Carbon::now(),
+        ]);
+        \App\Models\Komentar::create([
+            'id_pembuat'=> 2,
+            'id_forum'=> 1,
+            'komentar'=> 'aku kaya',
+            'tanggal_post'=> Carbon::now(),
+        ]);
+        \App\Models\Komentar::create([
+            'id_pembuat'=> 1,
+            'id_forum'=> 2,
+            'komentar'=> 'loh kok',
             'tanggal_post'=> Carbon::now(),
         ]);
     }

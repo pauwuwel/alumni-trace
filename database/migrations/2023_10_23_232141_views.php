@@ -41,6 +41,22 @@ return new class extends Migration
             INNER JOIN akun ON forum.id_pembuat = akun.id_akun
             INNER JOIN admin ON akun.id_akun = admin.id_akun'
         );
+
+        DB::unprepared(
+            'CREATE OR REPLACE VIEW view_komentar_data AS 
+
+            SELECT komentar.*, alumni.nama as nama_pembuat FROM komentar
+            INNER JOIN forum ON komentar.id_forum = forum.id_forum
+            INNER JOIN akun ON komentar.id_pembuat = akun.id_akun
+            INNER JOIN alumni ON akun.id_akun = alumni.id_akun
+            
+            UNION
+
+            SELECT komentar.*, admin.nama as nama_pembuat FROM komentar
+            INNER JOIN forum ON komentar.id_forum = forum.id_forum
+            INNER JOIN akun ON komentar.id_pembuat = akun.id_akun
+            INNER JOIN admin ON akun.id_akun = admin.id_akun'
+        );
     }
 
     public function down(): void
@@ -49,5 +65,6 @@ return new class extends Migration
         DB::statement("DROP VIEW IF EXISTS view_profile_admin");
         DB::statement("DROP VIEW IF EXISTS view_profile_alumni");
         DB::statement("DROP VIEW IF EXISTS view_forum_data");
+        DB::statement("DROP VIEW IF EXISTS view_komentar_data");
     }
 };

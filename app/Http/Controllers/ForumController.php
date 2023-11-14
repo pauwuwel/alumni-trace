@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-
+Carbon::setLocale('id');
 class ForumController extends Controller
 {
     /**
@@ -16,7 +16,34 @@ class ForumController extends Controller
      */
     public function index()
     {
-        $forum_data = DB::table('view_forum_data')->get();
+        $forum_data = DB::table('view_forum_data')->orderBy('tanggal_post', 'desc')->get();
+        $komentar_data = DB::table('view_komentar_data')->get();
+
+        $get_forum_komentar = [];
+
+        foreach ($komentar_data as $komentar) {
+            $forum_id = $komentar->id_forum;
+
+            if (!isset($get_forum_komentar[$forum_id])) {
+                $get_forum_komentar[$forum_id] = [];
+            }
+
+            $get_forum_komentar[$forum_id][] = $komentar;
+        }
+
+        foreach ($forum_data as $forum) {
+            $forum->komentar = isset($get_forum_komentar[$forum->id_forum]) ? $get_forum_komentar[$forum->id_forum] : [];
+
+            $forumDate = Carbon::parse($forum->tanggal_post);
+
+            if ($forumDate->diffInDays() > 7) {
+                $forum->tanggal_post = $forumDate->format('d-m-Y');
+            }
+
+            else {
+                $forum->tanggal_post = $forumDate->diffForHumans();
+            }
+        }
 
         return view('forum.index', compact('forum_data'));
     }
