@@ -10,6 +10,6 @@ class Kuliah extends Model
     use HasFactory;
     protected $table = 'kuliah';
     protected $primaryKey = 'id_kuliah';
-    protected $fillable = ['id_alumni', 'instansi', 'jabatan', 'tanggal_masuk', 'tanggal_lulus'];
+    protected $fillable = ['id_alumni', 'instansi', 'jurusan', 'tanggal_masuk', 'tanggal_lulus'];
     public $timestamps = false;
 }

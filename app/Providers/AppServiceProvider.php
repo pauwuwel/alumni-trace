@@ -38,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
                 elseif ($userData->role == 'admin')
                 {
                     if ($userData->admin->foto !== null)
-                    {
+                         {
                         $pfp = $userData->admin->foto;
                         $view->with('pfp', $pfp);    
                     }

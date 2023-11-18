@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Forum;
-use App\Models\komentar;
-use App\Models\logs;
+use App\Models\Komentar;
+use App\Models\Logs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;

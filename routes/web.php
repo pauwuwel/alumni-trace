@@ -5,9 +5,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\KerjaController;
 use App\Http\Controllers\KomentarController;
+use App\Http\Controllers\KuliahController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WirausahaController;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\Support\Carbon;
@@ -81,6 +84,34 @@ Route::middleware(['auth'])->group(function () {
         });
         Route::get('logs', [KomentarController::class,'logs']);
 
+        Route::prefix('kuliah')->group(function () {
+            Route::get('/', [KuliahController::class, 'index']);
+            Route::get('/tambah', [KuliahController::class, 'create']);
+            Route::post('/tambah', [KuliahController::class, 'store']);
+            Route::get('/edit/{id}', [KuliahController::class, 'edit']);
+            Route::post('/edit/{id}', [KuliahController::class, 'update']);
+            Route::delete('/hapus', [KuliahController::class, 'destroy']);
+        });
+
+
+        Route::prefix('kerja')->group(function () {
+            Route::get('/', [KerjaController::class, 'index']);
+            Route::get('/tambah', [KerjaController::class, 'create']);
+            Route::post('/tambah', [KerjaController::class, 'store']);
+            Route::get('/edit/{id}', [KerjaController::class, 'edit']);
+            Route::post('/edit/{id}', [KerjaController::class, 'update']);
+            Route::delete('/hapus', [KerjaController::class, 'destroy']);
+        });
+
+
+        Route::prefix('wirausaha')->group(function () {
+            Route::get('/', [WirausahaController::class, 'index']);
+            Route::get('/tambah', [WirausahaController::class, 'create']);
+            Route::post('/tambah', [WirausahaController::class, 'store']);
+            Route::get('/edit/{id}', [WirausahaController::class, 'edit']);
+            Route::post('/edit/{id}', [WirausahaController::class, 'update']);
+            Route::delete('/hapus', [WirausahaController::class, 'destroy']);
+        });
     });
 
     Route::middleware(['access:alumni'])->group(function () {

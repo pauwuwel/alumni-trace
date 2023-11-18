@@ -3,27 +3,39 @@
 @section('dashboard', 'active')
 @section('page', 'dashboard')
 @section('content')
+<head>
+    <style>
+        .text-karir {
+            color: #ffffff;
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
+            margin-top: 4%;
+        }
+
+        .jumlah-karir {
+            color: #ffffff;
+            text-align: center;
+            font-weight: bold;
+            font-size: 30px;
+            margin-top: 4%;
+        }
+    </style>
+</head>
     <div class="row">
-        @if (auth()->user()->role == 'superAdmin')
-            <div class="col-md-4 d-flex flex-column align-items-center justify-content-center" style="height: 20vh">
-                <h2>Total Alumni:</h2>
+        <div class="d-flex justify-content-between" style="gap: 12px">
+            <div style="height: 20vh;background: #00AD83" class="box w-100 rounded">
+                <p class="text-karir">KULIAH</p>
+                <p class="jumlah-karir">228</p>
             </div>
-            <div class="col-md-8 shadow rounded-3" style="height: 40vh; overflow-y: auto;">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <td>Riwayat Perubahan Akun</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($logs as $log)
-                            <tr>
-                                <td>{{ $log->logs }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            <div style="height: 20vh;background: #168DA7" class="box w-100 rounded">
+                <p class="text-karir">WIRAUSAHA</p>
+                <p class="jumlah-karir">28</p>
             </div>
-        @endif
+            <div style="height: 20vh;background: #00A9AD" class="box w-100 rounded">
+                <p class="text-karir">KERJA</p>
+                <p class="jumlah-karir">109</p>
+            </div>
+        </div>
     </div>
 @endsection

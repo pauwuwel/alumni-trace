@@ -15,7 +15,7 @@ return new class extends Migration
             $table->integer('id_kuliah', true)->nullable(false);
             $table->integer('id_alumni')->index('id_alumni')->nullable(false);
             $table->string('instansi', 60)->nullable(false);
-            $table->string('jabatan', 60)->nullable(false);
+            $table->string('jurusan', 60)->nullable(false);
             $table->date('tanggal_masuk')->nullable(false);
             $table->date('tanggal_lulus')->nullable(true);
 

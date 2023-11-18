@@ -58,6 +58,21 @@
                         <a class="nav-link @yield('logs')" href="/logs">Logs</a>
                     </li>
                     @endif
+                    @if (Auth::user()->role == 'alumni')
+                    <li class="nav-item">
+                        <a class="nav-link @yield('karir')" href="/wirausaha">Karir Wirausaha</a>
+                    </li>
+                    @endif
+                    @if (Auth::user()->role == 'alumni')
+                    <li class="nav-item">
+                        <a class="nav-link @yield('karir')" href="/kerja">Karir Kerja</a>
+                    </li>
+                    @endif
+                    @if (Auth::user()->role == 'alumni')
+                    <li class="nav-item">
+                        <a class="nav-link @yield('karir')" href="/kuliah">Karir Kuliah</a>
+                    </li>
+                    @endif
                 </ul>
                 <div class="dropdown custom-dropdown">
                     <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"

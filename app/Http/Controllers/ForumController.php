@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Akun;
 use App\Models\Forum;
-use App\Models\komentar;
-use App\Models\logs;
+use App\Models\Komentar;
+use App\Models\Logs;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -19,7 +19,7 @@ class ForumController extends Controller
      */
     public function index(Forum $forum)
     {
-        $forums = $forum->all();
+        // $forums = $forum->all();
 
         $komen = DB::table('view_komentar')->get();
 
@@ -32,12 +32,12 @@ class ForumController extends Controller
             ->join('admin', 'akun.id_akun', '=', 'admin.id_akun')
             ->select('forum.*', 'admin.nama');
 
-        $data = [
-            'datas' => $alumnis
-                ->union($admins)
-                ->orderBy('id_forum', 'desc')
-                ->get(),
-        ];
+        // $data = [
+        //     'datas' => $alumnis
+        //         ->union($admins)
+        //         ->orderBy('id_forum', 'desc')
+        //         ->get(),
+        // ];
 
         $totalForum = DB::select('SELECT getTotalForum() AS totalForum')[0]->totalForum;
         $totalKomentar = DB::select('SELECT getTotalKomentar() AS totalKomentar')[0]->totalKomentar;
@@ -48,7 +48,10 @@ class ForumController extends Controller
         // ];
 
         $data = [
-            'forum' => $forums,
+            'forum' => $alumnis
+                ->union($admins)
+                ->orderBy('id_forum', 'desc')
+                ->get(),
             'jumlahForum' => $totalForum,
             'jumlahKomentar' => $totalKomentar,
             'komentar' => $komen,
@@ -83,6 +86,7 @@ class ForumController extends Controller
         //Proses Insert
         if ($data) {
             $data['id_pembuat'] = auth()->user()->id_akun;
+            $data['tanggal_post'] = Carbon::now();
 
             if (auth()->user()->id_akun) {
                 $data['status'] = 'accepted';
