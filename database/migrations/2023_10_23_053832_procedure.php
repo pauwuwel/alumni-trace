@@ -35,6 +35,9 @@ return new class extends Migration
             
                 ELSEIF new_role = "alumni" THEN
                     INSERT INTO alumni (id_akun, nama) VALUES (new_id_akun, new_username);
+                    SET @last_alumni_id = LAST_INSERT_ID();
+
+                    INSERT INTO alamat (id_alumni) VALUES (@last_alumni_id);
             
                 ELSEIF new_role = "superAdmin" THEN
                     INSERT INTO superadmin (id_akun, nama) VALUES (new_id_akun, new_username);

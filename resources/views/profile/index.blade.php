@@ -41,7 +41,7 @@
                         </div>
                         <div class="form-group">
                             <label for="alamat">Alamat</label>
-                            <input type="text" class="form-control" disabled name="alamat" id="alamat" placeholder="Masukan alamat" value="-">
+                            <input type="text" class="form-control" disabled name="alamat" id="alamat" placeholder="Masukan alamat" value="{{ $data->jalan }} {{ $data->gang }} {{ $data->blok }} {{ $data->rt }} {{ $data->rw }} {{ $data->kelurahan }} {{ $data->kecamatan }} {{ $data->kota }} ">
                         </div>
                         <div class="form-group">
                             <label for="karir">Riwayat Karir</label>

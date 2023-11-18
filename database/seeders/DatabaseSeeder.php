@@ -44,6 +44,19 @@ class DatabaseSeeder extends Seeder
             'id_akun'=> 3,
             'nama'=> 'banskuy',
         ]);
+        \App\Models\Alamat::create([
+            'id_alumni'=> 1,
+            'jalan' => 'Jalan Fajar Pratama',
+            'gang' => 'Perum',
+            'nomor_rumah' => '17',
+            'blok' => 'B1',
+            'rt' => 005,
+            'rw' => 020,
+            'kelurahan' => 'Jakasampurna',
+            'kecamatan' => 'Bekasi Barat',
+            'kota' => 'Bekasi',
+            'kodepos' => 17145,
+        ]);
         \App\Models\Forum::create([
             'id_pembuat'=> 3,
             'judul'=> 'Ayo Ramaikan Clubing!!',

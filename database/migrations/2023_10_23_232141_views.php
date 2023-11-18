@@ -24,8 +24,9 @@ return new class extends Migration
 
         DB::unprepared(
             'CREATE OR REPLACE VIEW view_profile_alumni AS 
-            SELECT alumni.*, akun.role FROM alumni
-            INNER JOIN akun ON akun.id_akun = alumni.id_akun'
+            SELECT alumni.*, akun.role, alamat.jalan, alamat.gang, alamat.blok, alamat.rt, alamat.rw, alamat.kelurahan, alamat.kecamatan, alamat.kota, alamat.kodepos FROM alumni
+            INNER JOIN akun ON akun.id_akun = alumni.id_akun
+            INNER JOIN alamat ON alumni.id_alumni = alamat.id_alumni'
         );
 
         DB::unprepared(
