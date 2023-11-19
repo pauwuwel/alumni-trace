@@ -19,6 +19,7 @@
             }
         }
     </style>
+    @yield('style')
 </head>
 
 <body style="max-width: 100vw;overflow-x: hidden;">

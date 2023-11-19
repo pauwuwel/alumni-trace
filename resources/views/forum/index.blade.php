@@ -4,7 +4,7 @@
 @section('page', 'Forum')
 @section('subpage', '+ tambah forum')
 @section('sublink', '/forum/tambah')
-@section('content')
+@section('style')
     <style>
         .darken-on-hover: {
             transition: background-color 0.3s ease-in-out;
@@ -14,6 +14,8 @@
             background-color: #e8e9eb;
         }
     </style>
+@endsection
+@section('content')
     <div class="container-fluid d-flex flex-column mb-5" style="gap:20px">
         @foreach ($forum_data as $forum)
             <a href="/forum/{{ $forum->id_forum }}" class="text-decoration-none text-dark">
@@ -48,24 +50,3 @@
         @endforeach
     </div>
 @endsection
-{{-- @foreach ($forum_data as $item)
-            <div class="rounded-3 border-secondary p-3" style="background-color :#F1F1F1">  
-                <div class="d-flex align-items-end" style="gap: 10px">
-                    <h4 style="font-weight: bold">{{ $item->judul }}</h4>
-                    <h6>{{ $item->nama_pembuat }} || {{ $item->tanggal_post }}</h6>
-                </div>
-                <div class="col-12 text-truncate">{{ $item->content }}</div>
-                <h6 class="text-end mt-2">
-                    <a style="color:#00A9AD;text-decoration: underline" href="/forum/{{ $item->id_forum }}">
-                        lihat forum
-                    </a>
-                </h6>
-            </div>
-            <div>
-                @if (isset($item->komentar)) 
-                    @foreach($item->komentar as $komen)
-                        {{ $komen->komentar }}
-                    @endforeach
-                @endif
-            </div>
-        @endforeach --}}

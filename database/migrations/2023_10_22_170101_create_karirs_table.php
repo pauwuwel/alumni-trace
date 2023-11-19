@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kuliah', function (Blueprint $table) {
-            $table->integer('id_kuliah', true)->nullable(false);
+        Schema::create('karir', function (Blueprint $table) {
+            $table->integer('id_karir', true)->nullable(false);
             $table->integer('id_alumni')->index('id_alumni')->nullable(false);
-            $table->string('instansi', 60)->nullable(false);
-            $table->string('jurusan', 60)->nullable(false);
-            $table->date('tanggal_masuk')->nullable(false);
-            $table->date('tanggal_lulus')->nullable(true);
+            $table->enum('jenis_karir', ['kuliah', 'kerja', 'wirausaha']);
+            $table->string('nama_instansi', 60)->nullable(false);
+            $table->string('posisi_bidang', 60)->nullable(false);
+            $table->date('tanggal_mulai')->nullable(false);
+            $table->date('tanggal_selesai')->nullable(true);
 
             $table->foreign('id_alumni')->on('alumni')->references('id_alumni')
                   ->onUpdate('cascade')->onDelete('cascade');
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kuliah');
+        Schema::dropIfExists('karir');
     }
 };

@@ -41,7 +41,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}', [ProfileController::class, 'index']);
             Route::get('/edit/{id}', [ProfileController::class, 'edit']);
             Route::post('/edit/{id}', [ProfileController::class, 'update']);
-            // Route::post('/edit/simpan', [ProfileController::class, 'update']);
+            Route::post('/add-karir', [ProfileController::class, 'addKarir']);
         });
 
     });

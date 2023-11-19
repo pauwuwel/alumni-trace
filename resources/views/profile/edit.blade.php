@@ -1,7 +1,7 @@
 @extends('layout.index')
 @section('title', 'Profile')
 @section('page', 'Profile')
-@section('content')
+@section('style')
     <style>
         .change-profile-label {
             cursor: pointer;
@@ -18,7 +18,9 @@
         .hide-arrows {
             -moz-appearance: textfield;
         }
-    </style>                
+    </style> 
+@endsection
+@section('content')               
     <form method="POST" action="" class="form row" enctype="multipart/form-data">
         @foreach ($datas as $data)
             <div style="gap: 10px" class="col-md-3 d-flex flex-column align-items-center">

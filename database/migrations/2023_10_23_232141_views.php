@@ -24,7 +24,7 @@ return new class extends Migration
 
         DB::unprepared(
             'CREATE OR REPLACE VIEW view_profile_alumni AS 
-            SELECT alumni.*, akun.role, alamat.jalan, alamat.gang, alamat.blok, alamat.rt, alamat.rw, alamat.kelurahan, alamat.kecamatan, alamat.kota, alamat.kodepos FROM alumni
+            SELECT alumni.*, akun.role, alamat.jalan, alamat.gang, alamat.blok, alamat.nomor_rumah, alamat.rt, alamat.rw, alamat.kelurahan, alamat.kecamatan, alamat.kota, alamat.kodepos FROM alumni
             INNER JOIN akun ON akun.id_akun = alumni.id_akun
             INNER JOIN alamat ON alumni.id_alumni = alamat.id_alumni'
         );
@@ -58,6 +58,13 @@ return new class extends Migration
             INNER JOIN akun ON komentar.id_pembuat = akun.id_akun
             INNER JOIN admin ON akun.id_akun = admin.id_akun'
         );
+
+        DB::unprepared(
+            'CREATE OR REPLACE VIEW view_karir_alumni AS 
+
+            SELECT karir.* FROM karir
+            INNER JOIN alumni ON karir.id_alumni = alumni.id_alumni'
+        );
     }
 
     public function down(): void
@@ -67,5 +74,6 @@ return new class extends Migration
         DB::statement("DROP VIEW IF EXISTS view_profile_alumni");
         DB::statement("DROP VIEW IF EXISTS view_forum_data");
         DB::statement("DROP VIEW IF EXISTS view_komentar_data");
+        DB::statement("DROP VIEW IF EXISTS view_karir_alumni");
     }
 };

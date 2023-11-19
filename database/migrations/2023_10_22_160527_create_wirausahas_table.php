@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('wirausaha', function (Blueprint $table) {
             $table->integer('id_wirausaha', true)->nullable(false);
             $table->integer('id_alumni')->index('id_alumni')->nullable(false);
-            $table->string('alamat', 60)->nullable(false);
+            $table->string('nama_bidang', 60)->nullable(false);
             $table->string('bidang', 60)->nullable(false);
             $table->date('tanggal_masuk')->nullable(false);
             $table->date('tanggal_berhenti')->nullable(true);

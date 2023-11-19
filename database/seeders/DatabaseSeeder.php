@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Alamat::create([
             'id_alumni'=> 1,
-            'jalan' => 'Jalan Fajar Pratama',
+            'jalan' => 'Fajar Pratama',
             'gang' => 'Perum',
             'nomor_rumah' => '17',
             'blok' => 'B1',
@@ -56,6 +56,28 @@ class DatabaseSeeder extends Seeder
             'kecamatan' => 'Bekasi Barat',
             'kota' => 'Bekasi',
             'kodepos' => 17145,
+        ]);
+        \App\Models\Karir::create([
+            'id_alumni'=> 1,
+            'jenis_karir'=> 'kuliah',
+            'nama_instansi'=> 'Universitas Indonesia',
+            'posisi_bidang'=> 'Teknologi Informasi',
+            'tanggal_mulai'=> Carbon::now(),
+        ]);
+        \App\Models\Karir::create([
+            'id_alumni'=> 1,
+            'jenis_karir'=> 'kerja',
+            'nama_instansi'=> 'Brilyan Trimatra Utama',
+            'posisi_bidang'=> 'Programmer',
+            'tanggal_mulai'=> Carbon::now()->subMonth(),
+            'tanggal_selesai'=> Carbon::now(),
+        ]);
+        \App\Models\Karir::create([
+            'id_alumni'=> 1,
+            'jenis_karir'=> 'wirausaha',
+            'nama_instansi'=> 'Katsunadesu',
+            'posisi_bidang'=> 'Makanan',
+            'tanggal_mulai'=> Carbon::now()->subWeek(),
         ]);
         \App\Models\Forum::create([
             'id_pembuat'=> 3,

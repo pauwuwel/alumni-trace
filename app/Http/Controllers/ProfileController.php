@@ -8,9 +8,13 @@ use App\Models\Akun;
 use App\Models\SuperAdmin;
 use App\Models\Admin;
 use App\Models\Alumni;
+use App\Models\Karir;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
+
+Carbon::setLocale('id');
 
 class ProfileController extends Controller
 {
@@ -22,7 +26,31 @@ class ProfileController extends Controller
             if ($akun->alumni) 
             {
                 
-                $data = [ 'datas' => DB::table('view_profile_alumni')->get() ];
+                $profileData = DB::table('view_profile_alumni')->get();
+                $careerData = DB::table('view_karir_alumni')->get();
+
+                foreach ($careerData as $career) {
+
+                    $careerArray = (array) $career;
+
+                    foreach ($careerArray as $field => $value) {
+                        if ($field !== 'nama_instansi' && $field !== 'tanggal_mulai' && $field !== 'tanggal_selesai') {
+                            $career->$field = Str::lower($value);
+                        }
+                    }
+
+                    $career->tanggal_mulai = Carbon::parse($career->tanggal_mulai)->isoFormat('DD MMMM YYYY');
+                    if ($career->tanggal_selesai !== null)
+                    {
+                        $career->tanggal_selesai = Carbon::parse($career->tanggal_selesai)->isoFormat('DD MMMM YYYY');
+                    }
+                    
+                }
+
+                $data = [
+                    'profile' => $profileData,
+                    'career' => $careerData,
+                ];
 
                 return view('profile.index', $data);
 
@@ -221,5 +249,42 @@ class ProfileController extends Controller
             return back()->with('error', 'Data profile gagal diupdate');
         }
         
+    }
+
+    public function addKarir(Alumni $alumni, Karir $karir, Request $request)
+    {
+        $data = $request->validate(
+            [
+                'jenis_karir' => ['required'],
+                'nama_instansi' => ['required'],
+                'posisi_bidang'    => ['required'],
+                'tanggal_mulai'    => ['required'],
+                'tanggal_selesai',
+                'id_alumni',
+            ]
+        );
+
+        $userid = auth()->user()->id_akun;
+            $data['id_alumni'] = $alumni->join('akun', 'alumni.id_akun', '=', 'akun.id_akun')
+                                        ->select('alumni.id_alumni')->where('alumni.id_akun', $userid)
+                                        ->get();
+        $aksi = $karir->create($data);
+        
+
+        if ($aksi) {
+            // Pesan Berhasil
+            $pesan = [
+                'success' => true,
+                'pesan'   => 'Data jenis surat berhasil dihapus'
+            ];
+        } else {
+            // Pesan Gagal
+            $pesan = [
+                'success' => false,
+                'pesan'   => 'Data gagal dihapus'
+            ];
+        }
+
+        return response()->json($pesan);
     }
 }
