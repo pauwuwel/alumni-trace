@@ -3,7 +3,6 @@
 @section('page', 'Profile')
 @section('style')
     <style>
-
         .hr-container {
             display: flex;
             align-items: center;
@@ -80,31 +79,40 @@
                             <thead>
                                 <tr>
                                     <td colspan="2">
-                                        <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Tambah Karir</button>
+                                        <button class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal">Tambah Karir</button>
                                     </td>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($career as $data)
+                                @foreach ($career as $data)
                                     <tr>
                                         <td>
                                             {{ $data->tanggal_selesai !== null ? 'Telah ' : 'Sedang ' }}
-                                            {{ $data->jenis_karir == 'kuliah' ? 'menjalankan kuliah di ' : 
-                                                ($data->jenis_karir == 'kerja' ? 'bekerja pada ' : 
-                                                ($data->jenis_karir == 'wirausaha' ? 'menjalankan usaha dengan nama ' : '')) 
-                                            }}
+                                            {{ $data->jenis_karir == 'kuliah'
+                                                ? 'menjalankan kuliah di '
+                                                : ($data->jenis_karir == 'kerja'
+                                                    ? 'bekerja pada '
+                                                    : ($data->jenis_karir == 'wirausaha'
+                                                        ? 'menjalankan usaha dengan nama '
+                                                        : '')) }}
                                             {{ $data->nama_instansi }}
-                                            {{ $data->jenis_karir == 'kuliah' ? 'dengan jurusan ' : 
-                                                ($data->jenis_karir == 'kerja' ? 'dengan jabatan ' : 
-                                                ($data->jenis_karir == 'wirausaha' ? 'dalam bidang ' : '')) 
-                                            }}
+                                            {{ $data->jenis_karir == 'kuliah'
+                                                ? 'dengan jurusan '
+                                                : ($data->jenis_karir == 'kerja'
+                                                    ? 'dengan jabatan '
+                                                    : ($data->jenis_karir == 'wirausaha'
+                                                        ? 'dalam bidang '
+                                                        : '')) }}
                                             {{ $data->posisi_bidang }}
                                             {{ $data->tanggal_selesai !== null ? 'pada ' : 'sejak ' }}
                                             {{ $data->tanggal_mulai }}
                                             {{ $data->tanggal_selesai !== null ? 'hingga ' . $data->tanggal_selesai : ' ' }}
-                                            
+
                                         </td>
-                                        <td style="width: 5%"><button class="btn btn-sm btn-info text-white">Edit</button></td>
+                                        <td style="width: 5%">
+                                            <button class="btn btn-sm btn-danger text-white btnHapus" onclick="hapusKarir({{ $data->id_karir }}, event)"><i class="bi bi-trash"></i></button>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -134,68 +142,80 @@
                                     <option value="wirausaha">Wirausaha</option>
                                 </select>
                             </div>
-                            
+
                             <div id="kuliahForm" class="formKarir" style="display: none;">
                                 <div class="form-group">
                                     <label for="nama_instansi">Instansi</label>
-                                    <input type="text" class="form-control" name="nama_instansi" id="nama_instansi" placeholder="Masukan instansi">
+                                    <input type="text" class="form-control" name="nama_instansi_kuliah"
+                                        id="nama_instansi_kuliah" placeholder="Masukan instansi">
                                 </div>
                                 <div class="form-group">
                                     <label for="posisi_bidang">Jurusan</label>
-                                    <input type="text" class="form-control" name="posisi_bidang" id="posisi_bidang" placeholder="Masukan jurusan">
+                                    <input type="text" class="form-control" name="posisi_bidang_kuliah"
+                                        id="posisi_bidang_kuliah" placeholder="Masukan jurusan">
                                 </div>
                                 <div class="form-group">
                                     <label for="tanggal_mulai">Tanggal Masuk</label>
-                                    <input type="date" class="form-control" name="tanggal_mulai" id="tanggal_mulai">
+                                    <input type="date" class="form-control" name="tanggal_mulai_kuliah"
+                                        id="tanggal_mulai_kuliah">
                                 </div>
                                 <div class="form-group">
                                     <label for="tanggal_selesai">Tanggal Lulus</label>
-                                    <input type="date" class="form-control" name="tanggal_selesai" id="tanggal_selesai" aria-describedby="selesaiHelp">
+                                    <input type="date" class="form-control" name="tanggal_selesai_kuliah"
+                                        id="tanggal_selesai_kuliah" aria-describedby="selesaiHelp">
                                     <div id="selesaiHelp" class="form-text">Masukan jika perlu.</div>
                                 </div>
-                            </div>  
-                            
+                            </div>
+
                             <div id="kerjaForm" class="formKarir" style="display: none;">
                                 <div class="form-group">
                                     <label for="nama_instansi">Instansi</label>
-                                    <input type="text" class="form-control" name="nama_instansi" id="nama_instansi" placeholder="Masukan instansi">
+                                    <input type="text" class="form-control" name="nama_instansi_kerja"
+                                        id="nama_instansi_kerja" placeholder="Masukan instansi">
                                 </div>
                                 <div class="form-group">
                                     <label for="posisi_bidang">Jabatan</label>
-                                    <input type="text" class="form-control" name="posisi_bidang" id="posisi_bidang" placeholder="Masukan jabatan">
+                                    <input type="text" class="form-control" name="posisi_bidang_kerja"
+                                        id="posisi_bidang_kerja" placeholder="Masukan jabatan">
                                 </div>
                                 <div class="form-group">
                                     <label for="tanggal_mulai">Tanggal Masuk</label>
-                                    <input type="date" class="form-control" name="tanggal_mulai" id="tanggal_mulai">
+                                    <input type="date" class="form-control" name="tanggal_mulai_kerja"
+                                        id="tanggal_mulai_kerja">
                                 </div>
                                 <div class="form-group">
                                     <label for="tanggal_selesai">Tanggal keluar</label>
-                                    <input type="date" class="form-control" name="tanggal_selesai" id="tanggal_selesai" aria-describedby="selesaiHelp">
+                                    <input type="date" class="form-control" name="tanggal_selesai_kerja"
+                                        id="tanggal_selesai_kerja" aria-describedby="selesaiHelp">
                                     <div id="selesaiHelp" class="form-text">Masukan jika perlu.</div>
                                 </div>
-                            </div>  
+                            </div>
 
                             <div id="wirausahaForm" class="formKarir" style="display: none;">
                                 <div class="form-group">
                                     <label for="nama_instansi">Nama Usaha</label>
-                                    <input type="text" class="form-control" name="nama_instansi" id="nama_instansi" placeholder="Masukan instansi">
+                                    <input type="text" class="form-control" name="nama_instansi_wirausaha"
+                                        id="nama_instansi_wirausaha" placeholder="Masukan instansi">
                                 </div>
                                 <div class="form-group">
                                     <label for="posisi_bidang">Bidang</label>
-                                    <input type="text" class="form-control" name="posisi_bidang" id="posisi_bidang" placeholder="Masukan bidang">
+                                    <input type="text" class="form-control" name="posisi_bidang_wirausaha"
+                                        id="posisi_bidang_wirausaha" placeholder="Masukan bidang">
                                 </div>
                                 <div class="form-group">
                                     <label for="tanggal_mulai">Tanggal Mulai</label>
-                                    <input type="date" class="form-control" name="tanggal_mulai" id="tanggal_mulai">
+                                    <input type="date" class="form-control" name="tanggal_mulai_wirausaha"
+                                        id="tanggal_mulai_wirausaha">
                                 </div>
                                 <div class="form-group">
                                     <label for="tanggal_selesai">Tanggal Berhenti</label>
-                                    <input type="date" class="form-control" name="tanggal_selesai" id="tanggal_selesai" aria-describedby="selesaiHelp">
+                                    <input type="date" class="form-control" name="tanggal_selesai_wirausaha"
+                                        id="tanggal_selesai_wirausaha" aria-describedby="selesaiHelp">
                                     <div id="selesaiHelp" class="form-text">Masukan jika perlu.</div>
                                 </div>
-                            </div>  
-    
-                        </div>       
+                            </div>
+
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
@@ -207,13 +227,13 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             // Show/hide form sections based on the selected career type
-            document.getElementById('jenis_karir').addEventListener('change', function () {
+            document.getElementById('jenis_karir').addEventListener('change', function() {
                 var selectedCareer = this.value;
 
                 // Hide all forms
-                document.querySelectorAll('.formKarir').forEach(function (form) {
+                document.querySelectorAll('.formKarir').forEach(function(form) {
                     form.style.display = 'none';
                 });
 
@@ -222,16 +242,78 @@
             });
         });
 
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show/hide form sections based on the selected career type
+            document.getElementById('jenis_karir').addEventListener('change', function() {
+                var selectedCareer = this.value;
+
+                // Hide all forms
+                document.querySelectorAll('.formKarir').forEach(function(form) {
+                    form.style.display = 'none';
+                });
+
+                // Show the form based on the selected career type
+                document.getElementById(selectedCareer + 'Form').style.display = 'block';
+            });
+        });
+
+        function hapusKarir(karirId, event) {
+            event.preventDefault();
+            swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Data yang dihapus tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff0000',
+                cancelButtonColor: '#969696',
+                confirmButtonText: 'Hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    //Ajax Delete
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '',
+                        data: {
+                            id_karir: karirId,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(data) {
+                            if (data.success) {
+                                swal.fire('Berhasil di hapus!', '', 'success').then(function() {
+                                    //Refresh Halaman
+                                    location.reload();
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
         function submitForm() {
             // Retrieve form data based on the selected career type
             var selectedCareer = $('#jenis_karir').val();
             var formData = {
                 jenis_karir: selectedCareer,
-                nama_instansi: $('#nama_instansi').val(),
-                posisi_bidang: $('#posisi_bidang').val(),
-                tanggal_mulai: $('#tanggal_mulai').val(),
-                tanggal_selesai: $('#tanggal_selesai').val()
             };
+
+            if (selectedCareer === 'kuliah') {
+                formData.nama_instansi = $('#nama_instansi_kuliah').val();
+                formData.posisi_bidang = $('#posisi_bidang_kuliah').val();
+                formData.tanggal_mulai = $('#tanggal_mulai_kuliah').val();
+                formData.tanggal_selesai = $('#tanggal_selesai_kuliah').val();
+            } else if (selectedCareer === 'kerja') {
+                formData.nama_instansi = $('#nama_instansi_kerja').val();
+                formData.posisi_bidang = $('#posisi_bidang_kerja').val();
+                formData.tanggal_mulai = $('#tanggal_mulai_kerja').val();
+                formData.tanggal_selesai = $('#tanggal_selesai_kerja').val();
+            } else if (selectedCareer === 'wirausaha') {
+                formData.nama_instansi = $('#nama_instansi_wirausaha').val();
+                formData.posisi_bidang = $('#posisi_bidang_wirausaha').val();
+                formData.tanggal_mulai = $('#tanggal_mulai_wirausaha').val();
+                formData.tanggal_selesai = $('#tanggal_selesai_wirausaha').val();
+            }
 
             // Log the form data for testing
             console.log(formData);
@@ -240,7 +322,7 @@
             try {
                 $.ajax({
                     type: 'POST',
-                    url: '/profile/add-karir',
+                    url: '',
                     data: {
                         jenis_karir: formData.jenis_karir,
                         nama_instansi: formData.nama_instansi,
@@ -248,6 +330,19 @@
                         tanggal_mulai: formData.tanggal_mulai,
                         tanggal_selesai: formData.tanggal_selesai,
                         _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        // Display a SweetAlert2 success message
+                        swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Data karir baru berhasil ditambah',
+                        }).then((result) => {
+                            // Reload the page after the SweetAlert2 success message
+                            if (result.isConfirmed || result.isDismissed) {
+                                location.reload();
+                            }
+                        });
                     }
                 });
             } catch (error) {

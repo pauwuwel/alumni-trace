@@ -29,6 +29,9 @@
                     <a href="/forum" style="text-decoration:none">
                         <button class="btn btn-secondary">Kembali</button>
                     </a>
+                    <a href="/forum" style="text-decoration:none">
+                        <button class="btn btn-warning">Komentar</button>
+                    </a>
                 </div>
             @endif
         @endforeach

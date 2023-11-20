@@ -8,6 +8,7 @@ use App\Models\Akun;
 use App\Models\SuperAdmin;
 use App\Models\Admin;
 use App\Models\Alumni;
+use App\Models\Alamat;
 use App\Models\Karir;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -20,12 +21,10 @@ class ProfileController extends Controller
 {
     public function index(Akun $akun, Request $request, string $id)
     {
-        $akun = Akun::find($id); 
-        if ($akun) 
-        {
-            if ($akun->alumni) 
-            {
-                
+        $akun = Akun::find($id);
+        if ($akun) {
+            if ($akun->alumni) {
+
                 $profileData = DB::table('view_profile_alumni')->get();
                 $careerData = DB::table('view_karir_alumni')->get();
 
@@ -37,14 +36,15 @@ class ProfileController extends Controller
                         if ($field !== 'nama_instansi' && $field !== 'tanggal_mulai' && $field !== 'tanggal_selesai') {
                             $career->$field = Str::lower($value);
                         }
+                        if ($field == 'nama_instansi') {
+                            $career->$field = ucwords($value);
+                        }
                     }
 
                     $career->tanggal_mulai = Carbon::parse($career->tanggal_mulai)->isoFormat('DD MMMM YYYY');
-                    if ($career->tanggal_selesai !== null)
-                    {
+                    if ($career->tanggal_selesai !== null) {
                         $career->tanggal_selesai = Carbon::parse($career->tanggal_selesai)->isoFormat('DD MMMM YYYY');
                     }
-                    
                 }
 
                 $data = [
@@ -53,102 +53,74 @@ class ProfileController extends Controller
                 ];
 
                 return view('profile.index', $data);
+            } elseif ($akun->admin) {
 
-            } 
-            
-            elseif ($akun->admin) 
-            {
-                
-                $data = [ 'datas' => DB::table('view_profile_admin')->get() ];
+                $data = ['datas' => DB::table('view_profile_admin')->get()];
 
                 return view('profile.index', $data);
-            } 
-            
-            elseif ($akun->superAdmin) 
-            {
-                $data = [ 'datas' => DB::table('view_profile_super_admin')->get() ];
+            } elseif ($akun->superAdmin) {
+                $data = ['datas' => DB::table('view_profile_super_admin')->get()];
 
                 return view('profile.index', $data);
-            } 
-            
-            else 
-            {
+            } else {
                 return back()->with('error', 'terjadi kesalahan');
             }
-        }
-
-        else 
-        {
+        } else {
             return back()->with('error', 'terjadi kesalahan');
         }
     }
 
-    public function edit(Akun $akun, Request $request, string $id)
+    public function edit(Akun $akun, Alamat $alamat, Request $request, string $id)
     {
-        $akun = Akun::find($id); 
-        
-        if ($akun->id_akun !== auth()->user()->id_akun)
-        {
+        $akun = Akun::find($id);
+
+        if ($akun->id_akun !== auth()->user()->id_akun) {
             return back()->with('error', 'Anda tidak memiliki akses!');
         }
 
         // dd($akun->id_akun, auth()->user()->id_akun);
 
-        if ($akun) 
-        {
-            if ($akun->alumni) 
-            {
-                
-                $data = [ 
-                    'datas' => $akun->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
-                    ->select('alumni.*', 'akun.role')->where('alumni.id_akun', $id)->get()
+        if ($akun) {
+            if ($akun->alumni) {
+
+                $data = [
+                    'profile' => $akun->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
+                        ->select('alumni.*', 'akun.role')->where('alumni.id_akun', $id)->get(),
+                    'alamat' => $alamat->join('alumni', 'alamat.id_alumni', '=', 'alumni.id_alumni')
+                        ->select('alamat.*')->where('alumni.id_akun', $id)->get(),
                 ];
 
                 return view('profile.edit', $data);
+            } elseif ($akun->admin) {
 
-            } 
-            
-            elseif ($akun->admin) 
-            {
-                
-                $data = [ 
-                    'datas' => $akun->join('admin', 'akun.id_akun', '=', 'admin.id_akun')
-                    ->select('admin.*', 'akun.role')->where('admin.id_akun', $id)->get()
+                $data = [
+                    'profile' => $akun->join('admin', 'akun.id_akun', '=', 'admin.id_akun')
+                        ->select('admin.*', 'akun.role')->where('admin.id_akun', $id)->get()
                 ];
 
                 return view('profile.edit', $data);
-            } 
-            
-            elseif ($akun->superadmin) 
-            {
-                
-                $data = [ 
-                    'datas' => $akun->join('super_admin', 'akun.id_akun', '=', 'super_admin.id_akun')
-                    ->select('super_admin.*', 'akun.role')->where('super_admin.id_akun', $id)->get()
+            } elseif ($akun->superadmin) {
+
+                $data = [
+                    'profile' => $akun->join('super_admin', 'akun.id_akun', '=', 'super_admin.id_akun')
+                        ->select('super_admin.*', 'akun.role')->where('super_admin.id_akun', $id)->get()
                 ];
 
                 return view('profile.edit', $data);
-            } 
-            
-            else 
-            {
+            } else {
                 return back()->with('error', 'terjadi kesalahan');
             }
-        }
-
-        else 
-        {
+        } else {
             return back()->with('error', 'terjadi kesalahan');
         }
     }
 
-    public function update(SuperAdmin $superAdmin, Admin $admin, Alumni $alumni, Request $request, string $id)
+    public function update(SuperAdmin $superAdmin, Admin $admin, Alumni $alumni, Request $request, Alamat $alamat, string $id)
     {
 
         $role = $request->input('role');
-        
-        if ($role == 'alumni')
-        {
+
+        if ($role == 'alumni') {
             $id_alumni = $request->input('id_alumni');
 
             $data = $request->validate([
@@ -159,6 +131,19 @@ class ProfileController extends Controller
                 'foto' => 'sometimes|file',
             ]);
 
+            $dataAlamat = $request->validate([
+                'jalan' => 'nullable',
+                'gang' => 'nullable',
+                'nomor_rumah' => 'nullable',
+                'blok' => 'nullable',
+                'rt' => 'nullable',
+                'rw' => 'nullable',
+                'kelurahan' => 'nullable',
+                'kecamatan' => 'nullable',
+                'kota' => 'nullable',
+                'kodepos' => 'nullable',
+            ]);
+
             if ($request->hasFile('foto')) {
                 $foto_file = $request->file('foto');
                 $foto_extension = $foto_file->getClientOriginalExtension();
@@ -166,25 +151,21 @@ class ProfileController extends Controller
                 $foto_file->move(public_path('img'), $foto_nama);
                 $data['foto'] = $foto_nama;
 
-                
+
                 $update_data = $alumni->where('id_alumni', $id_alumni)->first();
-                if($update_data->file !== null)
-                {
+                if ($update_data->file !== null) {
                     File::delete(public_path('img') . '/' . $update_data->file);
                 }
-
             }
             $dataUpdate = $alumni->where('id_alumni', $id_alumni)->update($data);
+            $alamatUpdate = $alamat->where('id_alumni', $id_alumni)->update($dataAlamat);
 
-            if ($dataUpdate) {
+            if ($dataUpdate || $alamatUpdate) {
                 return redirect('profile/' . $id)->with('success', 'Data profile berhasil diupdate');
             }
 
             return back()->with('error', 'Data profile gagal diupdate');
-        }
-
-        elseif ($role == 'superAdmin')
-        {
+        } elseif ($role == 'superAdmin') {
             $id_super_admin = $request->input('id_super_admin');
 
             $data = $request->validate([
@@ -199,13 +180,11 @@ class ProfileController extends Controller
                 $foto_file->move(public_path('img'), $foto_nama);
                 $data['foto'] = $foto_nama;
 
-                
+
                 $update_data = $superAdmin->where('id_super_admin', $id_super_admin)->first();
-                if($update_data->file !== null)
-                {
+                if ($update_data->file !== null) {
                     File::delete(public_path('img') . '/' . $update_data->file);
                 }
-
             }
             $dataUpdate = $superAdmin->where('id_super_admin', $id_super_admin)->update($data);
 
@@ -214,10 +193,7 @@ class ProfileController extends Controller
             }
 
             return back()->with('error', 'Data profile gagal diupdate');
-        }
-
-        elseif ($role == 'admin')
-        {
+        } elseif ($role == 'admin') {
             $id_admin = $request->input('id_admin');
 
             $data = $request->validate([
@@ -232,13 +208,11 @@ class ProfileController extends Controller
                 $foto_file->move(public_path('img'), $foto_nama);
                 $data['foto'] = $foto_nama;
 
-                
+
                 $update_data = $admin->where('id_admin', $id_admin)->first();
-                if($update_data->file !== null)
-                {
+                if ($update_data->file !== null) {
                     File::delete(public_path('img') . '/' . $update_data->file);
                 }
-
             }
             $dataUpdate = $admin->where('id_admin', $id_admin)->update($data);
 
@@ -248,28 +222,51 @@ class ProfileController extends Controller
 
             return back()->with('error', 'Data profile gagal diupdate');
         }
-        
     }
 
-    public function addKarir(Alumni $alumni, Karir $karir, Request $request)
+    public function addKarir(Alumni $alumni, Karir $karir, Request $request, string $id)
     {
-        $data = $request->validate(
-            [
-                'jenis_karir' => ['required'],
-                'nama_instansi' => ['required'],
-                'posisi_bidang'    => ['required'],
-                'tanggal_mulai'    => ['required'],
-                'tanggal_selesai',
-                'id_alumni',
-            ]
-        );
+        $data = $request->validate([
+            'jenis_karir' => ['required'],
+            'nama_instansi' => ['required'],
+            'posisi_bidang' => ['required'],
+            'tanggal_mulai' => ['required', 'date'],
+            'tanggal_selesai' => ['nullable', 'date'],
+        ]);
 
-        $userid = auth()->user()->id_akun;
-            $data['id_alumni'] = $alumni->join('akun', 'alumni.id_akun', '=', 'akun.id_akun')
-                                        ->select('alumni.id_alumni')->where('alumni.id_akun', $userid)
-                                        ->get();
-        $aksi = $karir->create($data);
-        
+        // Additional validation or processing logic can be added here
+
+        // Find the Alumni ID based on the authenticated user
+        $alumniData = $alumni->join('akun', 'alumni.id_akun', '=', 'akun.id_akun')
+            ->select('alumni.id_alumni')->where('alumni.id_akun', $id)
+            ->first();
+
+        // Create a new Karir instance and fill it with the form data
+        $karir = new Karir();
+        $karir->jenis_karir = $data['jenis_karir'];
+        $karir->nama_instansi = $data['nama_instansi'];
+        $karir->posisi_bidang = $data['posisi_bidang'];
+        $karir->tanggal_mulai = $data['tanggal_mulai'];
+        $karir->tanggal_selesai = $data['tanggal_selesai'];
+
+        // Set the Alumni ID for the Karir instance
+        $karir->id_alumni = $alumniData->id_alumni;
+
+        // Save the new Karir instance to the database
+        $karir->save();
+
+        // You can also associate it with the relevant Alumni or any other logic here
+
+        // Return a response (you may customize this based on your needs)
+        return response()->json(['message' => 'Karir added successfully']);
+    }
+
+    public function removeKarir(Karir $karir, Request $request, string $id)
+    {
+        $id_karir = $request->input('id_karir');
+
+        // Hapus
+        $aksi = $karir->where('id_karir', $id_karir)->delete();
 
         if ($aksi) {
             // Pesan Berhasil
