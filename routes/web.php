@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('dashboard')->group(function () {
             Route::get('/', [DashboardController::class, 'index']);
+            Route::get('/print', [DashboardController::class, 'printPDF']);
         });
 
         Route::prefix('profile')->group(function () {
@@ -67,10 +68,11 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/tambah', [ForumController::class, 'create']);
             Route::post('/tambah', [ForumController::class, 'store']);
             Route::get('/{id}', [ForumController::class, 'show']);
-            Route::post('/{id}', [ForumController::class, 'status']);
+            Route::post('/status', [ForumController::class, 'status']);
             Route::get('/edit/{id}', [ForumController::class, 'edit']);
             Route::post('/edit/{id}', [ForumController::class, 'update']);
             Route::delete('/hapus', [ForumController::class, 'destroy']);
+            Route::post('/add-komentar', [ForumController::class, 'addKomen']);
         });
 
     });

@@ -15,19 +15,19 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         \App\Models\Akun::create([
-            'id_akun' => 1,
+            // 'id_akun' => 1,
             'username' => 'superadmin',
             'password'=> Hash::make('123'),
             'role'=> 'superAdmin',
         ]);
         \App\Models\Akun::create([
-            'id_akun' => 2,
+            // 'id_akun' => 2,
             'username' => 'admin',
             'password'=> Hash::make('123'),
             'role'=> 'admin',
         ]);
         \App\Models\Akun::create([
-            'id_akun' => 3,
+            // 'id_akun' => 3,
             'username' => 'alumni',
             'password'=> Hash::make('123'),
             'role'=> 'alumni',
@@ -103,12 +103,6 @@ class DatabaseSeeder extends Seeder
             'id_pembuat'=> 2,
             'id_forum'=> 1,
             'komentar'=> 'aku kaya',
-            'tanggal_post'=> Carbon::now(),
-        ]);
-        \App\Models\Komentar::create([
-            'id_pembuat'=> 1,
-            'id_forum'=> 2,
-            'komentar'=> 'loh kok',
             'tanggal_post'=> Carbon::now(),
         ]);
     }

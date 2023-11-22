@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Akun;
 use App\Models\Forum;
 use App\Models\Logs;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -35,10 +36,13 @@ class DashboardController extends Controller
         {
             return view('dashboard.index');
         }
+    }
 
-        else
-        {
+    public function printPDF()
+    {
+        $logs = Logs::orderBy('id_logs', 'desc')->get();
 
-        }
+        $pdf = Pdf::loadview('dashboard.log-pdf', compact('logs'));
+        return $pdf->stream();
     }
 }

@@ -19,11 +19,21 @@ return new class extends Migration
                 RETURN alumniCount;
             END'
         );
+
+        DB::unprepared('DROP FUNCTION IF EXISTS getTotalKomentar');
+        DB::unprepared(
+            'CREATE FUNCTION getTotalKomentar(forum_id INT) RETURNS INT
+            BEGIN
+                DECLARE total INT;
+                SELECT COUNT(*) INTO total FROM komentar WHERE id_forum = forum_id;
+                RETURN total;
+            END'
+        );
     }
 
     public function down(): void
     {
         DB::unprepared('DROP FUNCTION IF EXISTS getTotalAlumni');
+        DB::unprepared('DROP FUNCTION IF EXISTS getTotalKomentar');
     }
-    
 };

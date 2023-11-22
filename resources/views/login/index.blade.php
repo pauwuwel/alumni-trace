@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
@@ -13,6 +14,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="vh-100 overflow-hidden">
         <div class="row h-100">
@@ -22,17 +24,21 @@
             <div class="col-lg-4 col-sm-12 d-flex align-items-center justify-content-center">
                 <form method="POST" action="">
                     <div class="d-flex flex-column" style="width: 26vw;gap: 12px;">
-                        <img src="{{ url('img/logo_colored.png') }}" alt="logo alumni-trace" style="margin: 0px auto 12px auto; width:50%;">
+                        <img src="{{ url('img/logo_colored.png') }}" alt="logo alumni-trace"
+                            style="margin: 0px auto 12px auto; width:50%;">
                         @include('layout.flash-massage')
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input type="text" class="form-control" name="username" id="username" placeholder="Masukan username">
+                            <input type="text" class="form-control" name="username" id="username"
+                                placeholder="Masukan username">
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" name="password" id="password" placeholder="Masukan password">
+                            <input type="password" class="form-control" name="password" id="password"
+                                placeholder="Masukan password">
                         </div>
-                        <button type="submit" class="btn text-light text-uppercase fw-bold btn-md mt-1" style="letter-spacing: 2px;background: #00AEA6;">Masuk</button>
+                        <button type="submit" class="btn text-light text-uppercase fw-bold btn-md mt-1"
+                            style="letter-spacing: 2px;background: #00AEA6;">Masuk</button>
                         @csrf
                     </div>
                 </form>
@@ -40,4 +46,5 @@
         </div>
     </div>
 </body>
+
 </html>

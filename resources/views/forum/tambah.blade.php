@@ -3,7 +3,7 @@
 @section('forum', 'active')
 @section('page', 'Forum')
 @section('content')
-<div class="card">
+    <div class="card">
         <div class="card-header">
             Tambah Forum
         </div>

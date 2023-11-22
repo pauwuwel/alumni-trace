@@ -8,8 +8,8 @@
             <button class="btn btn-success mb-2">Tambah Akun</button>
         </a>
     </div>
-    <div class="table-responsive">
-        <table class="table table-hover table-bordered">
+    <div class="">
+        <table class="table table-hover table-bordered datatable">
             <thead>
                 <tr>
                     <th>Usermame</th>
@@ -77,6 +77,16 @@
                         }
                     });
                 }
+            });
+        });
+        $(document).ready(function() {
+            $('.datatable').DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false
             });
         });
     </script>

@@ -12,6 +12,7 @@
         body {
             font-family: 'Montserrat';
         }
+
         @media (max-width: 768px) {
             .custom-dropdown {
                 position: static;
@@ -23,7 +24,7 @@
 </head>
 
 <body style="max-width: 100vw;overflow-x: hidden;">
-    <nav class="navbar navbar-expand-sm navbar-dark py-3" style="background: #00AEA6">
+    <nav class="navbar navbar-expand-sm navbar-dark py-3 fixed-top" style="background: #00AEA6">
         <div class="container-fluid">
             <a class="navbar-brand" href="/dashboard">
                 <img src="{{ url('img/logo_white.png') }}" alt="alumni-trace" height="32" class="me-2">
@@ -58,8 +59,8 @@
                 <div class="dropdown custom-dropdown">
                     <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                         data-bs-toggle="dropdown">
-                        <img src="{{ $pfp ? url('img') . '/' . $pfp : url('img') . '/pp.png' }}" alt="" width="32" height="32"
-                            class="rounded-circle me-2">
+                        <img src="{{ $pfp ? url('img') . '/' . $pfp : url('img') . '/pp.png' }}" alt=""
+                            width="32" height="32" class="rounded-circle me-2">
                     </a>
                     <ul class="dropdown-menu text-small shadow dropdown-menu-end">
                         <li><a class="dropdown-item" style="pointer-events: none"
@@ -74,7 +75,7 @@
             </div>
         </div>
     </nav>
-    <div class="container-fluid mt-3 px-5">
+    <div class="container-fluid px-5 pb-3" style="margin-top: 14vh">
         <div class="d-flex align-items-end mb-3" style="gap:10px">
             <h4 style="text-transform: capitalize;color:#00A9AD;font-weight: bold">@yield('page')</h4>
             <h6><a style="color:#00A9AD;text-decoration: underline" href="@yield('sublink')">@yield('subpage')</a></h6>

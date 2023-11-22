@@ -66,58 +66,66 @@
                         </div>
                         <div class="form-group">
                             <label for="alamat">Alamat</label>
-                            <textarea name="alamat" class="form-control" style="resize: none" disabled id="alamat" rows="5">{{ $data->jalan !== null ? 'Jalan ' . $data->jalan : '' }} {{ $data->gang !== null ? 'Gang ' . $data->gang : '' }} {{ $data->nomor_rumah !== null ? 'No. ' . $data->nomor_rumah : '' }} {{ $data->blok !== null ? 'Blok ' . $data->blok : '' }} {{ $data->rt !== null ? 'RT ' . $data->rt : '' }} / {{ $data->rw !== null ? 'RW ' . $data->rw : '' }} {{ $data->kelurahan !== null ? 'Kelurahan ' . $data->kelurahan : '' }} {{ $data->kecamatan !== null ? 'Kecamatan ' . $data->kecamatan : '' }} {{ $data->kota !== null ? 'Kota ' . $data->kota : '' }} {{ $data->kodepos !== null ? $data->kodepos : '' }} </textarea>
+                            <textarea name="alamat" class="form-control" style="resize: none" disabled id="alamat" rows="5">{{ $data->jalan !== null ? 'Jalan ' . $data->jalan : '' }} {{ $data->gang !== null ? 'Gang ' . $data->gang : '' }} {{ $data->nomor_rumah !== null ? 'No. ' . $data->nomor_rumah : '' }} {{ $data->blok !== null ? 'Blok ' . $data->blok : '' }} {{ $data->rt !== null ? 'RT ' . $data->rt : '' }} {{ $data->rw !== null ? 'RW ' . $data->rw : '' }} {{ $data->kelurahan !== null ? 'Kelurahan ' . $data->kelurahan : '' }} {{ $data->kecamatan !== null ? 'Kecamatan ' . $data->kecamatan : '' }} {{ $data->kota !== null ? 'Kota ' . $data->kota : '' }} {{ $data->kodepos !== null ? $data->kodepos : '' }} </textarea>
                         </div>
                     @endif
-                    <div class="hr-container">
-                        <hr class="my-4">
-                        <span class="text-muted text">Riwayat Karir</span>
-                        <hr class="my-4">
-                    </div>
-                    <div class="form-group">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <td colspan="2">
-                                        <button class="btn btn-sm btn-success" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal">Tambah Karir</button>
-                                    </td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($career as $data)
-                                    <tr>
-                                        <td>
-                                            {{ $data->tanggal_selesai !== null ? 'Telah ' : 'Sedang ' }}
-                                            {{ $data->jenis_karir == 'kuliah'
-                                                ? 'menjalankan kuliah di '
-                                                : ($data->jenis_karir == 'kerja'
-                                                    ? 'bekerja pada '
-                                                    : ($data->jenis_karir == 'wirausaha'
-                                                        ? 'menjalankan usaha dengan nama '
-                                                        : '')) }}
-                                            {{ $data->nama_instansi }}
-                                            {{ $data->jenis_karir == 'kuliah'
-                                                ? 'dengan jurusan '
-                                                : ($data->jenis_karir == 'kerja'
-                                                    ? 'dengan jabatan '
-                                                    : ($data->jenis_karir == 'wirausaha'
-                                                        ? 'dalam bidang '
-                                                        : '')) }}
-                                            {{ $data->posisi_bidang }}
-                                            {{ $data->tanggal_selesai !== null ? 'pada ' : 'sejak ' }}
-                                            {{ $data->tanggal_mulai }}
-                                            {{ $data->tanggal_selesai !== null ? 'hingga ' . $data->tanggal_selesai : ' ' }}
+                    @if (auth()->user()->role == 'alumni')
+                        <div class="hr-container">
+                            <hr class="my-4">
+                            <span class="text-muted text">Riwayat Karir</span>
+                            <hr class="my-4">
+                        </div>
+                        <div class="form-group">
+                            <table class="table table-hover">
+                                <thead>
+                                    @if ($data->id_akun == auth()->user()->id_akun)
+                                        <tr>
+                                            <td colspan="2">
+                                                <button class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal">Tambah Karir</button>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </thead>
+                                <tbody>
+                                    @foreach ($career as $karir)
+                                        <tr>
+                                            <td>
+                                                {{ $karir->tanggal_selesai !== null ? 'Telah ' : 'Sedang ' }}
+                                                {{ $karir->jenis_karir == 'kuliah'
+                                                    ? 'menjalankan kuliah di '
+                                                    : ($karir->jenis_karir == 'kerja'
+                                                        ? 'bekerja pada '
+                                                        : ($karir->jenis_karir == 'wirausaha'
+                                                            ? 'menjalankan usaha dengan nama '
+                                                            : '')) }}
+                                                {{ $karir->nama_instansi }}
+                                                {{ $karir->jenis_karir == 'kuliah'
+                                                    ? 'dengan jurusan '
+                                                    : ($karir->jenis_karir == 'kerja'
+                                                        ? 'dengan jabatan '
+                                                        : ($karir->jenis_karir == 'wirausaha'
+                                                            ? 'dalam bidang '
+                                                            : '')) }}
+                                                {{ $karir->posisi_bidang }}
+                                                {{ $karir->tanggal_selesai !== null ? 'pada ' : 'sejak ' }}
+                                                {{ $karir->tanggal_mulai }}
+                                                {{ $karir->tanggal_selesai !== null ? 'hingga ' . $karir->tanggal_selesai : ' ' }}
 
-                                        </td>
-                                        <td style="width: 5%">
-                                            <button class="btn btn-sm btn-danger text-white btnHapus" onclick="hapusKarir({{ $data->id_karir }}, event)"><i class="bi bi-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                            </td>
+                                            @if ($data->id_akun == auth()->user()->id_akun)
+                                                <td style="width: 5%">
+                                                    <button class="btn btn-sm btn-danger text-white btnHapus"
+                                                        onclick="hapusKarir({{ $karir->id_karir }}, event)"><i
+                                                            class="bi bi-trash"></i></button>
+                                                </td>
+                                            @endif
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
                 </div>
             </div>
         @endforeach

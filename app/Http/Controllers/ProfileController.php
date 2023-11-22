@@ -19,14 +19,19 @@ Carbon::setLocale('id');
 
 class ProfileController extends Controller
 {
-    public function index(Akun $akun, Request $request, string $id)
+    public function index(Akun $akun, Alumni $alumni, Request $request, string $id)
     {
         $akun = Akun::find($id);
         if ($akun) {
             if ($akun->alumni) {
 
-                $profileData = DB::table('view_profile_alumni')->get();
-                $careerData = DB::table('view_karir_alumni')->get();
+                $idAlumni = $alumni->join('akun', 'alumni.id_akun', '=', 'akun.id_akun')
+    ->select('alumni.id_alumni')->where('alumni.id_akun', $id)
+    ->first();
+                
+
+                $profileData = DB::table('view_profile_alumni')->where('id_akun', $id)->get();
+                $careerData = DB::table('view_karir_alumni')->where('id_alumni', $idAlumni->id_alumni)->get();
 
                 foreach ($careerData as $career) {
 
@@ -55,11 +60,11 @@ class ProfileController extends Controller
                 return view('profile.index', $data);
             } elseif ($akun->admin) {
 
-                $data = ['datas' => DB::table('view_profile_admin')->get()];
+                $data = ['profile' => DB::table('view_profile_admin')->get()];
 
                 return view('profile.index', $data);
             } elseif ($akun->superAdmin) {
-                $data = ['datas' => DB::table('view_profile_super_admin')->get()];
+                $data = ['profile' => DB::table('view_profile_super_admin')->get()];
 
                 return view('profile.index', $data);
             } else {

@@ -22,25 +22,22 @@
                 <button class="card text-start darken-on-hover w-100">
 
                     <div class="card-body w-100 p-2" style="min-height: 18vh">
-        
+
                         <h5 class="card-title fw-bolder" style="margin: 0 0 6px 1px;">{{ $forum->judul }}</h5>
                         <h6 class="card-subtitle text-muted">{{ $forum->nama_pembuat }} || {{ $forum->tanggal_post }}</h6>
-            
-                        <div style="border-top: 1px solid #e0e0e0; margin: 10px 0;"></div>
-            
-                        <p class="card-text lh-sm mb-4">{{ $forum->content }}</p>
-            
-                        @if (isset($forum->komentar))
 
+                        <div style="border-top: 1px solid #e0e0e0; margin: 10px 0;"></div>
+
+                        <p class="card-text lh-sm mb-4">{{ $forum->content }}</p>
+
+                        @if (isset($forum->komentar))
                             @foreach ($forum->komentar as $komen)
-                            
                                 <div style="border-top: 1px solid #e0e0e0; margin: 12px 0;"></div>
 
-                                <h6 class="card-title fw-bolder" style="margin: 0 0 4px 1px;">{{ $komen->nama_pembuat }}</h6>
+                                <h6 class="card-title fw-bolder" style="margin: 0 0 4px 1px;">{{ $komen->nama_pembuat }}
+                                </h6>
                                 <h6 class="card-text text-muted">{{ $komen->komentar }}</h6>
-                                
                             @endforeach
-
                         @endif
 
                     </div>

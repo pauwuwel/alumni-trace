@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Akun;
 use App\Models\Forum;
+use App\Models\Komentar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 Carbon::setLocale('id');
 class ForumController extends Controller
@@ -16,8 +18,8 @@ class ForumController extends Controller
      */
     public function index()
     {
-        $forum_data = DB::table('view_forum_data')->orderBy('tanggal_post', 'desc')->get();
-        $komentar_data = DB::table('view_komentar_data')->get();
+        $forum_data = DB::table('view_forum_data')->where('status', 'accepted')->orderBy('tanggal_post', 'desc')->get();
+        $komentar_data = DB::table('view_komentar_data')->orderBy('tanggal_post', 'desc')->get();
 
         $get_forum_komentar = [];
 
@@ -38,9 +40,7 @@ class ForumController extends Controller
 
             if ($forumDate->diffInDays() > 7) {
                 $forum->tanggal_post = $forumDate->format('d-m-Y');
-            }
-
-            else {
+            } else {
                 $forum->tanggal_post = $forumDate->diffForHumans();
             }
         }
@@ -76,14 +76,12 @@ class ForumController extends Controller
         if ($data) {
             $data['id_pembuat'] = auth()->user()->id_akun;
             $data['tanggal_post'] = Carbon::now();
-            
-            if (auth()->user()->role == 'admin')
-            {
+
+            if (auth()->user()->role == 'admin') {
                 $data['status'] = 'accepted';
             }
-            
-            if ($request->hasFile('attachment') && $request->file('attachment')->isValid())
-            {
+
+            if ($request->hasFile('attachment') && $request->file('attachment')->isValid()) {
                 $foto_file = $request->file('attachment');
                 $foto_nama = md5($foto_file->getClientOriginalName() . time()) . '.' . $foto_file->getClientOriginalExtension();
                 $foto_file->move(public_path('img'), $foto_nama);
@@ -91,7 +89,11 @@ class ForumController extends Controller
             }
             // Simpan jika data terisi semua
             $forum->create($data);
-            return redirect('forum')->with('success', 'Data user baru berhasil ditambah');
+            if (auth()->user()->role == 'admin') {
+                return redirect('forum')->with('success', 'Forum baru berhasil dibuat');
+            } else {
+                return redirect('forum')->with('success', 'Data forum berhasil di kirim, mohon tunggu konfirmasi dari admin.');
+            }
         } else {
             // Kembali ke form tambah data
             return back()->with('error', 'Data user gagal ditambahkan');
@@ -103,22 +105,64 @@ class ForumController extends Controller
      */
     public function show(Forum $forum, string $id)
     {
-        $alumnis = $forum
-                        ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
-                        ->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
-                        ->select('forum.*', 'alumni.nama')->where('id_forum', $id);
-        $admins = $forum
-                        ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
-                        ->join('admin', 'akun.id_akun', '=', 'admin.id_akun')
-                        ->select('forum.*', 'admin.nama')->where('id_forum', $id);
 
-                   
-        $data = ['datas' => $alumnis->union($admins)->get()];
+        $forum_data = DB::table('view_forum_data')->where('id_forum', $id)->get();
 
-        return view('forum.detail', $data);
+        foreach ($forum_data as $forum) {
+
+            if ($forum->status == 'pending') {
+
+                if (auth()->user()->role == 'admin') {
+                    return view('forum.detail', compact('forum_data'));
+                } else {
+                    return redirect('forum')->with('error', 'Forum yang anda akses belum dikonfirmasi!');
+                }
+            }
+        }
+
+        $komentar_data = DB::table('view_komentar_data')->where('id_forum', $id)->orderBy('tanggal_post', 'desc')->get();
+
+        $get_forum_komentar = [];
+
+        foreach ($komentar_data as $komentar) {
+            $forum_id = $komentar->id_forum;
+
+            if (!isset($get_forum_komentar[$forum_id])) {
+                $get_forum_komentar[$forum_id] = [];
+            }
+
+            $get_forum_komentar[$forum_id][] = $komentar;
+        }
+
+        foreach ($forum_data as $forum) {
+
+            $forum->komentar = isset($get_forum_komentar[$forum->id_forum]) ? $get_forum_komentar[$forum->id_forum] : [];
+            $forum->totalKomentar = DB::select('SELECT getTotalKomentar(?) AS totalKomentar', [$forum->id_forum])[0]->totalKomentar;
+
+            $forumDate = Carbon::parse($forum->tanggal_post);
+
+            if ($forumDate->diffInDays() > 7) {
+                $forum->tanggal_post = $forumDate->format('d-m-Y');
+            } else {
+                $forum->tanggal_post = $forumDate->diffForHumans();
+            }
+
+            foreach ($forum->komentar as $komen) {
+
+                $komenDate = Carbon::parse($komen->tanggal_post);
+                if ($komenDate->diffInDays() > 7) {
+                    $komen->tanggal_post = $komenDate->format('d-m-Y');
+                } else {
+                    $komen->tanggal_post = $komenDate->diffForHumans();
+                }
+            }
+        }
+
+
+        return view('forum.detail', compact('forum_data'));
     }
 
-    public function status(Forum $forum, string $id, Request $request)
+    public function status(Forum $forum, Request $request)
     {
         $id_forum = $request->input('id_forum');
         $status = $request->input('status');
@@ -172,9 +216,9 @@ class ForumController extends Controller
             $dataUpdate = $forum->where('id_forum', $id_forum)->update($data);
 
             if ($dataUpdate) {
-                return redirect('forum')->with('success', 'Data jenis surat berhasil di update');
+                return redirect('forum')->with('success', 'Data Forum update');
             } else {
-                return back()->with('error', 'Data jenis surat gagal di update');
+                return back()->with('error', 'Data Forum gagal di update');
             }
         }
     }
@@ -187,7 +231,7 @@ class ForumController extends Controller
         $id_forum = $request->input('id_forum');
 
         // Hapus
-        $aksi = $forum->where('id_forum', $id_forum )->delete();
+        $aksi = $forum->where('id_forum', $id_forum)->delete();
 
         if ($aksi) {
             // Pesan Berhasil
@@ -204,5 +248,24 @@ class ForumController extends Controller
         }
 
         return response()->json($pesan);
+    }
+    public function addKomen(Komentar $komentar, Request $request)
+    {
+        $data = $request->validate([
+            'id_forum' => 'required',
+            'id_pembuat' => 'required',
+            'komentar' => 'required',
+            'attachment' => 'nullable',
+            'tanggal_post' => 'nullable',
+        ]);
+
+        $data['tanggal_post'] = Carbon::now();
+
+        $create = $komentar->create($data);
+        if ($create) {
+            return redirect('forum/' . $data['id_forum']);
+        } else {
+            return redirect('forum')->with('success', 'Data forum berhasil di kirim, mohon tunggu konfirmasi dari admin.');
+        }
     }
 }
