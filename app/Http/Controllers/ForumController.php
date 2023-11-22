@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 
 Carbon::setLocale('id');
 class ForumController extends Controller
@@ -213,6 +214,18 @@ class ForumController extends Controller
 
         if ($id_forum !== null) {
             // Process Update
+            if ($request->hasFile('attachment') && $request->file('attachment')->isValid()) {
+                $foto_file = $request->file('attachment');
+                $foto_extension = $foto_file->getClientOriginalExtension();
+                $foto_nama = md5($foto_file->getClientOriginalName() . time()) . '.' . $foto_extension;
+                $foto_file->move(public_path('img'), $foto_nama);
+
+                $update_data = $forum->where('id_forum', $id_forum)->first();
+                File::delete(public_path('img') . '/' . $update_data->attachment);
+
+                $data['attachment'] = $foto_nama;
+            }
+
             $dataUpdate = $forum->where('id_forum', $id_forum)->update($data);
 
             if ($dataUpdate) {
