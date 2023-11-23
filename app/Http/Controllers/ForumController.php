@@ -281,4 +281,73 @@ class ForumController extends Controller
             return redirect('forum')->with('success', 'Data forum berhasil di kirim, mohon tunggu konfirmasi dari admin.');
         }
     }
+
+    public function search(Request $request)
+    {
+        $output = '';
+
+        $searchQuery = $request->input('search');
+
+        $forum_data = DB::table('view_forum_data')->where('judul', 'like', '%' . $searchQuery . '%')
+            ->where('status', 'accepted')
+            ->orderBy('tanggal_post', 'desc')
+            ->get();
+
+        $komentar_data = DB::table('view_komentar_data')
+            ->orderBy('tanggal_post', 'desc')
+            ->get();
+
+        $get_forum_komentar = [];
+
+        foreach ($komentar_data as $komentar) {
+            $forum_id = $komentar->id_forum;
+
+            if (!isset($get_forum_komentar[$forum_id])) {
+                $get_forum_komentar[$forum_id] = [];
+            }
+
+            $get_forum_komentar[$forum_id][] = $komentar;
+        }
+
+        foreach ($forum_data as $forum) {
+            $forum->komentar = isset($get_forum_komentar[$forum->id_forum]) ? $get_forum_komentar[$forum->id_forum] : [];
+
+            $forumDate = Carbon::parse($forum->tanggal_post);
+
+            if ($forumDate->diffInDays() > 7) {
+                $forum->tanggal_post = $forumDate->format('d-m-Y');
+            } else {
+                $forum->tanggal_post = $forumDate->diffForHumans();
+            }
+        }
+
+
+        foreach ($forum_data as $forum) {
+            $output .= '<a href="/forum/post/' . $forum->id_forum . '" class="text-decoration-none text-dark">
+            <button class="card text-start darken-on-hover w-100">
+                <div class="card-body w-100 p-2" style="min-height: 18vh">
+                    <h5 class="card-title fw-bolder" style="margin: 0 0 6px 1px;">' . $forum->judul . '</h5>
+                    <h6 class="card-subtitle text-muted">' . $forum->nama_pembuat . ' || ' . $forum->tanggal_post . '</h6>
+                    <div style="border-top: 1px solid #e0e0e0; margin: 10px 0;"></div>
+                    <p class="card-text lh-sm mb-4">' . $forum->content . '</p>';
+
+            if (isset($forum->komentar)) {
+                foreach ($forum->komentar as $komen) {
+                    $output .= '<div style="border-top: 1px solid #e0e0e0; margin: 12px 0;"></div>';
+                    $output .= '<h6 class="card-title fw-bolder" style="margin: 0 0 4px 1px;">' . $komen->nama_pembuat . '</h6>';
+                    $output .= '<h6 class="card-text text-muted">' . $komen->komentar . '</h6>';
+                }
+            }
+
+            $output .= '</div></button></a>';
+        }
+
+
+        return response($output);
+    }
+
+    public function cetak()
+    {
+        //
+    }
 }

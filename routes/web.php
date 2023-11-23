@@ -67,12 +67,15 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [ForumController::class, 'index']);
             Route::get('/tambah', [ForumController::class, 'create']);
             Route::post('/tambah', [ForumController::class, 'store']);
-            Route::get('/{id}', [ForumController::class, 'show']);
+            Route::get('/post/{id}', [ForumController::class, 'show']);
+            Route::get('/cetak/{id}', [ForumController::class, 'cetak']);
             Route::post('/status', [ForumController::class, 'status']);
             Route::get('/edit/{id}', [ForumController::class, 'edit']);
             Route::post('/edit/{id}', [ForumController::class, 'update']);
             Route::delete('/hapus', [ForumController::class, 'destroy']);
             Route::post('/add-komentar', [ForumController::class, 'addKomen']);
+            Route::post('/add-komentar', [ForumController::class, 'addKomen']);
+            Route::get('/search-forum', [ForumController::class, 'search']);
         });
 
     });

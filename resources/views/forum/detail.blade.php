@@ -52,6 +52,7 @@
                                 <div class="col-12 d-flex">
                                     <div class="fw-bold">{{ $komen->nama_pembuat }}&nbsp;</div>
                                     <div>|| {{ $komen->tanggal_post }}</div>
+                                    
                                 </div>
                                 <div class="col-12">
                                     {{ $komen->komentar }}
@@ -199,7 +200,7 @@
                         success: function(data) {
                             if (data.success) {
                                 swal.fire('Berhasil di hapus!', '', 'success').then(function() {
-                                    window.location.href = '/dashboard';
+                                    window.location.href = '/forum';
                                 });
                             }
                         }
