@@ -199,7 +199,7 @@
                         success: function(data) {
                             if (data.success) {
                                 swal.fire('Berhasil di hapus!', '', 'success').then(function() {
-                                    window.location.href = '/dashboard';
+                                    window.location.href = '/forum';
                                 });
                             }
                         }

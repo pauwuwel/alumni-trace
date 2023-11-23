@@ -14,4 +14,11 @@ class GalleryController extends Controller
         ]; // mengembalikan data dalam sebuah array
         return view('galeri.index', $data);
     }
+
+    public function search(Request $request, Alumni $alumni)
+    {
+        $search = $request->input('search');
+        $data = Alumni::where('nama','LIKE', "%$search%")->get();
+        return view("galeri.index", ['datas' => $data]);
+    }
 }

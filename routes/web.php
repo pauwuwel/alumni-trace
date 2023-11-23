@@ -44,6 +44,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/edit/{id}', [ProfileController::class, 'update']);
             Route::post('/{id}', [ProfileController::class, 'addKarir']);
             Route::delete('/{id}', [ProfileController::class, 'removeKarir']);
+            Route::get('/print', [ProfileController::class, 'printPDF']);
         });
 
     });
@@ -81,6 +82,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('galeri')->group(function () {
             Route::get('/', [GalleryController::class, 'index']);
+            Route::get('/search', [GalleryController::class, 'search']);
+            // Route::get('/search-users', 'UserController@search');
         });
 
     });

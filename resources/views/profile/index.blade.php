@@ -31,9 +31,15 @@
                         <a href="/profile/edit/{{ $data->id_akun }}">
                             <button class="btn btn-info text-white">Edit Profile</button>
                         </a>
+                        <div>
+                            <a href="/profil/print">
+                                <button class="btn btn-warning text-white">Print Profil</button>
+                            </a>
+                        </div>
                     @endif
                     <button type="button" onClick="kembali()" class="btn btn-secondary">Kembali</button>
                 </div>
+
             </div>
             <div class="col-md-9">
                 <div class="d-flex flex-column" style="gap: 11px">
@@ -114,6 +120,10 @@
 
                                             </td>
                                             @if ($data->id_akun == auth()->user()->id_akun)
+                                                <td style="width: 5%">
+                                                    <button class="btn btn-sm btn-info text-white btnHapus"
+                                                        onclick="hapusKarir({{ $karir->id_karir }}, event)"><i class="bi bi-pencil-square"></i></button>
+                                                </td>
                                                 <td style="width: 5%">
                                                     <button class="btn btn-sm btn-danger text-white btnHapus"
                                                         onclick="hapusKarir({{ $karir->id_karir }}, event)"><i
@@ -361,5 +371,6 @@
         function kembali() {
             window.history.back();
         }
+
     </script>
 @endsection

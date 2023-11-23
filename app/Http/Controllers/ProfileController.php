@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 Carbon::setLocale('id');
 
@@ -288,5 +289,14 @@ class ProfileController extends Controller
         }
 
         return response()->json($pesan);
+    }
+
+    public function printPDF()
+    {
+    //     $profil = L::orderBy('id_profil', 'desc')->get();
+
+    //     $pdf = Pdf::loadview('dashboard.log-pdf', compact('logs'));
+    //     return $pdf->stream();
+        return view('profile.profilPdf');
     }
 }
