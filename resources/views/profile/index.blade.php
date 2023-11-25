@@ -114,10 +114,11 @@
 
                                             </td>
                                             @if ($data->id_akun == auth()->user()->id_akun)
-                                                <td style="width: 5%">
-                                                    <button class="btn btn-sm btn-danger text-white btnHapus"
-                                                        onclick="hapusKarir({{ $karir->id_karir }}, event)"><i
-                                                            class="bi bi-trash"></i></button>
+                                                <td style="width: 10%">
+                                                    <div class="d-flex" style="gap:5px;">
+                                                        <button class="btn btn-sm btn-info text-white btnHapus" onclick="hapusKarir({{ $karir->id_karir }}, event)"><i class="bi bi-pencil-fill"></i></button>
+                                                        <button class="btn btn-sm btn-danger text-white btnHapus" onclick="hapusKarir({{ $karir->id_karir }}, event)"><i class="bi bi-trash-fill"></i></button>
+                                                    </div>
                                                 </td>
                                             @endif
                                         </tr>

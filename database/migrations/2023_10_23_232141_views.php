@@ -65,6 +65,16 @@ return new class extends Migration
             SELECT karir.* FROM karir
             INNER JOIN alumni ON karir.id_alumni = alumni.id_alumni'
         );
+
+        DB::unprepared(
+            'CREATE VIEW view_total_karir AS
+
+            SELECT
+                COUNT(DISTINCT CASE WHEN jenis_karir = "kuliah" THEN id_alumni END) as total_kuliah,
+                COUNT(DISTINCT CASE WHEN jenis_karir = "kerja" THEN id_alumni END) as total_kerja,
+                COUNT(DISTINCT CASE WHEN jenis_karir = "wirausaha" THEN id_alumni END) as total_wirausaha
+            FROM karir'
+        );
     }
 
     public function down(): void
@@ -75,5 +85,6 @@ return new class extends Migration
         DB::statement("DROP VIEW IF EXISTS view_forum_data");
         DB::statement("DROP VIEW IF EXISTS view_komentar_data");
         DB::statement("DROP VIEW IF EXISTS view_karir_alumni");
+        DB::statement("DROP VIEW IF EXISTS view_total_karir");
     }
 };

@@ -13,29 +13,13 @@ class DashboardController extends Controller
 {
     public function index(Logs $logs, Forum $forum) 
     {
-        if (auth()->user()->role == 'superAdmin') 
-        {
-            $totalAlumni = DB::select("SELECT getTotalAlumni() as totalAlumni")[0]->totalAlumni;
-            $logs = Logs::orderBy('id_logs', 'desc')->get();
+        $karir_data = DB::table('view_total_karir')->first();
 
-            return view('dashboard.index', compact('totalAlumni', 'logs'));
-        }
+        $data = [
+            'karir_data' => $karir_data,
+        ];
 
-        elseif (auth()->user()->role == 'admin') 
-        {
-            $accForum = $forum
-            ->join('akun', 'forum.id_pembuat', '=', 'akun.id_akun')
-            ->join('alumni', 'akun.id_akun', '=', 'alumni.id_akun')
-            ->select('forum.*', 'alumni.nama')->where('status', 'pending')
-            ->orderBy('id_forum', 'desc')->get();
-
-            return view('dashboard.index', compact('accForum'));
-        }
-
-        elseif (auth()->user()->role == 'alumni') 
-        {
-            return view('dashboard.index');
-        }
+        return view('dashboard.index', $data);
     }
 
     public function printPDF()

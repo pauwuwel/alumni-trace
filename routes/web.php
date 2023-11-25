@@ -73,9 +73,11 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/edit/{id}', [ForumController::class, 'edit']);
             Route::post('/edit/{id}', [ForumController::class, 'update']);
             Route::delete('/hapus', [ForumController::class, 'destroy']);
+            Route::delete('/hapus-komen', [ForumController::class, 'remove']);
             Route::post('/add-komentar', [ForumController::class, 'addKomen']);
             Route::post('/add-komentar', [ForumController::class, 'addKomen']);
             Route::get('/search-forum', [ForumController::class, 'search']);
+            Route::get('/print-pdf/{id}', [ForumController::class, 'cetak']);
         });
 
     });
@@ -84,6 +86,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('galeri')->group(function () {
             Route::get('/', [GalleryController::class, 'index']);
+            Route::get('/search-alumni', [GalleryController::class, 'search']);
         });
 
     });

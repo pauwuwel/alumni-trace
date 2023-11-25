@@ -19,11 +19,19 @@
             padding: 0 10px;
             color: #888;
         }
+
+        .kdd ul {
+            min-width: 0px !important;
+        }
     </style>
 @endsection
 @section('content')
     <div class="container-fluid">
         @foreach ($forum_data as $data)
+            <div style="float: right">
+                <a target="_blank" href="/forum/print-pdf/{{ $data->id_forum }}" class="btn btn-sm btn-warning text-white"><i
+                        class="bi bi-printer"></i> Print</a>
+            </div>
             <div class="d-flex align-items-end" style="gap: 12px">
                 <h2 class="fw-bolder">{{ $data->judul }}</h2>
                 <h5>{{ $data->nama_pembuat }} || {{ $data->tanggal_post }}</h5>
@@ -51,8 +59,18 @@
                             <div class="row">
                                 <div class="col-12 d-flex">
                                     <div class="fw-bold">{{ $komen->nama_pembuat }}&nbsp;</div>
-                                    <div>|| {{ $komen->tanggal_post }}</div>
-                                    
+                                    <div>|| {{ $komen->tanggal_post }}&nbsp;</div>
+                                    @if (auth()->user()->id_akun == $komen->id_pembuat || auth()->user()->role == 'admin')
+                                        <div class="dropdown kdd">
+                                            <i class="bi bi-three-dots-vertical" style="cursor: pointer;"
+                                                class="dropdown-toggle"id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                aria-expanded="false"></i>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <li><a class="dropdown-item btn btnHapusKomen" idForum="{{ $data->id_forum }}" idKomen="{{ $komen->id_komentar }}" href="#"><i class="bi bi-trash-fill text-danger"></i></a></li>
+                                                <li><a class="dropdown-item btn btnEditKomen" idForum="{{ $data->id_forum }}" idKomen="{{ $komen->id_komentar }}" href="#"><i class="bi bi-pencil-square text-primary"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="col-12">
                                     {{ $komen->komentar }}
@@ -62,7 +80,7 @@
 
                     </div>
 
-                    <form method="POST" action="add-komentar" class="d-flex">
+                    <form method="POST" action="/forum/add-komentar" class="d-flex">
                         <input type="text" id="komentar" name="komentar" class="form-control"
                             placeholder="Tuliskan komentar...">
                         <input type="hidden" id="id_forum" name="id_forum" class="form-control"
@@ -201,6 +219,43 @@
                             if (data.success) {
                                 swal.fire('Berhasil di hapus!', '', 'success').then(function() {
                                     window.location.href = '/forum';
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        $('ul').on('click', '.btnHapusKomen', function(a) {
+            a.preventDefault();
+            let idForum = $(this).closest('.btnHapusKomen').attr('idForum');
+            let idKomen = $(this).closest('.btnHapusKomen').attr('idKomen');
+
+            swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Komentar yang dihapus tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff0000',
+                cancelButtonColor: '#969696',
+                confirmButtonText: 'Hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    //Ajax Delete
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '/forum/hapus-komen',
+                        data: {
+                            id_komentar: idKomen,
+                            id_forum: idForum,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(data) {
+                            if (data.success) {
+                                swal.fire('Berhasil di hapus!', '', 'success').then(function() {
+                                    window.location.href = '/forum/post/' + idForum;
                                 });
                             }
                         }

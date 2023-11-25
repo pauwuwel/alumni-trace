@@ -15,34 +15,54 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         \App\Models\Akun::create([
-            // 'id_akun' => 1,
+            'id_akun' => 1,
             'username' => 'superadmin',
             'password'=> Hash::make('123'),
             'role'=> 'superAdmin',
         ]);
         \App\Models\Akun::create([
-            // 'id_akun' => 2,
+            'id_akun' => 2,
             'username' => 'admin',
             'password'=> Hash::make('123'),
             'role'=> 'admin',
         ]);
         \App\Models\Akun::create([
-            // 'id_akun' => 3,
-            'username' => 'alumni',
+            'id_akun' => 3,
+            'username' => 'bana',
+            'password'=> Hash::make('123'),
+            'role'=> 'alumni',
+        ]);
+        \App\Models\Akun::create([
+            'id_akun' => 4,
+            'username' => 'gahtan',
+            'password'=> Hash::make('123'),
+            'role'=> 'alumni',
+        ]);
+        \App\Models\Akun::create([
+            'id_akun' => 5,
+            'username' => 'farel',
             'password'=> Hash::make('123'),
             'role'=> 'alumni',
         ]);
         \App\Models\SuperAdmin::create([
             'id_akun'=> 1,
-            'nama'=> 'parel',
+            'nama'=> 'Super Admin',
         ]);
         \App\Models\Admin::create([
             'id_akun'=> 2,
-            'nama'=> 'gahtan',
+            'nama'=> 'Admin',
         ]);
         \App\Models\Alumni::create([
             'id_akun'=> 3,
             'nama'=> 'banskuy',
+        ]);
+        \App\Models\Alumni::create([
+            'id_akun'=> 4,
+            'nama'=> 'tanskuy',
+        ]);
+        \App\Models\Alumni::create([
+            'id_akun'=> 5,
+            'nama'=> 'lerskuy',
         ]);
         \App\Models\Alamat::create([
             'id_alumni'=> 1,
@@ -59,13 +79,6 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Karir::create([
             'id_alumni'=> 1,
-            'jenis_karir'=> 'kuliah',
-            'nama_instansi'=> 'Universitas Indonesia',
-            'posisi_bidang'=> 'Teknologi Informasi',
-            'tanggal_mulai'=> Carbon::now(),
-        ]);
-        \App\Models\Karir::create([
-            'id_alumni'=> 1,
             'jenis_karir'=> 'kerja',
             'nama_instansi'=> 'Brilyan Trimatra Utama',
             'posisi_bidang'=> 'Programmer',
@@ -73,11 +86,39 @@ class DatabaseSeeder extends Seeder
             'tanggal_selesai'=> Carbon::now(),
         ]);
         \App\Models\Karir::create([
-            'id_alumni'=> 1,
+            'id_alumni'=> 2,
+            'jenis_karir'=> 'kerja',
+            'nama_instansi'=> 'Brilyan Trimatra Utama',
+            'posisi_bidang'=> 'Programmer',
+            'tanggal_mulai'=> Carbon::now()->subMonth(),
+        ]);
+        \App\Models\Karir::create([
+            'id_alumni'=> 2,
+            'jenis_karir'=> 'kuliah',
+            'nama_instansi'=> 'Universitas Gajah Mada',
+            'posisi_bidang'=> 'Teknologi Informasi',
+            'tanggal_mulai'=> Carbon::now()->subMonth(),
+        ]);
+        \App\Models\Karir::create([
+            'id_alumni'=> 3,
+            'jenis_karir'=> 'kuliah',
+            'nama_instansi'=> 'Universitas Pasundan',
+            'posisi_bidang'=> 'Teknologi Informasi',
+            'tanggal_mulai'=> Carbon::now()->subMonth(),
+        ]);
+        \App\Models\Karir::create([
+            'id_alumni'=> 3,
             'jenis_karir'=> 'wirausaha',
-            'nama_instansi'=> 'Katsunadesu',
+            'nama_instansi'=> 'Cipia',
             'posisi_bidang'=> 'Makanan',
-            'tanggal_mulai'=> Carbon::now()->subWeek(),
+            'tanggal_mulai'=> Carbon::now()->subMonth(),
+        ]);
+        \App\Models\Karir::create([
+            'id_alumni'=> 3,
+            'jenis_karir'=> 'wirausaha',
+            'nama_instansi'=> 'Topup Mobilejeng',
+            'posisi_bidang'=> 'Jasa',
+            'tanggal_mulai'=> Carbon::now()->subMonth(),
         ]);
         \App\Models\Forum::create([
             'id_pembuat'=> 3,

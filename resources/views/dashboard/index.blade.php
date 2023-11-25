@@ -32,75 +32,46 @@
             z-index: 1;
             /* Ensure it's above the scrolling content */
         }
+
+        .karirCard {
+            background-repeat: no-repeat;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+
+        .karirKuliah {
+            background-color: #168DA7;
+            background-size: 100px;
+            background-image: url({{ url('img/mortar.png') }});
+        }
+
+        .karirKerja {
+            background-color: #00AD83;
+            background-size: 108px;
+            background-image: url({{ url('img/manii.png') }});
+        }
+
+        .karirWirausaha {
+            background-color: #00A9AD;
+            background-size: 112px;
+            background-image: url({{ url('img/henseks.png') }});
+        }
+
     </style>
 @endsection
 @section('content')
-    <div class="row">
-        @if (auth()->user()->role == 'superAdmin')
-            <div class="col-md-4 d-flex flex-column align-items-center justify-content-center" style="height: 20vh">
-                <h2>Total Alumni:</h2>
-                <h1>{{ $totalAlumni }}</h1>
-            </div>
-            <div class="col-md-5 shadow rounded-3" style="height: 35vh; overflow-x: auto;">
-                <table class="table table-hover table-responsive">
-                    <thead>
-                        <tr>
-                            <th>Konfirmasi Forum Alumni</th>
-                            <!-- Add more th elements for additional columns if needed -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (isset($accForum))
-                            @foreach ($accForum as $forum)
-                                <tr>
-                                    <td>{{ $forum->nama }}, <b>{{ $forum->judul }}</b></td>
-                                    <!-- Add more td elements for additional columns if needed -->
-                                </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
-            </div>
-        @elseif (auth()->user()->role == 'admin')
-            <div class="col-md-5 shadow rounded-3" style="height: 35vh; overflow-x: auto;">
-                <table class="table table-hover table-responsive">
-                    <thead>
-                        <tr>
-                            <td style="text-align: center" colspan="2">Konfirmasi Forum Alumni</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (isset($accForum))
-                            @foreach ($accForum as $forum)
-                                <tr>
-                                    <td style="width: 90%">{{ $forum->nama }}, <b>{{ $forum->judul }}</b></td>
-                                    <td>
-                                        <a style="text-decoration: none" href="/forum/post/{{ $forum->id_forum }}"><button
-                                                class="btn btn-warning">Detail</button></a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
-            </div>
-        @elseif (auth()->user()->role == 'alumni')
-            {{-- <div class="row">
-                <div class="d-flex justify-content-between" style="gap: 12px">
-                    <div style="height: 20vh;background: #00AD83" class="box w-100 rounded">
-                        <p class="text-karir">KULIAH</p>
-                        <p class="jumlah-karir">1</p>
-                    </div>
-                    <div style="height: 20vh;background: #168DA7" class="box w-100 rounded">
-                        <p class="text-karir">WIRAUSAHA</p>
-                        <p class="jumlah-karir">0</p>
-                    </div>
-                    <div style="height: 20vh;background: #00A9AD" class="box w-100 rounded">
-                        <p class="text-karir">KERJA</p>
-                        <p class="jumlah-karir">0</p>
-                    </div>
-                </div>
-            </div> --}}
-        @endif
+    <div class="d-flex justify-content-between flex-column flex-md-row" style="gap:10px">
+        <div class="w-100 d-flex flex-column align-items-center justify-content-center rounded py-4 text-white karirCard karirKuliah">
+            <h3 style="letter-spacing: 2px; margin-bottom: 0px">Kuliah</h3>
+            <h2 class="fw-bold" style="letter-spacing: 1px; margin-bottom: 0px">{{ $karir_data->total_kuliah }}</h2>
+        </div>
+        <div class="w-100 d-flex flex-column align-items-center justify-content-center rounded py-4 text-white karirCard karirKerja">
+            <h3 style="letter-spacing: 2px; margin-bottom: 0px">Kerja</h3>
+            <h2 class="fw-bold" style="letter-spacing: 1px; margin-bottom: 0px">{{ $karir_data->total_kerja }}</h2>
+        </div>
+        <div class="w-100 d-flex flex-column align-items-center justify-content-center rounded py-4 text-white karirCard karirWirausaha">
+            <h3 style="letter-spacing: 2px; margin-bottom: 0px">Wirausaha</h3>
+            <h2 class="fw-bold" style="letter-spacing: 1px; margin-bottom: 0px">{{ $karir_data->total_wirausaha }}</h2>
+        </div>
     </div>
 @endsection

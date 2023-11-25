@@ -7,6 +7,7 @@ use App\Models\Forum;
 use App\Models\Komentar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
@@ -163,6 +164,7 @@ class ForumController extends Controller
         return view('forum.detail', compact('forum_data'));
     }
 
+
     public function status(Forum $forum, Request $request)
     {
         $id_forum = $request->input('id_forum');
@@ -276,7 +278,7 @@ class ForumController extends Controller
 
         $create = $komentar->create($data);
         if ($create) {
-            return redirect('forum/' . $data['id_forum']);
+            return redirect('forum/post/' . $data['id_forum']);
         } else {
             return redirect('forum')->with('success', 'Data forum berhasil di kirim, mohon tunggu konfirmasi dari admin.');
         }
@@ -346,8 +348,85 @@ class ForumController extends Controller
         return response($output);
     }
 
-    public function cetak()
+    public function cetak(string $id)
     {
-        //
+        $forum_data = DB::table('view_forum_data')->where('id_forum', $id)->get();
+
+        foreach ($forum_data as $forum) {
+
+            if ($forum->status == 'pending') {
+
+                if (auth()->user()->role == 'admin') {
+                    return view('forum.detail', compact('forum_data'));
+                } else {
+                    return redirect('forum')->with('error', 'Forum yang anda akses belum dikonfirmasi!');
+                }
+            }
+        }
+
+        $komentar_data = DB::table('view_komentar_data')->where('id_forum', $id)->orderBy('tanggal_post', 'desc')->get();
+
+        $get_forum_komentar = [];
+
+        foreach ($komentar_data as $komentar) {
+            $forum_id = $komentar->id_forum;
+
+            if (!isset($get_forum_komentar[$forum_id])) {
+                $get_forum_komentar[$forum_id] = [];
+            }
+
+            $get_forum_komentar[$forum_id][] = $komentar;
+        }
+
+        foreach ($forum_data as $forum) {
+
+            $forum->komentar = isset($get_forum_komentar[$forum->id_forum]) ? $get_forum_komentar[$forum->id_forum] : [];
+            $forum->totalKomentar = DB::select('SELECT getTotalKomentar(?) AS totalKomentar', [$forum->id_forum])[0]->totalKomentar;
+
+            $forumDate = Carbon::parse($forum->tanggal_post);
+
+            if ($forumDate->diffInDays() > 7) {
+                $forum->tanggal_post = $forumDate->format('d-m-Y');
+            } else {
+                $forum->tanggal_post = $forumDate->diffForHumans();
+            }
+
+            foreach ($forum->komentar as $komen) {
+
+                $komenDate = Carbon::parse($komen->tanggal_post);
+                if ($komenDate->diffInDays() > 7) {
+                    $komen->tanggal_post = $komenDate->format('d-m-Y');
+                } else {
+                    $komen->tanggal_post = $komenDate->diffForHumans();
+                }
+            }
+        }
+
+        $pdf = Pdf::loadview('forum.printForum', compact('forum_data'));
+        return $pdf->stream();
+    }
+
+    public function remove(Komentar $komentar, Request $request)
+    {
+        $idKomen = $request->input('id_komentar');
+
+        // Hapus
+        $aksi = $komentar->where('id_komentar', $idKomen)->delete();
+
+        if ($aksi) {
+            // Pesan Berhasil
+            $pesan = [
+                'success' => true,
+                'pesan'   => 'Data jenis surat berhasil dihapus'
+            ];
+        } else {
+            // Pesan Gagal
+            $pesan = [
+                'success' => false,
+                'pesan'   => 'Data gagal dihapus'
+            ];
+        }
+
+        return response()->json($pesan);
     }
 }

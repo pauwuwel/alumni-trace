@@ -18,7 +18,7 @@
 @section('content')
     <div class="container-fluid d-flex flex-column mb-5" style="gap:20px">
         <div class="search-container">
-            <input type="search" id="search" name="search" class="form-control" style="width:400px" placeholder="Cari judul forum..">
+            <input type="search" id="search" name="search" class="form-control" style="width:400px" placeholder="Cari judul forum...">
         </div>
         <div id="forums" class="d-flex flex-column mb-5" style="gap:20px">
             @foreach ($forum_data as $forum)
