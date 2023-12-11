@@ -22,7 +22,15 @@
 @endsection
 @section('content')
     <div class="row">
+        
         @foreach ($profile as $data)
+            @if ($data->id_akun == auth()->user()->id_akun)
+                <div>
+                    <a href="/profile/print/{{ $data->id_akun }}">
+                        <button class="btn btn-warning text-white" style="float: right"><i class="bi bi-printer"></i> Print Profil</button>
+                    </a>
+                </div>
+            @endif
             <div style="gap: 10px" class="col-md-3 d-flex flex-column align-items-center">
                 <img id="profile-image" src="{{ $data->foto !== null ? url('img/' . $data->foto) : url('img/pp.png') }}"
                     class="w-100" alt="pp">
@@ -31,11 +39,7 @@
                         <a href="/profile/edit/{{ $data->id_akun }}">
                             <button class="btn btn-info text-white">Edit Profile</button>
                         </a>
-                        <div>
-                            <a href="/profil/print">
-                                <button class="btn btn-warning text-white">Print Profil</button>
-                            </a>
-                        </div>
+                       
                     @endif
                     <button type="button" onClick="kembali()" class="btn btn-secondary">Kembali</button>
                 </div>
@@ -78,7 +82,7 @@
                     @if (auth()->user()->role == 'alumni')
                         <div class="hr-container">
                             <hr class="my-4">
-                            <span class="text-muted text">Riwayat Karir</span>
+                            <span class="text-muted text">{{ $totalKarir }} Riwayat Karir</span>
                             <hr class="my-4">
                         </div>
                         <div class="form-group">
@@ -86,9 +90,13 @@
                                 <thead>
                                     @if ($data->id_akun == auth()->user()->id_akun)
                                         <tr>
-                                            <td colspan="2">
+                                            <td colspan="3">
                                                 <button class="btn btn-sm btn-success" data-bs-toggle="modal"
-                                                    data-bs-target="#exampleModal">Tambah Karir</button>
+                                                    data-bs-target="#exampleModal">Tambah Karir</button> 
+                                                {{-- <span>Total Riwayat Karir : {{ $totalKarir }}</span> --}}
+                                                <a href="/profile/log/{{ $data->id_akun }}">
+                                                    <button class="btn btn-sm btn-success" style="float: right">Log Activity</button>
+                                                </a>
                                             </td>
                                         </tr>
                                     @endif

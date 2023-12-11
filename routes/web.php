@@ -44,7 +44,8 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/edit/{id}', [ProfileController::class, 'update']);
             Route::post('/{id}', [ProfileController::class, 'addKarir']);
             Route::delete('/{id}', [ProfileController::class, 'removeKarir']);
-            Route::get('/print', [ProfileController::class, 'printPDF']);
+            Route::get('/print/{id}', [ProfileController::class, 'printPDF']);
+            Route::get('/log/{id}', [ProfileController::class, 'logs']);
         });
 
     });

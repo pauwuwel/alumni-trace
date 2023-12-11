@@ -29,6 +29,16 @@ return new class extends Migration
                 RETURN total;
             END'
         );
+        
+        DB::unprepared('DROP FUNCTION IF EXISTS getTotalKarir');
+        DB::unprepared(
+            'CREATE FUNCTION getTotalKarir() RETURNS INT
+            BEGIN
+                DECLARE karirCount INT;
+                SELECT COUNT(id_karir) INTO karirCount FROM karir;
+                RETURN karirCount;
+            END'
+        );
     }
 
     public function down(): void
