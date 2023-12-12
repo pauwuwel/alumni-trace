@@ -9,7 +9,7 @@
         </a>
     </div>
     <div class="">
-        <table class="table table-hover table-bordered datatable">
+        <table class="table table-hover table-bordered">
             <thead>
                 <tr>
                     <th>Usermame</th>
@@ -77,16 +77,6 @@
                         }
                     });
                 }
-            });
-        });
-        $(document).ready(function() {
-            $('.datatable').DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false
             });
         });
     </script>

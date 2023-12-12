@@ -71,6 +71,7 @@ class ForumController extends Controller
                 'tanggal_post',
                 'id_pembuat',
                 'status',
+                'reviewedBy'
             ]
         );
 
@@ -81,6 +82,7 @@ class ForumController extends Controller
 
             if (auth()->user()->role == 'admin') {
                 $data['status'] = 'accepted';
+                $data['reviewedBy'] = auth()->user()->id_akun;
             }
 
             if ($request->hasFile('attachment') && $request->file('attachment')->isValid()) {
@@ -109,18 +111,6 @@ class ForumController extends Controller
     {
 
         $forum_data = DB::table('view_forum_data')->where('id_forum', $id)->get();
-
-        foreach ($forum_data as $forum) {
-
-            if ($forum->status == 'pending') {
-
-                if (auth()->user()->role == 'admin') {
-                    return view('forum.detail', compact('forum_data'));
-                } else {
-                    return redirect('forum')->with('error', 'Forum yang anda akses belum dikonfirmasi!');
-                }
-            }
-        }
 
         $komentar_data = DB::table('view_komentar_data')->where('id_forum', $id)->orderBy('tanggal_post', 'desc')->get();
 
@@ -160,6 +150,26 @@ class ForumController extends Controller
             }
         }
 
+        foreach ($forum_data as $forum) {
+
+            if ($forum->status == 'pending') {
+
+                if (auth()->user()->role == 'admin') {
+                    return view('forum.detail', compact('forum_data'));
+                } else {
+                    return redirect('forum')->with('error', 'Forum yang anda akses belum dikonfirmasi!');
+                }
+            }
+
+            if ($forum->status == 'deleted') {
+
+                if (auth()->user()->role == 'admin') {
+                    return view('forum.detail', compact('forum_data'));
+                } else {
+                    return redirect('forum')->with('error', 'Forum yang anda akses telah dihapus!');
+                }
+            }
+        }
 
         return view('forum.detail', compact('forum_data'));
     }
@@ -169,17 +179,16 @@ class ForumController extends Controller
     {
         $id_forum = $request->input('id_forum');
         $status = $request->input('status');
+        $id_admin = $request->input('id_admin');
 
-        $dataUpdate = $forum->where('id_forum', $id_forum)->update(['status' => $status]);
+        $dataUpdate = $forum->where('id_forum', $id_forum)->update(array('status' => $status, 'reviewedBy' => $id_admin));
 
         if ($dataUpdate) {
-            // Pesan Berhasil
             $pesan = [
                 'success' => true,
                 'pesan'   => 'Forum berhasil di Konfirmasi'
             ];
         } else {
-            // Pesan Gagal
             $pesan = [
                 'success' => false,
                 'pesan'   => 'Forum gagal di Konfirmasi'
@@ -244,25 +253,30 @@ class ForumController extends Controller
     public function destroy(Forum $forum, Request $request)
     {
         $id_forum = $request->input('id_forum');
+        $id_actor = $request->input('id_actor');
+        $status = $request->input('status');
 
-        // Hapus
-        $aksi = $forum->where('id_forum', $id_forum)->delete();
+        
+        $dataUpdate = $forum->where('id_forum', $id_forum)->update(['reviewedBy' => $id_actor, 'status' => $status]);
 
-        if ($aksi) {
-            // Pesan Berhasil
+        if ($dataUpdate) {
             $pesan = [
                 'success' => true,
-                'pesan'   => 'Data jenis surat berhasil dihapus'
+                'pesan'   => 'Forum berhasil di Konfirmasi'
             ];
         } else {
-            // Pesan Gagal
             $pesan = [
                 'success' => false,
-                'pesan'   => 'Data gagal dihapus'
+                'pesan'   => 'Forum gagal di Konfirmasi',
+                'datas' => [
+                    $id_forum, $id_actor
+                ]
             ];
         }
-
+        
         return response()->json($pesan);
+
+
     }
     public function addKomen(Komentar $komentar, Request $request)
     {
@@ -409,16 +423,30 @@ class ForumController extends Controller
     public function remove(Komentar $komentar, Request $request)
     {
         $idKomen = $request->input('id_komentar');
+        $idUser = $request->input('id_user');
 
         // Hapus
-        $aksi = $komentar->where('id_komentar', $idKomen)->delete();
+        $aksiEdit = $komentar->where('id_komentar', $idKomen)->update(['deletedBy' => $idUser]);
 
-        if ($aksi) {
-            // Pesan Berhasil
-            $pesan = [
-                'success' => true,
-                'pesan'   => 'Data jenis surat berhasil dihapus'
-            ];
+        if ($aksiEdit) {
+            
+            $aksiHapus = $komentar->where('id_komentar', $idKomen)->delete();
+
+            if ($aksiHapus) {
+
+                $pesan = [
+                    'success' => true,
+                    'pesan'   => 'Data jenis surat berhasil dihapus'
+                ];
+
+            } else {
+                // Pesan Gagal
+                $pesan = [
+                    'success' => false,
+                    'pesan'   => 'Data gagal dihapus'
+                ];
+            }
+            
         } else {
             // Pesan Gagal
             $pesan = [

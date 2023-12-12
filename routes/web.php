@@ -44,6 +44,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/edit/{id}', [ProfileController::class, 'update']);
             Route::post('/{id}', [ProfileController::class, 'addKarir']);
             Route::delete('/{id}', [ProfileController::class, 'removeKarir']);
+            Route::get('/{id}/activity', [ProfileController::class, 'showLogs']);
         });
 
     });
@@ -72,7 +73,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/status', [ForumController::class, 'status']);
             Route::get('/edit/{id}', [ForumController::class, 'edit']);
             Route::post('/edit/{id}', [ForumController::class, 'update']);
-            Route::delete('/hapus', [ForumController::class, 'destroy']);
+            Route::post('/hapus', [ForumController::class, 'destroy']);
             Route::delete('/hapus-komen', [ForumController::class, 'remove']);
             Route::post('/add-komentar', [ForumController::class, 'addKomen']);
             Route::post('/add-komentar', [ForumController::class, 'addKomen']);

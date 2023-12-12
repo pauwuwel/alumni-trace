@@ -8,7 +8,7 @@
             <label for="search">Cari Alumni</label>
             <input type="search" name="search" id="search" placeholder="Masukan nama alumni..." class="form-control mb-4" style="width: 400px;">
         </div>
-        <div id="galeri">
+        <div id="galeri" class="row">
             @foreach ($datas as $data)
                 <div class="col-md-2 col-sm-12 mb-2">
                     <a style="text-decoration:none;" href="/profile/{{ $data->id_akun }}">

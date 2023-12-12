@@ -10,6 +10,8 @@ use App\Models\Admin;
 use App\Models\Alumni;
 use App\Models\Alamat;
 use App\Models\Karir;
+use App\Models\Forum;
+use App\Models\Logs;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Carbon;
@@ -288,5 +290,49 @@ class ProfileController extends Controller
         }
 
         return response()->json($pesan);
+    }
+
+    public function showLogs(string $id, Logs $logs, Forum $forum)
+    {
+        if (auth()->user()->id_akun != $id)
+        {
+            return redirect('profile/' . auth()->user()->id_akun . '/activity');
+        }
+
+        if (auth()->user()->role == 'admin')
+        {
+            $logsData = $logs->where('table', 'forum')->get();
+
+            foreach ($logsData as $logss) {
+
+                $logssDate = Carbon::parse($logss->date);
+                if ($logssDate->diffInDays() > 7) {
+                    $logss->date = $logssDate->format('d-m-Y');
+                } else {
+                    $logss->date = $logssDate->diffForHumans();
+                }
+            }
+
+            return view('profile.logs', compact('logsData'));
+        }
+
+        else 
+        {
+            $userId = auth()->user()->id_akun;
+
+            $forumData = Forum::where('id_pembuat', $userId)->get();
+
+            $forumIds = $forumData->pluck('id_forum');
+
+            $logsData = Logs::whereIn('row', $forumIds)
+                ->where('table', 'forum')
+                ->get();
+
+            
+
+            return view('profile.logs', compact('logsData'));
+
+        }
+        
     }
 }

@@ -66,8 +66,13 @@
                                                 class="dropdown-toggle"id="dropdownMenuButton" data-bs-toggle="dropdown"
                                                 aria-expanded="false"></i>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <li><a class="dropdown-item btn btnHapusKomen" idForum="{{ $data->id_forum }}" idKomen="{{ $komen->id_komentar }}" href="#"><i class="bi bi-trash-fill text-danger"></i></a></li>
-                                                <li><a class="dropdown-item btn btnEditKomen" idForum="{{ $data->id_forum }}" idKomen="{{ $komen->id_komentar }}" href="#"><i class="bi bi-pencil-square text-primary"></i></a></li>
+                                                <li><a class="dropdown-item btn btnHapusKomen"
+                                                        idForum="{{ $data->id_forum }}" idKomen="{{ $komen->id_komentar }}"
+                                                        href="#"><i class="bi bi-trash-fill text-danger"></i></a></li>
+                                                <li><a class="dropdown-item btn btnEditKomen"
+                                                        idForum="{{ $data->id_forum }}"
+                                                        idKomen="{{ $komen->id_komentar }}" href="#"><i
+                                                            class="bi bi-pencil-square text-primary"></i></a></li>
                                             </ul>
                                         </div>
                                     @endif
@@ -107,7 +112,7 @@
                 </div>
             @else
                 <div class="d-flex justify-content-end" style="gap:10px">
-                    @if ($data->id_pembuat == auth()->user()->id_akun)
+                    @if ($data->id_pembuat == auth()->user()->id_akun || auth()->user()->role == "admin")
                         <button class="btn btn-danger text-white btnHapus" idForum="{{ $data->id_forum }}">Hapus</button>
                         <a href="/forum/edit/{{ $data->id_forum }}" style="text-decoration:none">
                             <button class="btn btn-primary">Edit</button>
@@ -122,9 +127,11 @@
     </div>
 
     <script type="module">
+
         $('div').on('click', '.btnAcc', function(a) {
             a.preventDefault();
             let idForum = $(this).closest('.btnAcc').attr('idForum');
+
             swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Forum ini akan dapat diakses oleh Alumni",
@@ -142,6 +149,7 @@
                         url: '/forum/status',
                         data: {
                             id_forum: idForum,
+                            id_admin: "{{ auth()->user()->id_akun }}",
                             status: 'accepted',
                             _token: "{{ csrf_token() }}"
                         },
@@ -149,7 +157,6 @@
                             if (data.success) {
                                 swal.fire('Forum di Konfirmasi!', '', 'success').then(
                                     function() {
-                                        //Refresh Halaman
                                         window.location.href = '/forum';
                                     });
                             }
@@ -162,28 +169,30 @@
         $('div').on('click', '.btnTolak', function(a) {
             a.preventDefault();
             let idForum = $(this).closest('.btnTolak').attr('idForum');
+
             swal.fire({
                 title: 'Apakah anda yakin?',
-                text: "Forum yang ditolak akan dihapus!",
+                text: "Forum yang ditolak akan dimasukan ke arsip!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#ff0000',
                 cancelButtonColor: '#969696',
-                confirmButtonText: 'Hapus',
+                confirmButtonText: 'Tolak',
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    //Ajax Delete
                     $.ajax({
-                        type: 'DELETE',
-                        url: '/forum/hapus',
+                        type: 'POST',
+                        url: '/forum/status',
                         data: {
                             id_forum: idForum,
+                            id_admin: "{{ auth()->user()->id_akun }}",
+                            status: "rejected",
                             _token: "{{ csrf_token() }}"
                         },
                         success: function(data) {
                             if (data.success) {
-                                swal.fire('Berhasil di hapus!', '', 'success').then(function() {
+                                swal.fire('Berhasil di tolak!', '', 'success').then(function() {
                                     window.location.href = '/dashboard';
                                 });
                             }
@@ -196,9 +205,10 @@
         $('div').on('click', '.btnHapus', function(a) {
             a.preventDefault();
             let idForum = $(this).closest('.btnHapus').attr('idForum');
+
             swal.fire({
                 title: 'Apakah anda yakin?',
-                text: "Forum yang ditolak akan dihapus!",
+                text: "Forum yang dihapus akan dimasukan ke arsip!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#ff0000',
@@ -207,17 +217,18 @@
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    //Ajax Delete
                     $.ajax({
-                        type: 'DELETE',
+                        type: 'POST',
                         url: '/forum/hapus',
                         data: {
                             id_forum: idForum,
+                            id_actor: "{{ auth()->user()->id_akun }}",
+                            status: 'deleted',
                             _token: "{{ csrf_token() }}"
                         },
                         success: function(data) {
                             if (data.success) {
-                                swal.fire('Berhasil di hapus!', '', 'success').then(function() {
+                                swal.fire('Berhasil di tolak!', '', 'success').then(function() {
                                     window.location.href = '/forum';
                                 });
                             }
@@ -249,7 +260,7 @@
                         url: '/forum/hapus-komen',
                         data: {
                             id_komentar: idKomen,
-                            id_forum: idForum,
+                            id_user: "{{ auth()->user()->id_akun }}",
                             _token: "{{ csrf_token() }}"
                         },
                         success: function(data) {

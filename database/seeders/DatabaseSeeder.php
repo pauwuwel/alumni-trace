@@ -122,6 +122,7 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Forum::create([
             'id_pembuat'=> 3,
+            'reviewedBy' => 2,
             'judul'=> 'Ayo Ramaikan Clubing!!',
             'content'=> 'Abang Tukang Bakso, cepat dong, kemari Sudah tak tahan lagi Satu mangkok saja, 5000 perak Yang banyak baksonya Tidak pakai saus, tidak pakai sambal Tapi minta pakai kol',
             'status'=> 'accepted',
@@ -129,10 +130,18 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Forum::create([
             'id_pembuat'=> 3,
+            'reviewedBy' => 2,
             'judul'=> 'Tutorial Laravel 10 By Banskuyy',
             'content'=> 'Cicak-cicak di dinding Diam-diam merayap Datang seekor nyamuk Hap! Lalu ditangkap Cicak-cicak di dinding Diam-diam merayap Datang seekor nyamuk Hap! Lalu ditangkap Cicak-cicak di dinding Diam-diam merayap Datang seekor nyamuk Hap! Lalu ditangkap Cicak-cicak di dinding Diam-diam merayap Datang seekor nyamuk Hap! Lalu ditangkap',
             'status'=> 'accepted',
             'tanggal_post'=> Carbon::now()->subMonth(),
+        ]);
+        \App\Models\Forum::create([
+            'id_pembuat'=> 3,
+            'judul'=> 'acc this thing',
+            'content'=> 'Cicak-cicak di dinding Diam-diam merayap Datang seekor nyamuk Hap! Lalu ditangkap Cicak-cicak di dinding Diam-diam merayap Datang seekor nyamuk Hap! Lalu ditangkap Cicak-cicak di dinding Diam-diam merayap Datang seekor nyamuk Hap! Lalu ditangkap Cicak-cicak di dinding Diam-diam merayap Datang seekor nyamuk Hap! Lalu ditangkap',
+            'status'=> 'pending',
+            'tanggal_post'=> Carbon::now()->addMonth(),
         ]);
         \App\Models\Komentar::create([
             'id_pembuat'=> 3,

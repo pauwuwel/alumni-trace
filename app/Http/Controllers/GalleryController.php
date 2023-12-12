@@ -11,9 +11,9 @@ class GalleryController extends Controller
     public function index(Alumni $alumni)
     {
         $data = [
-            'datas' =>DB::table('view_profile_alumni')->orderBy('nama', 'asc')->get()
+            'datas' =>DB::table('view_all_alumni')->orderBy('nama', 'asc')->get()
         ]; // mengembalikan data dalam sebuah array
-        return view('galeri.index');
+        return view('galeri.index', $data);
     }
 
     public function search(Request $request)

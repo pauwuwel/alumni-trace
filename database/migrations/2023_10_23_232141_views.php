@@ -30,6 +30,12 @@ return new class extends Migration
         );
 
         DB::unprepared(
+            'CREATE OR REPLACE VIEW view_all_alumni AS 
+            SELECT alumni.* FROM alumni
+            INNER JOIN akun ON akun.id_akun = alumni.id_akun'
+        );
+
+        DB::unprepared(
             'CREATE OR REPLACE VIEW view_forum_data AS 
 
             SELECT forum.*, alumni.nama as nama_pembuat FROM forum
@@ -67,7 +73,7 @@ return new class extends Migration
         );
 
         DB::unprepared(
-            'CREATE VIEW view_total_karir AS
+            'CREATE OR REPLACE VIEW view_total_karir AS
 
             SELECT
                 COUNT(DISTINCT CASE WHEN jenis_karir = "kuliah" THEN id_alumni END) as total_kuliah,
@@ -82,6 +88,7 @@ return new class extends Migration
         DB::statement("DROP VIEW IF EXISTS view_profile_super_admin");
         DB::statement("DROP VIEW IF EXISTS view_profile_admin");
         DB::statement("DROP VIEW IF EXISTS view_profile_alumni");
+        DB::statement("DROP VIEW IF EXISTS view_all_alumni");
         DB::statement("DROP VIEW IF EXISTS view_forum_data");
         DB::statement("DROP VIEW IF EXISTS view_komentar_data");
         DB::statement("DROP VIEW IF EXISTS view_karir_alumni");

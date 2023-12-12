@@ -57,21 +57,153 @@
             background-image: url({{ url('img/henseks.png') }});
         }
 
+        .chart-container {
+            max-height: 240px;
+        }
+
+        #chartKarir {
+            width: 200px !important;
+            height: 200px !important;
+        }
+
+        .karirbox {
+            width: 12px;
+            height: 12px;
+        }
+
+        .karir-text p {
+            margin: 0px !important;
+        }
+
+        .boxkuliah {
+            background: #67C587;
+        }
+
+        .boxkerja {
+            background: #C9EAD4;
+        }
+
+        .boxwirausaha {
+            background: #EAF6ED;
+        }
+
+        .boxnganggur {
+            background: #A9DEBA;
+        }
+
+        .table-scroll {
+            max-height: 240px;
+            overflow-y: auto;
+        }
     </style>
 @endsection
 @section('content')
-    <div class="d-flex justify-content-between flex-column flex-md-row" style="gap:10px">
-        <div class="w-100 d-flex flex-column align-items-center justify-content-center rounded py-4 text-white karirCard karirKuliah">
-            <h3 style="letter-spacing: 2px; margin-bottom: 0px">Kuliah</h3>
-            <h2 class="fw-bold" style="letter-spacing: 1px; margin-bottom: 0px">{{ $karir_data->total_kuliah }}</h2>
+    <div class="d-flex flex-column" style="gap:16px">
+        <div class="d-flex justify-content-between flex-column flex-md-row" style="gap:10px">
+            <div
+                class="w-100 d-flex flex-column align-items-center justify-content-center rounded py-5 text-white karirCard karirKuliah">
+                <h3 style="letter-spacing: 2px; margin-bottom: 0px">Kuliah</h3>
+                <h2 class="fw-bold" style="letter-spacing: 1px; margin-bottom: 0px">{{ $karir_data->total_kuliah }}</h2>
+            </div>
+            <div
+                class="w-100 d-flex flex-column align-items-center justify-content-center rounded py-5 text-white karirCard karirKerja">
+                <h3 style="letter-spacing: 2px; margin-bottom: 0px">Kerja</h3>
+                <h2 class="fw-bold" style="letter-spacing: 1px; margin-bottom: 0px">{{ $karir_data->total_kerja }}</h2>
+            </div>
+            <div
+                class="w-100 d-flex flex-column align-items-center justify-content-center rounded py-5 text-white karirCard karirWirausaha">
+                <h3 style="letter-spacing: 2px; margin-bottom: 0px">Wirausaha</h3>
+                <h2 class="fw-bold" style="letter-spacing: 1px; margin-bottom: 0px">{{ $karir_data->total_wirausaha }}</h2>
+            </div>
         </div>
-        <div class="w-100 d-flex flex-column align-items-center justify-content-center rounded py-4 text-white karirCard karirKerja">
-            <h3 style="letter-spacing: 2px; margin-bottom: 0px">Kerja</h3>
-            <h2 class="fw-bold" style="letter-spacing: 1px; margin-bottom: 0px">{{ $karir_data->total_kerja }}</h2>
-        </div>
-        <div class="w-100 d-flex flex-column align-items-center justify-content-center rounded py-4 text-white karirCard karirWirausaha">
-            <h3 style="letter-spacing: 2px; margin-bottom: 0px">Wirausaha</h3>
-            <h2 class="fw-bold" style="letter-spacing: 1px; margin-bottom: 0px">{{ $karir_data->total_wirausaha }}</h2>
+        <div class="d-flex justify-content-between flex-column flex-md-row" style="gap: 10px;">
+            <div class="chart-container d-flex shadow p-4 justify-content-center rounded" style="gap:16px;">
+                <canvas id="chartKarir"></canvas>
+                <div class="d-flex flex-column align-items-start justify-content-around">
+                    <div class="d-flex align-items-center karir-text" style="gap: 8px;">
+                        <div class="karirbox boxkuliah"></div>
+                        <p>Kuliah</p>
+                    </div>
+                    <div class="d-flex align-items-center karir-text" style="gap: 8px;">
+                        <div class="karirbox boxkerja"></div>
+                        <p>Kerja</p>
+                    </div>
+                    <div class="d-flex align-items-center karir-text" style="gap: 8px;">
+                        <div class="karirbox boxwirausaha"></div>
+                        <p>Wirausaha</p>
+                    </div>
+                    <div class="d-flex align-items-center karir-text" style="gap: 8px;">
+                        <div class="karirbox boxnganggur"></div>
+                        <p>Tidak diketahui</p>
+                    </div>
+                </div>
+            </div>
+            @if (auth()->user()->role == 'superAdmin')
+            @elseif(auth()->user()->role == 'admin')
+                <div class="table-scroll w-100 shadow rounded">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <td style="text-align: center;" colspan="2">Konfirmasi Forum Alumni</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($forum_data as $forum)
+                                <tr>
+                                    <td style="width: 90%">
+                                        @if ($forum !== null)
+                                            {{ $forum->nama_pembuat }}, <b>{{ $forum->judul }}</b>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($forum !== null)
+                                            <a style="text-decoration: none" href="/forum/post/{{ $forum->id_forum }}">
+                                                <button class="btn btn-warning">Detail</button>
+                                            </a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="2" class="text-muted">Tidak ada forum yang tersedia</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            @endif
         </div>
     </div>
+
+    <script type="module">
+        var ctx = document.getElementById('chartKarir').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Kuliah', 'Kerja', 'Wirausaha', 'Tidak Diketahui'],
+                datasets: [{
+                    label: 'Total alumni',
+                    data: [
+                        {{ $karir_data->total_kuliah }},
+                        {{ $karir_data->total_kerja }},
+                        {{ $karir_data->total_wirausaha }},
+                        1
+                    ],
+                    backgroundColor: ['#67C587', '#C9EAD4', '#EAF6ED', '#A9DEBA'],
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                },
+                scales: {
+                    y: {
+                        display: false,
+                    }
+                },
+            }
+        });
+    </script>
 @endsection

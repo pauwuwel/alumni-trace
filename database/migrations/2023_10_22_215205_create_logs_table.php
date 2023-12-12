@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->integer('id_logs', true)->nullable(false);
-            $table->text('logs')->nullable(false);
+            $table->string('actor', 60)->nullable(false);
+            $table->string('action', 60)->nullable(false);
+            $table->string('table', 60)->nullable(false);
+            $table->string('row', 60)->nullable(false);
+            $table->dateTime('date')->nullable(false);
         });
     }
 
