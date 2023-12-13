@@ -402,7 +402,7 @@ class ForumController extends Controller
             if ($forumDate->diffInDays() > 7) {
                 $forum->tanggal_post = $forumDate->format('d-m-Y');
             } else {
-                $forum->tanggal_post = $forumDate->diffForHumans();
+                $forum->tanggal_post = $forumDate->format('d-m-Y');
             }
 
             foreach ($forum->komentar as $komen) {
@@ -411,7 +411,7 @@ class ForumController extends Controller
                 if ($komenDate->diffInDays() > 7) {
                     $komen->tanggal_post = $komenDate->format('d-m-Y');
                 } else {
-                    $komen->tanggal_post = $komenDate->diffForHumans();
+                    $komen->tanggal_post = $komenDate->format('d-m-Y');
                 }
             }
         }

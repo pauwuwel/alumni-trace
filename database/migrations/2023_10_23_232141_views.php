@@ -76,10 +76,12 @@ return new class extends Migration
             'CREATE OR REPLACE VIEW view_total_karir AS
 
             SELECT
-                COUNT(DISTINCT CASE WHEN jenis_karir = "kuliah" THEN id_alumni END) as total_kuliah,
-                COUNT(DISTINCT CASE WHEN jenis_karir = "kerja" THEN id_alumni END) as total_kerja,
-                COUNT(DISTINCT CASE WHEN jenis_karir = "wirausaha" THEN id_alumni END) as total_wirausaha
-            FROM karir'
+                COUNT(DISTINCT CASE WHEN karir.jenis_karir = "kuliah" THEN karir.id_alumni END) as total_kuliah,
+                COUNT(DISTINCT CASE WHEN karir.jenis_karir = "kerja" THEN karir.id_alumni END) as total_kerja,
+                COUNT(DISTINCT CASE WHEN karir.jenis_karir = "wirausaha" THEN karir.id_alumni END) as total_wirausaha,
+                COUNT(DISTINCT alumni.id_alumni) - COUNT(DISTINCT CASE WHEN karir.id_alumni IS NOT NULL THEN alumni.id_alumni END) as total_nganggur
+            FROM alumni
+            LEFT JOIN karir ON alumni.id_alumni = karir.id_alumni'
         );
     }
 

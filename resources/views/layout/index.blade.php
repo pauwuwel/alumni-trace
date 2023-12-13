@@ -111,8 +111,6 @@
                             <li><a class="dropdown-item" href="/profile/{{ Auth::user()->id_akun }}">Profile</a></li>
                             <li><a class="dropdown-item" href="/profile/{{ Auth::user()->id_akun }}/activity">Riwayat
                                     Aktivitas</a></li>
-                            <li><a class="dropdown-item" href="/profile/{{ Auth::user()->id_akun }}/forum">Forum
-                                    Saya</a></li>
                             <li><a class="dropdown-item" href="/logout">Sign out</a></li>
                         </ul>
                     </div>

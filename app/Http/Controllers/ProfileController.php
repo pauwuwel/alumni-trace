@@ -25,14 +25,15 @@ class ProfileController extends Controller
     {
         $akun = Akun::find($id);
         if ($akun) {
-            if ($akun->alumni) {
-
+            if ($akun->alumni) 
+            {
                 $idAlumni = $alumni->join('akun', 'alumni.id_akun', '=', 'akun.id_akun')
-    ->select('alumni.id_alumni')->where('alumni.id_akun', $id)
-    ->first();
-                
+                    ->select('alumni.id_alumni')->where('alumni.id_akun', $id)
+                    ->first();
+
 
                 $profileData = DB::table('view_profile_alumni')->where('id_akun', $id)->get();
+
                 $careerData = DB::table('view_karir_alumni')->where('id_alumni', $idAlumni->id_alumni)->get();
 
                 foreach ($careerData as $career) {
@@ -48,11 +49,13 @@ class ProfileController extends Controller
                         }
                     }
 
-                    $career->tanggal_mulai = Carbon::parse($career->tanggal_mulai)->isoFormat('DD MMMM YYYY');
+                    $career->tanggal_mulai_iso = Carbon::parse($career->tanggal_mulai)->isoFormat('DD MMMM YYYY');
+
                     if ($career->tanggal_selesai !== null) {
-                        $career->tanggal_selesai = Carbon::parse($career->tanggal_selesai)->isoFormat('DD MMMM YYYY');
+                        $career->tanggal_selesai_iso = Carbon::parse($career->tanggal_selesai)->isoFormat('DD MMMM YYYY');
                     }
                 }
+
 
                 $data = [
                     'profile' => $profileData,
@@ -268,6 +271,27 @@ class ProfileController extends Controller
         return response()->json(['message' => 'Karir added successfully']);
     }
 
+    public function editKarir(Alumni $alumni, Karir $karir, Request $request, string $id)
+    {
+        $data = $request->validate([
+            'jenis_karir' => ['required'],
+            'id_alumni' => ['required'],
+            'id_karir' => ['required'],
+            'nama_instansi' => ['required'],
+            'posisi_bidang' => ['required'],
+            'tanggal_mulai' => ['required', 'date'],
+            'tanggal_selesai' => ['nullable', 'date'],
+        ]);
+        
+        $dataUpdate = $karir->where('id_karir', $data['id_karir'])->update($data);
+
+        if ($dataUpdate) {
+            return redirect('profile/' . $id)->with('success', 'Data karir berhasil diupdate');
+        }
+
+        return back()->with('error', 'Data karir gagal diupdate');
+    }
+    
     public function removeKarir(Karir $karir, Request $request, string $id)
     {
         $id_karir = $request->input('id_karir');
@@ -287,20 +311,18 @@ class ProfileController extends Controller
                 'success' => false,
                 'pesan'   => 'Data gagal dihapus'
             ];
-        }
+        }       
 
         return response()->json($pesan);
     }
 
     public function showLogs(string $id, Logs $logs, Forum $forum)
     {
-        if (auth()->user()->id_akun != $id)
-        {
+        if (auth()->user()->id_akun != $id) {
             return redirect('profile/' . auth()->user()->id_akun . '/activity');
         }
 
-        if (auth()->user()->role == 'admin')
-        {
+        if (auth()->user()->role == 'admin') {
             $logsData = $logs->where('table', 'forum')->get();
 
             foreach ($logsData as $logss) {
@@ -314,10 +336,7 @@ class ProfileController extends Controller
             }
 
             return view('profile.logs', compact('logsData'));
-        }
-
-        else 
-        {
+        } else {
             $userId = auth()->user()->id_akun;
 
             $forumData = Forum::where('id_pembuat', $userId)->get();
@@ -328,11 +347,9 @@ class ProfileController extends Controller
                 ->where('table', 'forum')
                 ->get();
 
-            
+
 
             return view('profile.logs', compact('logsData'));
-
         }
-        
     }
 }

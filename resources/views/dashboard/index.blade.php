@@ -187,7 +187,7 @@
                         {{ $karir_data->total_kuliah }},
                         {{ $karir_data->total_kerja }},
                         {{ $karir_data->total_wirausaha }},
-                        1
+                        {{ $karir_data->total_nganggur }}
                     ],
                     backgroundColor: ['#67C587', '#C9EAD4', '#EAF6ED', '#A9DEBA'],
                 }]

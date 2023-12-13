@@ -69,7 +69,7 @@
                             <textarea name="alamat" class="form-control" style="resize: none" disabled id="alamat" rows="5">{{ $data->jalan !== null ? 'Jalan ' . $data->jalan : '' }} {{ $data->gang !== null ? 'Gang ' . $data->gang : '' }} {{ $data->nomor_rumah !== null ? 'No. ' . $data->nomor_rumah : '' }} {{ $data->blok !== null ? 'Blok ' . $data->blok : '' }} {{ $data->rt !== null ? 'RT ' . $data->rt : '' }} {{ $data->rw !== null ? 'RW ' . $data->rw : '' }} {{ $data->kelurahan !== null ? 'Kelurahan ' . $data->kelurahan : '' }} {{ $data->kecamatan !== null ? 'Kecamatan ' . $data->kecamatan : '' }} {{ $data->kota !== null ? 'Kota ' . $data->kota : '' }} {{ $data->kodepos !== null ? $data->kodepos : '' }} </textarea>
                         </div>
                     @endif
-                    @if (auth()->user()->role == 'alumni')
+                    @if ($data->role == 'alumni')
                         <div class="hr-container">
                             <hr class="my-4">
                             <span class="text-muted text">Riwayat Karir</span>
@@ -88,7 +88,7 @@
                                     @endif
                                 </thead>
                                 <tbody>
-                                    @foreach ($career as $karir)
+                                    @forelse ($career as $karir)
                                         <tr>
                                             <td>
                                                 {{ $karir->tanggal_selesai !== null ? 'Telah ' : 'Sedang ' }}
@@ -109,20 +109,88 @@
                                                             : '')) }}
                                                 {{ $karir->posisi_bidang }}
                                                 {{ $karir->tanggal_selesai !== null ? 'pada ' : 'sejak ' }}
-                                                {{ $karir->tanggal_mulai }}
-                                                {{ $karir->tanggal_selesai !== null ? 'hingga ' . $karir->tanggal_selesai : ' ' }}
-
+                                                {{ $karir->tanggal_mulai_iso }}
+                                                {{ $karir->tanggal_selesai !== null ? 'hingga ' . $karir->tanggal_selesai_iso : ' ' }}
                                             </td>
                                             @if ($data->id_akun == auth()->user()->id_akun)
                                                 <td style="width: 10%">
                                                     <div class="d-flex" style="gap:5px;">
-                                                        <button class="btn btn-sm btn-info text-white btnHapus" onclick="hapusKarir({{ $karir->id_karir }}, event)"><i class="bi bi-pencil-fill"></i></button>
-                                                        <button class="btn btn-sm btn-danger text-white btnHapus" onclick="hapusKarir({{ $karir->id_karir }}, event)"><i class="bi bi-trash-fill"></i></button>
+                                                        <button class="btn btn-sm btn-info text-white btnHapus" data-bs-toggle="modal"
+                                                        data-bs-target="#editModal{{ $karir->id_karir }}">
+                                                            <i class="bi bi-pencil-fill"></i>
+                                                        </button>
+
+                                                        <button class="btn btn-sm btn-danger text-white btnHapus"
+                                                            onclick="hapusKarir({{ $karir->id_karir }}, event)"><i
+                                                                class="bi bi-trash-fill"></i></button>
                                                     </div>
                                                 </td>
+
+                                                <div class="modal fade" id="editModal{{ $karir->id_karir }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Karir</h1>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <form method="POST" action="edit-karir/{{ auth()->user()->id_akun }}">
+                                                                @csrf
+                                                                <div class="modal-body">
+                                                                    <div class="d-flex flex-column">
+                                                                        <div class="form-group">
+                                                                            <label for="edit_jenis_karir">Jenjang Karir</label>
+                                                                            <select required class="form-control" name="edit_jenis_karir" id="edit_jenis_karir" disabled>
+                                                                                <option {{ $karir->jenis_karir == 'kuliah' ? 'selected' : '' }} value="kuliah">Kuliah</option>
+                                                                                <option {{ $karir->jenis_karir == 'kerja' ? 'selected' : '' }} value="kerja">Kerja</option>
+                                                                                <option {{ $karir->jenis_karir == 'wirausaha' ? 'selected' : '' }} value="wirausaha">Wirausaha</option>
+                                                                            </select>
+                                                                            <input type="hidden" name="jenis_karir" value="{{ $karir->jenis_karir }}">
+                                                                            <input type="hidden" name="id_alumni" value="{{ $karir->id_alumni }}">
+                                                                            <input type="hidden" name="id_karir" value="{{ $karir->id_karir }}">
+                                                                        </div>
+
+                                                                        <div id="editKarirForm" class="formEditKarir">
+                                                                            <div class="form-group">
+                                                                                <label for="nama_instansi">{{ $karir->jenis_karir == 'kuliah' || $karir->jenis_karir == 'kerja' ? 'Instansi' : 'Nama Usaha' }}</label>
+                                                                                <input type="text" class="form-control" name="nama_instansi"
+                                                                                    id="nama_instansi" placeholder="Masukan instansi" value="{{ $karir->nama_instansi }}">
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label for="posisi_bidang">{{ $karir->jenis_karir == 'kuliah' ? 'Jurusan' : ( $karir->jenis_karir == 'kerja' ? 'Jabatan' : ( $karir->jenis_karir == 'wirausaha' ? 'Bidang' : '' ) ) }}</label>
+                                                                                <input type="text" class="form-control" name="posisi_bidang"
+                                                                                    id="posisi_bidang" placeholder="Masukan jurusan" value="{{ $karir->posisi_bidang }}">
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label for="tanggal_mulai">Tanggal {{ $karir->jenis_karir == 'kuliah' || $karir->jenis_karir == 'kerja' ? 'Masuk' : 'Mulai' }}</label>
+                                                                                <input type="date" class="form-control" name="tanggal_mulai"
+                                                                                    id="tanggal_mulai" value="{{ $karir->tanggal_mulai }}">
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label for="tanggal_selesai">Tanggal {{ $karir->jenis_karir == 'kuliah' ? 'Lulus' : ( $karir->jenis_karir == 'kerja' ? 'Keluar' : ( $karir->jenis_karir == 'wirausaha' ? 'Berhenti' : '' ) ) }}</label>
+                                                                                <input type="date" class="form-control" name="tanggal_selesai"
+                                                                                    id="tanggal_selesai" aria-describedby="selesaiHelp" value="{{ $karir->tanggal_selesai }}">
+                                                                                <div id="selesaiHelp" class="form-text">Masukan jika perlu.</div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                                                                    <button type="submit" class="btn btn-info text-white">Edit</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             @endif
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="{{ $data->id_akun == auth()->user()->id_akun ? '2' : '1' }}" class="text-center text-muted">
+                                                Tidak memiliki riwayat karir</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -193,7 +261,7 @@
                                         id="tanggal_mulai_kerja">
                                 </div>
                                 <div class="form-group">
-                                    <label for="tanggal_selesai">Tanggal keluar</label>
+                                    <label for="tanggal_selesai">Tanggal Keluar</label>
                                     <input type="date" class="form-control" name="tanggal_selesai_kerja"
                                         id="tanggal_selesai_kerja" aria-describedby="selesaiHelp">
                                     <div id="selesaiHelp" class="form-text">Masukan jika perlu.</div>
@@ -236,21 +304,6 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Show/hide form sections based on the selected career type
-            document.getElementById('jenis_karir').addEventListener('change', function() {
-                var selectedCareer = this.value;
-
-                // Hide all forms
-                document.querySelectorAll('.formKarir').forEach(function(form) {
-                    form.style.display = 'none';
-                });
-
-                // Show the form based on the selected career type
-                document.getElementById(selectedCareer + 'Form').style.display = 'block';
-            });
-        });
-
         document.addEventListener('DOMContentLoaded', function() {
             // Show/hide form sections based on the selected career type
             document.getElementById('jenis_karir').addEventListener('change', function() {
