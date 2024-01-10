@@ -69,10 +69,7 @@
                                                 <li><a class="dropdown-item btn btnHapusKomen"
                                                         idForum="{{ $data->id_forum }}" idKomen="{{ $komen->id_komentar }}"
                                                         href="#"><i class="bi bi-trash-fill text-danger"></i></a></li>
-                                                <li><a class="dropdown-item btn btnEditKomen"
-                                                        idForum="{{ $data->id_forum }}"
-                                                        idKomen="{{ $komen->id_komentar }}" href="#"><i
-                                                            class="bi bi-pencil-square text-primary"></i></a></li>
+                                                
                                             </ul>
                                         </div>
                                     @endif

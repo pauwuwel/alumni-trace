@@ -12,6 +12,7 @@ use App\Models\Alamat;
 use App\Models\Karir;
 use App\Models\Forum;
 use App\Models\Logs;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Carbon;
@@ -25,8 +26,7 @@ class ProfileController extends Controller
     {
         $akun = Akun::find($id);
         if ($akun) {
-            if ($akun->alumni) 
-            {
+            if ($akun->alumni) {
                 $idAlumni = $alumni->join('akun', 'alumni.id_akun', '=', 'akun.id_akun')
                     ->select('alumni.id_alumni')->where('alumni.id_akun', $id)
                     ->first();
@@ -282,7 +282,7 @@ class ProfileController extends Controller
             'tanggal_mulai' => ['required', 'date'],
             'tanggal_selesai' => ['nullable', 'date'],
         ]);
-        
+
         $dataUpdate = $karir->where('id_karir', $data['id_karir'])->update($data);
 
         if ($dataUpdate) {
@@ -291,7 +291,7 @@ class ProfileController extends Controller
 
         return back()->with('error', 'Data karir gagal diupdate');
     }
-    
+
     public function removeKarir(Karir $karir, Request $request, string $id)
     {
         $id_karir = $request->input('id_karir');
@@ -311,7 +311,7 @@ class ProfileController extends Controller
                 'success' => false,
                 'pesan'   => 'Data gagal dihapus'
             ];
-        }       
+        }
 
         return response()->json($pesan);
     }
@@ -351,5 +351,43 @@ class ProfileController extends Controller
 
             return view('profile.logs', compact('logsData'));
         }
+    }
+
+    public function printPDF(Akun $akun, Alumni $alumni, Request $request, string $id)
+    {
+        $idAlumni = $alumni->join('akun', 'alumni.id_akun', '=', 'akun.id_akun')
+            ->select('alumni.id_alumni')->where('alumni.id_akun', $id)
+            ->first();
+
+
+        $profileData = DB::table('view_profile_alumni')->where('id_akun', $id)->get();
+        $careerData = DB::table('view_karir_alumni')->where('id_alumni', $idAlumni->id_alumni)->get();
+
+        foreach ($careerData as $career) {
+
+            $careerArray = (array) $career;
+
+            foreach ($careerArray as $field => $value) {
+                if ($field !== 'nama_instansi' && $field !== 'tanggal_mulai' && $field !== 'tanggal_selesai') {
+                    $career->$field = Str::lower($value);
+                }
+                if ($field == 'nama_instansi') {
+                    $career->$field = ucwords($value);
+                }
+            }
+
+            $career->tanggal_mulai = Carbon::parse($career->tanggal_mulai)->isoFormat('DD MMMM YYYY');
+            if ($career->tanggal_selesai !== null) {
+                $career->tanggal_selesai = Carbon::parse($career->tanggal_selesai)->isoFormat('DD MMMM YYYY');
+            }
+        }
+
+        $data = [
+            'profile' => $profileData,
+            'career' => $careerData,
+        ];
+
+        $pdf = Pdf::loadview('profile.print', $data);
+        return $pdf->stream('profile.print');
     }
 }

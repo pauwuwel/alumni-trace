@@ -34,6 +34,12 @@
                     @endif
                     <button type="button" onClick="kembali()" class="btn btn-secondary">Kembali</button>
                 </div>
+                @if (auth()->user()->role == 'alumni' && auth()->user()->id_akun == $data->id_akun)
+                    <div class="d-flex flex-column align-items-center justify-content-center">
+                        <a target="_blank" href="/profile/print/{{ $data->id_akun }}" class="btn btn-warning text-white"><i
+                            class="bi bi-printer"></i> Print</a>
+                    </div>
+                @endif
             </div>
             <div class="col-md-9">
                 <div class="d-flex flex-column" style="gap: 11px">

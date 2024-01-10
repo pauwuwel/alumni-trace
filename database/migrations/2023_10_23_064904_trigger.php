@@ -93,7 +93,7 @@ return new class extends Migration
         );
 
         DB::unprepared(
-            'CREATE TRIGGER craeteKomen
+            'CREATE TRIGGER createKomen
             AFTER INSERT ON komentar
             FOR EACH ROW
             BEGIN

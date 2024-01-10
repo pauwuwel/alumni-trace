@@ -40,6 +40,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('profile')->group(function () {
             Route::get('/{id}', [ProfileController::class, 'index']);
+            Route::get('/print/{id}', [ProfileController::class, 'printPDF']);
             Route::get('/edit/{id}', [ProfileController::class, 'edit']);
             Route::post('/edit/{id}', [ProfileController::class, 'update']);
             Route::post('/{id}', [ProfileController::class, 'addKarir']);
