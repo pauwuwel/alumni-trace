@@ -99,7 +99,7 @@
                 </div>
             @endif
 
-            @if ($data->status == 'pending' && auth()->user()->id_akun == 'admin')
+            @if ($data->status == 'pending' && auth()->user()->role == 'admin')
                 <div class="d-flex justify-content-end" style="gap:10px">
                     <button class="btn btn-success btnAcc" idForum="{{ $data->id_forum }}">Konfirmasi</button>
                     <button class="btn btn-danger text-white btnTolak" idForum="{{ $data->id_forum }}">Tolak</button>

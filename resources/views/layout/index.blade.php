@@ -77,7 +77,11 @@
                                 @forelse ($notifications as $notip)
                                     <li>
                                         <a class="dropdown-item notip-item" href="forum/post/{{ $notip['forum_id'] }}">
-                                            {{ $notip['actor'] }} menambahkan komentar pada forum anda. <span class="text-muted">{{ $notip['tanggal_post'] }}</span>
+                                            @if ($notip['action'] == 'INSERT')
+                                                {{ $notip['actor'] }} menambahkan komentar pada forum anda. <span class="text-muted">{{ $notip['tanggal_post'] }}</span>   
+                                            @elseif($notip['action'] == 'ACCEPT')
+                                                {{ $notip['actor'] }} telah konfirmasi anda. <span class="text-muted">{{ $notip['tanggal_post'] }}</span>   
+                                            @endif
                                         </a>
                                     </li>
                                 @empty
