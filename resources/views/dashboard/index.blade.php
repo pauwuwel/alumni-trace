@@ -139,6 +139,34 @@
                 </div>
             </div>
             @if (auth()->user()->role == 'superAdmin')
+                <div class="table-scroll w-100 shadow rounded">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <td style="text-align: center;">Riwayat Aktivitas</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($logs_data as $logs)
+                                <tr>
+                                    <td style="width: 90%">
+                                        @if ($logs !== null)
+                                            {{ $logs->actor == Auth::user()->username ? 'Anda ' : $logs->actor }}
+                                            {{ $logs->action == 'INSERT' ? 'membuat ' : ($logs->action == 'UPDATE' ? 'mengedit ' : ($logs->action == 'DELETE' ? 'menghapus ' : ($logs->action == 'ACCEPT' ? 'mengkonfirmasi ' : ($logs->action == 'REJECT' ? 'menolak ' : '')))) }}
+                                            {{ $logs->table }}
+                                            {{ 'dengan id ' . $logs->row . ' // ' }}
+                                            {{ $logs->date }}
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td class="text-muted">Tidak ada log aktivitas yang tersedia</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             @elseif(auth()->user()->role == 'admin')
                 <div class="table-scroll w-100 shadow rounded">
                     <table class="table table-hover">

@@ -47,6 +47,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/edit-karir/{id}', [ProfileController::class, 'editKarir']);
             Route::delete('/{id}', [ProfileController::class, 'removeKarir']);
             Route::get('/{id}/activity', [ProfileController::class, 'showLogs']);
+            Route::get('/{id}/forum', [ProfileController::class, 'showForum']);
         });
 
     });

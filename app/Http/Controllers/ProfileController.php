@@ -353,6 +353,11 @@ class ProfileController extends Controller
         }
     }
 
+    public function showForum()
+    {
+        return view('profile.forum');
+    }
+
     public function printPDF(Akun $akun, Alumni $alumni, Request $request, string $id)
     {
         $idAlumni = $alumni->join('akun', 'alumni.id_akun', '=', 'akun.id_akun')

@@ -28,14 +28,15 @@ class GalleryController extends Controller
 
         foreach ($alumni_data as $alumni) {
             $output .= '<div class="col-md-2 col-sm-12 mb-2">
-                    <a style="text-decoration:none;" href="/profile/' . $alumni->id_akun . '">
-                        <button class="card w-100 rounded-3 d-flex flex-column justify-content-between p-3 h-100">
-                            <img src="' . ($alumni->foto !== null ? url("img/" . $alumni->foto) : url("img/pp.png")) . '" alt="pp"
-                                class="w-100 mb-2 rounded" srcset="">
-                            <h4 class="text-capitalize text-bold w-100">' . $alumni->nama . '</h4>
-                        </button>
-                    </a>
-                </div>';
+                <a style="text-decoration:none;" href="/profile/' . $alumni->id_akun . '">
+                    <button class="card w-100 d-flex flex-column justify-content-between p-2 h-100">
+                        <img src="' . ($alumni->foto !== null ? url("img/" . $alumni->foto) : url("img/pp.png")) . '" alt="pp" class="w-100 mb-2 rounded" srcset="">
+                        <div style="text-align: left;">
+                            <h4 class="text-capitalize text-bold" style="margin:0;">' . $alumni->nama . '</h4>
+                        </div>
+                    </button>
+                </a>
+            </div>';
         }
 
 

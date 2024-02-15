@@ -55,23 +55,22 @@ class AppServiceProvider extends ServiceProvider
                     // Check if the forum's creator matches the current user
                     if ($forum && $forum->id_pembuat == $currentUserId) {
 
-                        $forumDate = Carbon::parse($forum->tanggal_post);
+                        $forumDate = Carbon::parse($log->date);
+                        $diffInMonths = $forumDate->diffInMonths();
 
-                        $diffInDays = $forumDate->diffInDays();
-
-                        if ($diffInDays > 7) {
-                            $diffInWeeks = $forumDate->diffInWeeks();
-                             $formattedDate = $diffInWeeks . 'm';
+                        if ($diffInMonths > 0) {
+                            $formattedDate = $diffInMonths . 'b';
                         } else {
+                            $diffInSeconds = $forumDate->diffInSeconds();
                             $diffInMinutes = $forumDate->diffInMinutes();
                             $diffInHours = $forumDate->diffInHours();
-            
-                            if ($diffInMinutes < 60) {
+
+                            if ($diffInSeconds < 60) {
+                                $formattedDate = $diffInSeconds . 'd';
+                            } elseif ($diffInMinutes < 60) {
                                 $formattedDate = $diffInMinutes . 'm';
                             } elseif ($diffInHours < 24) {
                                 $formattedDate = $diffInHours . 'j';
-                            } else {
-                                $formattedDate = $diffInDays . 'h';
                             }
                         }
 

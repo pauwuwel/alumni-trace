@@ -67,32 +67,29 @@
                             </li>
                         @endif
                     </ul>
-                    <div class="dropdown" style="margin-right: 24px">
-                        <a class="text-white text-decoration-none dropdown-toggle toggle-notif" href="#"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-bell-fill fs-5">
-                                {{-- <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                99+
-                                <span class="visually-hidden">unread messages</span>
-                              </span> --}}
-                            </i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            @forelse ($notifications as $notip)
-                                <li>
-                                    <a class="dropdown-item notip-item" href="forum/post/{{ $notip['forum_id'] }}">
-                                        {{ $notip['actor'] }} menambahkan komentar pada forum anda. <span class="text-muted">{{ $notip['tanggal_post'] }}</span>
-                                    </a>
-                                </li>
-                            @empty
-                                <li>
-                                    <a class="dropdown-item" style="pointer-events: none" href="#">
-                                        tidak ada notifikasi
-                                    </a>
-                                </li>
-                            @endforelse
-                        </ul>
-                    </div>
+                    @if (Auth::user()->role != 'superAdmin')
+                        <div class="dropdown" style="margin-right: 24px">
+                            <a class="text-white text-decoration-none dropdown-toggle toggle-notif" href="#"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-bell-fill fs-5"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                @forelse ($notifications as $notip)
+                                    <li>
+                                        <a class="dropdown-item notip-item" href="forum/post/{{ $notip['forum_id'] }}">
+                                            {{ $notip['actor'] }} menambahkan komentar pada forum anda. <span class="text-muted">{{ $notip['tanggal_post'] }}</span>
+                                        </a>
+                                    </li>
+                                @empty
+                                    <li>
+                                        <a class="dropdown-item" style="pointer-events: none" href="#">
+                                            tidak ada notifikasi
+                                        </a>
+                                    </li>
+                                @endforelse
+                            </ul>
+                        </div>
+                    @endif
                     <div class="dropdown custom-dropdown">
                         <a href="#"
                             class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
@@ -109,8 +106,10 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li><a class="dropdown-item" href="/profile/{{ Auth::user()->id_akun }}">Profile</a></li>
-                            <li><a class="dropdown-item" href="/profile/{{ Auth::user()->id_akun }}/activity">Riwayat
-                                    Aktivitas</a></li>
+                            @if (Auth::user()->role != 'superAdmin')
+                                <li><a class="dropdown-item" href="/profile/{{ Auth::user()->id_akun }}/forum">Forum Saya</a></li>
+                            @endif
+                            {{-- <li><a class="dropdown-item" href="/profile/{{ Auth::user()->id_akun }}/activity">Riwayat Aktivitas</a></li> --}}
                             <li><a class="dropdown-item" href="/logout">Sign out</a></li>
                         </ul>
                     </div>
