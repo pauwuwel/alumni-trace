@@ -88,8 +88,6 @@ class ProfileController extends Controller
             return back()->with('error', 'Anda tidak memiliki akses!');
         }
 
-        // dd($akun->id_akun, auth()->user()->id_akun);
-
         if ($akun) {
             if ($akun->alumni) {
 
@@ -244,14 +242,10 @@ class ProfileController extends Controller
             'tanggal_selesai' => ['nullable', 'date'],
         ]);
 
-        // Additional validation or processing logic can be added here
-
-        // Find the Alumni ID based on the authenticated user
         $alumniData = $alumni->join('akun', 'alumni.id_akun', '=', 'akun.id_akun')
             ->select('alumni.id_alumni')->where('alumni.id_akun', $id)
             ->first();
 
-        // Create a new Karir instance and fill it with the form data
         $karir = new Karir();
         $karir->jenis_karir = $data['jenis_karir'];
         $karir->nama_instansi = $data['nama_instansi'];
@@ -259,15 +253,10 @@ class ProfileController extends Controller
         $karir->tanggal_mulai = $data['tanggal_mulai'];
         $karir->tanggal_selesai = $data['tanggal_selesai'];
 
-        // Set the Alumni ID for the Karir instance
         $karir->id_alumni = $alumniData->id_alumni;
 
-        // Save the new Karir instance to the database
         $karir->save();
 
-        // You can also associate it with the relevant Alumni or any other logic here
-
-        // Return a response (you may customize this based on your needs)
         return response()->json(['message' => 'Karir added successfully']);
     }
 
@@ -353,9 +342,48 @@ class ProfileController extends Controller
         }
     }
 
-    public function showForum()
+    public function showForum(string $id)
     {
-        return view('profile.forum');
+        $forum_data = DB::table('view_forum_data')->where('id_pembuat', $id)->orderBy('tanggal_post', 'desc')->get();
+        $komentar_data = DB::table('view_komentar_data')->orderBy('tanggal_post', 'desc')->get();
+
+        $get_forum_komentar = [];
+
+        foreach ($komentar_data as $komentar) {
+            $forum_id = $komentar->id_forum;
+
+            if (!isset($get_forum_komentar[$forum_id])) {
+                $get_forum_komentar[$forum_id] = [];
+            }
+
+            $get_forum_komentar[$forum_id][] = $komentar;
+        }
+
+        foreach ($forum_data as $forum) {
+            $forum->komentar = isset($get_forum_komentar[$forum->id_forum]) ? $get_forum_komentar[$forum->id_forum] : [];
+
+            $forumDate = Carbon::parse($forum->tanggal_post);
+
+            if ($forumDate->diffInDays() > 7) {
+                $forum->tanggal_post = $forumDate->format('d-m-Y');
+            } else {
+                $forum->tanggal_post = $forumDate->diffForHumans();
+            }
+
+            if ($forum->reviewedBy !== null) {
+                $adminName = DB::table('admin')
+                    ->join('akun', 'admin.id_akun', '=', 'akun.id_akun')
+                    ->where('akun.id_akun', $forum->reviewedBy)
+                    ->value('admin.nama');
+    
+                $forum->reviewer_name = $adminName;
+            } else {
+                $forum->reviewer_name = null;
+            }
+    
+        }
+        
+        return view('profile.forum', compact('forum_data'));
     }
 
     public function printPDF(Akun $akun, Alumni $alumni, Request $request, string $id)

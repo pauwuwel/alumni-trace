@@ -99,7 +99,7 @@
                 </div>
             @endif
 
-            @if ($data->status == 'pending')
+            @if ($data->status == 'pending' && auth()->user()->id_akun == 'admin')
                 <div class="d-flex justify-content-end" style="gap:10px">
                     <button class="btn btn-success btnAcc" idForum="{{ $data->id_forum }}">Konfirmasi</button>
                     <button class="btn btn-danger text-white btnTolak" idForum="{{ $data->id_forum }}">Tolak</button>
@@ -109,11 +109,13 @@
                 </div>
             @else
                 <div class="d-flex justify-content-end" style="gap:10px">
-                    @if ($data->id_pembuat == auth()->user()->id_akun || auth()->user()->role == "admin")
-                        <button class="btn btn-danger text-white btnHapus" idForum="{{ $data->id_forum }}">Hapus</button>
-                        <a href="/forum/edit/{{ $data->id_forum }}" style="text-decoration:none">
-                            <button class="btn btn-primary">Edit</button>
-                        </a>
+                    @if ($data->status !== 'pending')
+                        @if ($data->id_pembuat == auth()->user()->id_akun || auth()->user()->role == "admin")
+                            <button class="btn btn-danger text-white btnHapus" idForum="{{ $data->id_forum }}">Hapus</button>
+                            <a href="/forum/edit/{{ $data->id_forum }}" style="text-decoration:none">
+                                <button class="btn btn-primary">Edit</button>
+                            </a>
+                        @endif
                     @endif
                     <a href="/forum" style="text-decoration:none">
                         <button class="btn btn-secondary">Kembali</button>

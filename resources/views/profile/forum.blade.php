@@ -1,6 +1,5 @@
 @extends('layout.index')
 @section('title', 'Forum saya')
-@section('forum', 'active')
 @section('page', 'Forum saya')
 @section('subpage', '+ tambah forum')
 @section('sublink', '/forum/tambah')
@@ -20,14 +19,28 @@
         <div class="search-container">
             <input type="search" id="search" name="search" class="form-control" style="width:400px" placeholder="Cari judul forum...">
         </div>
-        {{-- <div id="forums" class="d-flex flex-column mb-5" style="gap:20px">
+        <div id="forums" class="d-flex flex-column mb-5" style="gap:20px">
             @foreach ($forum_data as $forum)
                 <a href="/forum/post/{{ $forum->id_forum }}" class="text-decoration-none text-dark">
                     <button class="card text-start darken-on-hover w-100">
 
                         <div class="card-body w-100 p-2" style="min-height: 18vh">
 
-                            <h5 class="card-title fw-bolder" style="margin: 0 0 6px 1px;">{{ $forum->judul }}</h5>
+                            <div class="d-flex" style="gap:10px;">
+                                <h5 class="card-title fw-bolder" style="margin: 0 0 6px 1px;">{{ $forum->judul }}</h5>
+                                <h5 class="text-muted" style="margin: 0 0 6px 1px;">**
+                                    @if ($forum->status == 'pending')
+                                        Menunggu di konfirmasi
+                                    @elseif ($forum->status == 'rejected')
+                                        Ditolak oleh {{ $forum->reviewer_name }}
+                                    @elseif ($forum->status == 'accepted')
+                                        Dikonfirmasi oleh {{ $forum->reviewer_name }}
+                                    @elseif ($forum->status == 'deleted')
+                                        Dihapus oleh {{ $forum->reviewer_name }}
+                                    @endif
+                                </h5>
+                            </div>
+
                             <h6 class="card-subtitle text-muted">{{ $forum->nama_pembuat }} || {{ $forum->tanggal_post }}</h6>
 
                             <div style="border-top: 1px solid #e0e0e0; margin: 10px 0;"></div>
@@ -49,7 +62,7 @@
                     </button>
                 </a>
             @endforeach
-        </div> --}}
+        </div>
     </div>
 
     <script type="module">

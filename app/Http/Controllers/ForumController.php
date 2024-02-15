@@ -154,7 +154,7 @@ class ForumController extends Controller
 
             if ($forum->status == 'pending') {
 
-                if (auth()->user()->role == 'admin') {
+                if (auth()->user()->role == 'admin' || $forum->id_pembuat == auth()->user()->id_akun) {
                     return view('forum.detail', compact('forum_data'));
                 } else {
                     return redirect('forum')->with('error', 'Forum yang anda akses belum dikonfirmasi!');
@@ -163,7 +163,7 @@ class ForumController extends Controller
 
             if ($forum->status == 'deleted') {
 
-                if (auth()->user()->role == 'admin') {
+                if (auth()->user()->role == 'admin' || $forum->id_pembuat == auth()->user()->id_akun) {
                     return view('forum.detail', compact('forum_data'));
                 } else {
                     return redirect('forum')->with('error', 'Forum yang anda akses telah dihapus!');
