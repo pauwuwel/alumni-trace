@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
 
             $currentUserId = $userData->id_akun; // Assuming you're using authentication
 
-            $logEntries = Logs::whereIn('action', ['INSERT', 'ACCEPT'])
+            $logEntries = Logs::whereIn('action', ['INSERT', 'ACCEPT', 'REJECT'])
                             ->whereIn('table', ['komentar', 'forum'])
                             ->orderBy('date', 'DESC')
                             ->get();
@@ -93,7 +93,7 @@ class AppServiceProvider extends ServiceProvider
                             }
                         }
                     }
-                } elseif ($log->action === 'ACCEPT' && $log->table === 'forum') {
+                } elseif (($log->action === 'ACCEPT' || $log->action === 'REJECT') && $log->table === 'forum') {
                     $forumId = $log->row;
 
                     // Fetch the corresponding forum information

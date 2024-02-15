@@ -80,7 +80,9 @@
                                             @if ($notip['action'] == 'INSERT')
                                                 {{ $notip['actor'] }} menambahkan komentar pada forum anda. <span class="text-muted">{{ $notip['tanggal_post'] }}</span>   
                                             @elseif($notip['action'] == 'ACCEPT')
-                                                {{ $notip['actor'] }} telah konfirmasi anda. <span class="text-muted">{{ $notip['tanggal_post'] }}</span>   
+                                                {{ $notip['actor'] }} telah konfirmasi forum anda. <span class="text-muted">{{ $notip['tanggal_post'] }}</span>
+                                            @elseif($notip['action'] == 'REJECT')
+                                                {{ $notip['actor'] }} telah menolak anda. <span class="text-muted">{{ $notip['tanggal_post'] }}</span>   
                                             @endif
                                         </a>
                                     </li>
