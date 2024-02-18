@@ -138,8 +138,34 @@
                     </div>
                 </div>
             </div>
-            @if (auth()->user()->role == 'superAdmin')
-            @elseif(auth()->user()->role == 'admin')
+            {{-- @if (auth()->user()->role == 'superAdmin') --}}
+                <div class="table-scroll w-100 shadow rounded">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <td style="text-align: center;">Riwayat Aktivitas</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($log_data as $logs)
+                                <tr>
+                                    <td class="text-{{ $logs->action == 'INSERT' ? 'success' : ( $logs->action == 'UPDATE' ? 'warning' : ( $logs->action == 'DELETE' || $logs->action == 'REJECT' ? 'danger' : (  $logs->action == 'ACCEPT' ? 'info' : '' ) ) ) }}">
+                                        {{ $logs->actor == auth()->user()->username ? 'Anda ' : $logs->actor }}
+                                        {{ $logs->action == 'INSERT' ? 'membuat ' : ( $logs->action == 'UPDATE' ? 'mengedit ' : ( $logs->action == 'DELETE' ? 'menghapus ' : (  $logs->action == 'ACCEPT' ? 'mengkonfirmasi ' : ( $logs->action == 'REJECT' ? 'menolak ' : '' ) ) ) ) }}
+                                        {{ $logs->table }}
+                                        {{ 'dengan id ' . $logs->row . ' || ' }}
+                                        {{ $logs->date }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td class="text-muted">Tidak ada log yang tersedia</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            {{-- @elseif(auth()->user()->role == 'admin')
                 <div class="table-scroll w-100 shadow rounded">
                     <table class="table table-hover">
                         <thead>
@@ -170,8 +196,8 @@
                             @endforelse
                         </tbody>
                     </table>
-                </div>
-            @endif
+                </div> --}}
+            {{-- @endif --}}
         </div>
     </div>
 

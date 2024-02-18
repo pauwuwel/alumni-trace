@@ -45,7 +45,7 @@ return new class extends Migration
                 SELECT username INTO oldActor FROM akun WHERE id_akun = 1;
 
                 INSERT INTO logs (actor, action, `table`, row, `date`)
-                VALUES (oldActor, "UPDATE", "akun", OLD.id_akun, NOW());
+                VALUES (oldActor, "DELETE", "akun", OLD.id_akun, NOW());
             END'
         );
 

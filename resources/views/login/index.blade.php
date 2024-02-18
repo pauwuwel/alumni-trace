@@ -29,12 +29,12 @@
                         @include('layout.flash-massage')
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input type="text" class="form-control" name="username" id="username"
+                            <input required type="text" class="form-control" name="username" id="username"
                                 placeholder="Masukan username">
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" name="password" id="password"
+                            <input required type="password" class="form-control" name="password" id="password"
                                 placeholder="Masukan password">
                         </div>
                         <button type="submit" class="btn text-light text-uppercase fw-bold btn-md mt-1"
