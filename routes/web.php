@@ -56,9 +56,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('kelola-akun')->group(function () {
             Route::get('/', [AkunController::class, 'index']);
-            Route::get('/tambah', [AkunController::class, 'create']);
+            // Route::get('/tambah', [AkunController::class, 'create']);
             Route::post('/tambah', [AkunController::class, 'store']);
-            Route::get('/edit/{id}', [AkunController::class, 'edit']);
+            // Route::get('/edit/{id}', [AkunController::class, 'edit']);
             Route::post('/edit/{id}', [AkunController::class, 'update']);
             Route::delete('/hapus', [AkunController::class, 'destroy']);
         });

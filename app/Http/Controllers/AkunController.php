@@ -66,7 +66,7 @@ class AkunController extends Controller
             // DB::commit();
 
             // Redirect with success message
-            return response()->json(['success' => 'Data user berhasil ditambahkan.']);
+            return response()->json(['success' => 'Data akun berhasil ditambahkan.']);
         } catch (\Exception $e) {
             // Rollback the transaction on exception
             // DB::rollback();
@@ -99,6 +99,7 @@ class AkunController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
     public function update(Request $request, Akun $akun)
     {
         $data = $request->validate([
@@ -107,18 +108,52 @@ class AkunController extends Controller
         ]);
 
         $id_akun = $request->input('id_akun');
+        $old_username = $request->input('old_username');
 
         if ($id_akun !== null) {
+            // Check if the new username is different from the old one
+            if ($data['username'] !== $old_username) {
+                // Check if the new username already exists
+                $existingUsername = Akun::where('username', $data['username'])->exists();
+                if ($existingUsername) {
+                    return response()->json(['error' => 'Username sudah ada. Silakan pilih username lain.']);
+                }
+            } else {
+                return response()->json(['error' => 'Mohon masukan username yang baru.']);
+            }
+
             // Process Update
             $dataUpdate = $akun->where('id_akun', $id_akun)->update($data);
 
             if ($dataUpdate) {
-                return redirect('kelola-akun')->with('success', 'Data akun berhasil di update');
+                return response()->json(['success' => 'Data akun berhasil di update']);
             } else {
-                return back()->with('error', 'Data akun gagal di update');
+                return response()->json(['error' => 'Data akun gagal di update']);
             }
         }
     }
+
+
+    // public function update(Request $request, Akun $akun)
+    // {
+    //     $data = $request->validate([
+    //         'username' => ['required'],
+    //         'role' => ['required'],
+    //     ]);
+
+    //     $id_akun = $request->input('id_akun');
+
+    //     if ($id_akun !== null) {
+    //         // Process Update
+    //         $dataUpdate = $akun->where('id_akun', $id_akun)->update($data);
+
+    //         if ($dataUpdate) {
+    //             return redirect('kelola-akun')->with('success', 'Data akun berhasil di update');
+    //         } else {
+    //             return back()->with('error', 'Data akun gagal di update');
+    //         }
+    //     }
+    // }
 
     /**
      * Remove the specified resource from storage.
