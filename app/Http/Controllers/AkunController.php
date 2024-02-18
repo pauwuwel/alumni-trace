@@ -36,32 +36,43 @@ class AkunController extends Controller
      */
     public function store(Akun $akun, Request $request)
     {
-        $data = $request->validate(
-            [
-                'username' => ['required'],
-                'password' => ['required'],
-                'role'    => ['required'],
-            ]
-        );
+        $data = $request->validate([
+            'username' => ['required'],
+            'password' => ['required'],
+            'role'    => ['required'],
+        ]);
 
-        //Proses Insert
-        if ($data) {
-            $data['password'] = Hash::make($data['password']);
+        // Hash the password
+        $data['password'] = Hash::make($data['password']);
 
-            // Simpan jika data terisi semua
-            DB::beginTransaction();
-            try {
-                $akunId = $akun->create($data)->id_akun;
-                DB::statement("CALL createProfile(?, ?, ?)", [$akunId, $data['username'], $data['role']]);
-                // DB::commit();
-                return redirect('kelola-akun')->with('success', 'Data user berhasil ditambahkan');
-            } catch (Exception $e) {
-                // DB::rollback();  
-                return back()->with('error', 'Data user gagal ditambahkan');
+        // Begin a database transaction
+        DB::beginTransaction();
+
+        try {
+
+            // filter username
+            $existingUsername = Akun::where('username', $data['username'])->exists();
+            if ($existingUsername) {
+                return response()->json(['error' => 'Username sudah ada. Silakan pilih username lain.']);
             }
-        } else {
-            // Kembali ke form tambah data
-            return back()->with('error', 'Data user gagal ditambahkan');
+
+            // Create a new Akun record
+            $newAkun = $akun->create($data);
+            
+            // Call the stored procedure to create a profile
+            DB::statement("CALL createProfile(?, ?, ?)", [$newAkun->id_akun, $data['username'], $data['role']]);
+            
+            // Commit the transaction
+            // DB::commit();
+
+            // Redirect with success message
+            return response()->json(['success' => 'Data user berhasil ditambahkan.']);
+        } catch (\Exception $e) {
+            // Rollback the transaction on exception
+            // DB::rollback();
+
+            // Redirect back with error message
+            return response()->json(['error' => 'Terjadi kesalahan. Mohon coba lagi.']);
         }
     }
 
